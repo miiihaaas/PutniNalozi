@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-{% if current_user.authorization != 'c_user' %}
+{% if current_user.authorization == 's_admin' %}
   <a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}">Register New Company</a>
 {% endif %}
 <table width="300" border="1" class="table">
@@ -14,10 +14,21 @@
     {% for company in companys %}
       <tr>
         <td><a class="mr-2" href="#" title="Edit Company">{{ company.companyname }}</a></td>
-        <td><a class="mr-2" href="#" title="Edit Company">{{ company.company_address }} {{ company.company_address_number }}</a></td>
-        <td><a class="mr-2" href="#" title="Edit Company">{{ company.company_city }} {{ company.company_state }}</a></td>
-        <td><a class="mr-2" href="#" title="Edit Company">{{ company.company_site }} / {{ company.company_mail }} / {{ company.company_phone }}</a></td>
+        <td>{{ company.company_address }} {{ company.company_address_number }}</td>
+        <td>{{ company.company_city }} {{ company.company_state }}</td>
+        <td>{{ company.company_site }} / {{ company.company_mail }} / {{ company.company_phone }}</td>
       </tr>
+    {% endfor %}
+  {% else %}
+    {% for company in companys %}
+      {% if company.companyname == current_user.user_company.companyname %}
+        <tr>
+          <td><a class="mr-2" href="#" title="Edit Company">{{ company.companyname }}</a></td>
+          <td>{{ company.company_address }} {{ company.company_address_number }}</td>
+          <td>{{ company.company_city }} {{ company.company_state }}</td>
+          <td>{{ company.company_site }} / {{ company.company_mail }} / {{ company.company_phone }}</td>
+        </tr>
+      {% endif %}
     {% endfor %}
   {% endif %}
 </table>

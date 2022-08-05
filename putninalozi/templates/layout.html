@@ -37,6 +37,7 @@
                   <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">User</a>
                   <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
                 {% elif current_user.authorization == 'c_admin'%}
+                  <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Company</a>
                   <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vehicle</a>
                   <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">User</a>
                   <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>

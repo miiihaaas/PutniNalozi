@@ -23,7 +23,7 @@ def register_u():
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         if current_user.authorization == 'c_admin':
-            user = User(username=form.username.data.upper(),
+            user = User(username="killColumn", #obrisati kolonu username u db, nakon toga obrisati ovaj parametar
                         email=form.email.data,
                         password=hashed_password,
                         name=form.name.data,
@@ -31,7 +31,7 @@ def register_u():
                         authorization=form.authorization.data,
                         company_id=Company.query.filter_by(companyname=current_user.user_company.companyname).first().id) #Company.query.filter_by(companyname=form.company_id.data).first().id) #int(current_user.company_id)) ##
         elif current_user.authorization == 's_admin':
-            user = User(username=form.username.data.upper(),
+            user = User(username="killColumn", #obrisati kolonu username u db, nakon toga obrisati ovaj parametar
                         email=form.email.data,
                         password=hashed_password,
                         name=form.name.data,

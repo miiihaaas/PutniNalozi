@@ -5,7 +5,7 @@ from putninalozi.models import Company
 
 class RegistrationCompanyForm(FlaskForm):
     companyname = StringField('Company Name', validators=[DataRequired(), Length(min=2, max=20)])
-    companyname_short = StringField('Short Company Name', validators=[DataRequired(), Length(min=3, max=5)])
+    # companyname_short = StringField('Short Company Name', validators=[DataRequired(), Length(min=3, max=5)])
     company_address = StringField('Company Street', validators=[DataRequired(), Length(min=5, max=20)])
     company_address_number = StringField('Number', validators=[DataRequired(), Length(min=1, max=5)])
     company_zip_code = StringField('ZIP', validators=[DataRequired(), Length(min=5, max=5)])
