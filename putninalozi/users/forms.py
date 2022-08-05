@@ -6,7 +6,7 @@ from putninalozi.models import Company, User
 
 
 class RegistrationUserForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    # username = StringField('Username', validators=[DataRequired(), Email()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()]) #stavljaće se podrazumevana šifra tipa: korisnik1234
     # confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
@@ -15,11 +15,6 @@ class RegistrationUserForm(FlaskForm):
     authorization = SelectField('Authorization Level', validators=[DataRequired()], choices=[('c_user', 'USER'),('c_admin', 'ADMIN')]) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
     company_id = SelectField('Company ID', choices=Company.query.all()) #Company.query.all()  vs  [(1, 'Helios'),(2, 'Metalac')]
     submit = SubmitField('Register User')
-
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('That username is taken, please choose a different one')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
@@ -56,7 +51,7 @@ class UpdateUserForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    username=StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')

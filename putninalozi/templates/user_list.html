@@ -4,36 +4,47 @@
   <a class="btn btn-info btn-sm m-1" href="{{ url_for('users.register_u') }}">Register New User</a>
 {% endif %}
 <table  border="1" class="table">
-  <tr id="header">
-    <th>Name Surname</th>
-    <th>Company</th>
-    <th>Authorization</th>
-  </tr>
   {% if current_user.authorization == 's_admin' %}
+    <tr id="header">
+      <th>Name Surname</th>
+      <th>Company</th>
+      <th>Authorization</th>
+      <th>email</th>
+      <th>Dodeljena Vozila</th>
+    </tr>
     {% for user in users %}
       <tr>
         <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
-        <td><a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.user_company.companyname }}</a></td>
-        <td><a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.authorization }}</a></td>
+        <td>{{ user.user_company.companyname }}</td>
+        <td>{{ user.authorization }}</td>
+        <td>{{ user.email }}</td>
       </tr>
     {% endfor %}
   {% elif current_user.authorization == 'c_admin' %}
+    <tr id="header">
+      <th>Name Surname</th>
+      <th>email</th>
+      <th>Dodeljena Vozila</th>
+    </tr>
     {% for user in users %}
       {% if user.user_company.id == current_user.user_company.id %}
         <tr>
           <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
-          <td><a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.user_company.companyname }}</a></td>
-          <td><a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.authorization }}</a></td>
+          <td>{{ user.email }}</td>
         </tr>
       {% endif %}
     {% endfor %}
   {% else %}
+    <tr id="header">
+      <th>Name Surname</th>
+      <th>email</th>
+      <th>Dodeljena Vozila</th>
+    </tr>
     {% for user in users %}
       {% if user.id == current_user.id %}
         <tr>
           <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
-          <td><a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.user_company.companyname }}</a></td>
-          <td><a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.authorization }}</a></td>
+          <td>{{ user.email }}</td>
         </tr>
       {% endif %}
     {% endfor %}
