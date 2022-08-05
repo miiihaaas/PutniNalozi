@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>{{ current_user.authorization }}</h1>
+    <h1>{{ current_user.company_id }}</h1>
+    <h1>{{ current_user.name }} {{ current_user.surname }}</h1>
+    <h1>{{ current_user.user_company.companyname }}</h1>
+{% endblock content%}

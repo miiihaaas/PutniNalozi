@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+{% if current_user.authorization != 'c_user' %}
+  <a class="btn btn-info btn-sm m-1" href="{{ url_for('vehicles.register_v') }}">Register New Vehicle</a>
+{% endif %}
+<table width="200" border="1" class="table">
+  <tr>
+    <th>Vehicle Type</th>
+    <th>Vehicle Brand</th>
+    <th>Vehicle Registration</th>
+    <th>Company</th>
+  </tr>
+  {% if current_user.authorization == 's_admin' %}
+    {% for vehicle in vehicles %}
+      <tr>
+        <td><a class="mr-2" href="#" title="Edit Vehicle">{{ vehicle.vehicle_type }}</a></td>
+        <td><a class="mr-2" href="#" title="Edit Vehicle">{{ vehicle.vehicle_brand }}</a></td>
+        <td><a class="mr-2" href="#" title="Edit Vehicle">{{ vehicle.vehicle_registration }}</a></td>
+        <td><a class="mr-2" href="#" title="Edit Vehicle">{{ vehicle.vehicle_company.companyname }}</a></td>
+      </tr>
+    {% endfor %}
+  {% elif current_user.authorization == 'c_admin' %}
+    {% for vehicle in vehicles %}
+      {% if vehicle.vehicle_company.id == current_user.user_company.id %}
+        <tr>
+          <td><a class="mr-2" href="#" title="Edit Vehicle">{{ vehicle.vehicle_type }}</a></td>
+          <td><a class="mr-2" href="#" title="Edit Vehicle">{{ vehicle.vehicle_brand }}</a></td>
+          <td><a class="mr-2" href="#" title="Edit Vehicle">{{ vehicle.vehicle_registration }}</a></td>
+          <td><a class="mr-2" href="#" title="Edit Vehicle">{{ vehicle.vehicle_company.companyname }}</a></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+</table>
+{% endblock content%}
