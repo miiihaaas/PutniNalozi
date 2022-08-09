@@ -35,7 +35,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     # username = db.Column(db.String(20), unique=True, nullable=False) #predlog je da bude standardizovano: npr prva tri slova prezimena, imena (PANMIH, SIMDUS)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    old_email = db.Column(db.String(120), unique=True, nullable=False)
+    old_email = db.Column(db.String(120), unique=False, nullable=False)
     password = db.Column(db.String(60), nullable = False)
     name = db.Column(db.String(20), unique=False, nullable=False)
     surname = db.Column(db.String(20), unique=False, nullable=False)

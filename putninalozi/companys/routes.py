@@ -1,7 +1,8 @@
 import secrets, os
+from PIL import Image
 from flask import Blueprint
-from flask import  render_template, url_for, flash, redirect, request
-from putninalozi import db
+from flask import  render_template, url_for, flash, redirect, request, abort
+from putninalozi import db, app
 from putninalozi.companys.forms import RegistrationCompanyForm, EditCompanyForm
 from putninalozi.models import Company
 from flask_login import current_user, login_required
@@ -47,6 +48,11 @@ def save_picture(form_picture):
     picture_path = os.path.join(app.root_path, 'static/company_logos', picture_fn)
     form_picture.save(picture_path)
 
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+
     return picture_fn
 
 
@@ -55,26 +61,28 @@ def save_picture(form_picture):
 def company_profile(company_id): #ovo je funkcija za editovanje user-a
     company = Company.query.get_or_404(company_id)
     if current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
-        if current_user.id == user.id:
-            pass
-        else:
-            abort(403)
+        abort(403)
+    elif current_user.user_company.id != company.id and current_user.authorization != 's_admin':
+        abort(403)
     form = EditCompanyForm()
     if form.validate_on_submit():
         if form.company_logo.data:
             picture_file = save_picture(form.company_logo.data)
-        companyname=form.companyname.data
-        company_address=form.company_address.data
-        company_address_number=form.company_address_number.data
-        company_zip_code=form.company_zip_code.data
-        company_city=form.company_city.data
-        company_state=form.company_state.data
-        company_pib=form.company_pib.data
-        company_mb=form.company_mb.data
-        company_site=form.company_site.data
-        company_mail=form.company_mail.data
-        company_phone=form.company_phone.data
-        company_logo=form.company_logo.data
+            company.company_logo=picture_file
+
+
+        company.companyname=form.companyname.data
+        company.company_address=form.company_address.data
+        company.company_address_number=form.company_address_number.data
+        company.company_zip_code=form.company_zip_code.data
+        company.company_city=form.company_city.data
+        company.company_state=form.company_state.data
+        company.company_pib=form.company_pib.data
+        company.company_mb=form.company_mb.data
+        company.company_site=form.company_site.data
+        company.company_mail=form.company_mail.data
+        company.company_phone=form.company_phone.data
+        db.session.commit()
     elif request.method == 'GET':
         form.companyname.data=company.companyname
         form.company_address.data=company.company_address
@@ -87,5 +95,7 @@ def company_profile(company_id): #ovo je funkcija za editovanje user-a
         form.company_site.data=company.company_site
         form.company_mail.data=company.company_mail
         form.company_phone.data=company.company_phone
-        # form.company_logo.data=company.company_logo
-    return render_template('company.html', title='Edit Company', form=form, legend='Edit Company')
+        form.company_logo.data=company.company_logo
+    image_file = url_for('static', filename='company_logos/' + company.company_logo)
+    print(image_file)
+    return render_template('company.html', title='Edit Company', company=company, form=form, legend='Edit Company', image_file=image_file)

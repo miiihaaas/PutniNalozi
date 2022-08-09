@@ -12,6 +12,6 @@ travel_warrants = Blueprint('travel_warrants', __name__)
 
 @travel_warrants.route("/travel_warrant", methods=['GET', 'POST'])
 def travel_warrant():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('main.home'))
     return render_template('travel_warrant.html', title='Travel Warrant')

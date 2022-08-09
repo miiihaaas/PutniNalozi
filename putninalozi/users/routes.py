@@ -26,6 +26,7 @@ def register_u():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         if current_user.authorization == 'c_admin':
             user = User(email=form.email.data,
+                        old_email=form.email.data,
                         password=hashed_password,
                         name=form.name.data,
                         surname=form.surname.data,
@@ -61,7 +62,8 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         user.name = form.name.data
         user.surname = form.surname.data
         user.email = form.email.data
-        user.old_email = user.old_email
+        user.old_email = form.old_email.data
+
         if current_user.authorization != 'c_user':
             user.authorization = form.authorization.data
         if current_user.authorization == 's_admin':
@@ -72,14 +74,11 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         flash('Profile was updated', 'success')
         return redirect(url_for('users.user_list')) #vidi da li je bolje na neko drugo mesto da ga prebaci
     elif request.method == 'GET':
-        # form.username.data = user.username
-        # form.password.data = user.password
         form.name.data = user.name
         form.surname.data = user.surname
         form.email.data = user.email
 
-        form.old_email = user.email
-        user.old_email = user.email
+        form.old_email.data = user.email
     return render_template('user.html', title="Edit User", user=user, form=form, legend='Edit User')
 
 

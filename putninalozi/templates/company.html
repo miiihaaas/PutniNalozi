@@ -1,5 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="media">
+  <img class="rounded-circle account-img" src="{{ image_file }}">
+  <div class="media-body">
+    <h2 class="account-heading">{{ company.companyname }}</h2>
+    <p class="text-secondary text-muted">{{ company.company_address }} {{ company.company_address_number }}, {{ company.company_city }}</p>
+
+  </div>
+</div>
 <div class="content-section">
     <form method="POST" action="" enctype="multipart/form-data">
         {{ form.hidden_tag() }}

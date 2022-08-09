@@ -23,29 +23,25 @@ class RegistrationUserForm(FlaskForm):
 
 
 class UpdateUserForm(FlaskForm):
-    # username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    old_email = StringField('Old Email', validators=[DataRequired(), Email()]) # služi za validaciju prilikom promene podataka usera...
-    # password = PasswordField('New Password', validators=[DataRequired()]) #stavljaće se podrazumevana šifra tipa: korisnik1234
-    # confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    old_email = StringField('Old Email', validators=[DataRequired(), Email()]) # služi za validaciju prilikom promene podataka mejla...
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=20)])
     surname = StringField('Surname', validators=[DataRequired(), Length(min=2, max=20)])
     authorization = SelectField('Authorization Level', validators=[DataRequired()], choices=[('c_user', 'USER'),('c_admin', 'ADMIN')]) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
     company_id = SelectField('Company ID', choices=Company.query.all()) #Company.query.all()  vs  [(1, 'Helios'),(2, 'Metalac')]
     submit = SubmitField('Update User')
 
-    def validate_email(self, email, old_email):
-        print(f'{email.data=}')
-
-        user = User.query.filter_by(email=old_email.data).first()
+    def validate_old_email(self, old_email):
+        print(f'{old_email.data=}')
+        user = User.query.filter_by(old_email=old_email.data).first()
+        print(user)
+        # print(f'{user.old_email=}')
         # print(f'{user.email=}')
-        # print(f'{user.id=}')
-        user = User.query.filter_by(email=user.old_email).first()
-        # print(f'{user.email=}')
-        if user.old_email != user.email:
-            user = User.query.filter_by(email=email.data).first()
-            if user:
-                raise ValidationError('That email is taken, please choose a different one')
+        # user = User.query.filter_by(email=user.old_email).first()
+        # if user.old_email != user.email:
+        #     user = User.query.filter_by(email=email.data).first()
+        #     if user:
+        #         raise ValidationError('That email is taken, please choose a different one')
 
 
 

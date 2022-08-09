@@ -51,16 +51,8 @@
             </div>
             <div class="form-group">
                 {{ form.old_email.label(class="form-control-label") }}
-                {% if form.old_email.errors %}
-                    {{ form.old_email(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.old_email.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.old_email(class="form-control form-control-lg") }}
-                {% endif %}
+                {{ form.old_email(class="form-control form-control-lg") }}
+
             </div>
 
             {% if current_user.authorization == 's_admin'%}
