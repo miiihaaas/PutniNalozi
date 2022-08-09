@@ -1,4 +1,151 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Travel Warrant - work in progress</h1>
+    <div class="form-group">
+        {{ form.with_task.label(class="form-control-label") }}
+
+        {% if form.with_task.errors %}
+            {{ form.with_task(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.with_task.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.with_task(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.workplace.label(class="form-control-label") }}
+
+        {% if form.workplace.errors %}
+            {{ form.workplace(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.workplace.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.workplace(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+    <p>
+      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+        Putovanje U Inostranstvo
+      </button>
+    </p>
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+        {{ form.abroad_contry.label(class="form-control-label") }}
+
+        {% if form.abroad_contry.errors %}
+            {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.abroad_contry.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.abroad_contry(class="form-control form-control-lg") }}
+        {% endif %}
+      </div>
+    </div>
+    <div class="form-group">
+        {{ form.relation.label(class="form-control-label") }}
+
+        {% if form.relation.errors %}
+            {{ form.relation(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.relation.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.relation(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.trip_approved_by.label(class="form-control-label") }}
+
+        {% if form.trip_approved_by.errors %}
+            {{ form.trip_approved_by(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.trip_approved_by.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.trip_approved_by(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.travel_expenses_paid_by.label(class="form-control-label") }}
+
+        {% if form.travel_expenses_paid_by.errors %}
+            {{ form.travel_expenses_paid_by(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.travel_expenses_paid_by.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.travel_expenses_paid_by(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.advance_payment_amount.label(class="form-control-label") }}
+
+        {% if form.advance_payment_amount.errors %}
+            {{ form.advance_payment_amount(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.advance_payment_amount.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.advance_payment_amount(class="form-control form-control-lg") }} {{ form.advance_payment_amount_currency(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.amount_of_daily_wages.label(class="form-control-label") }}
+
+        {% if form.amount_of_daily_wages.errors %}
+            {{ form.amount_of_daily_wages(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.amount_of_daily_wages.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.amount_of_daily_wages(class="form-control form-control-lg") }} {{ form.amount_of_daily_wages_currency(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.km_start.label(class="form-control-label") }}
+
+        {% if form.km_start.errors %}
+            {{ form.km_start(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.km_start.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.km_start(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+    <div class="form-group">
+        {{ form.km_end.label(class="form-control-label") }}
+
+        {% if form.km_end.errors %}
+            {{ form.km_end(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in form.km_end.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ form.km_end(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
 {% endblock content%}

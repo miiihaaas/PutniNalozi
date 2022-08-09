@@ -6,10 +6,8 @@ from putninalozi.models import Company, User
 
 
 class RegistrationUserForm(FlaskForm):
-    # username = StringField('Username', validators=[DataRequired(), Email()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()]) #stavljaće se podrazumevana šifra tipa: korisnik1234
-    # confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=20)])
     surname = StringField('Surname', validators=[DataRequired(), Length(min=2, max=20)])
     authorization = SelectField('Authorization Level', validators=[DataRequired()], choices=[('c_user', 'USER'),('c_admin', 'ADMIN')]) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user

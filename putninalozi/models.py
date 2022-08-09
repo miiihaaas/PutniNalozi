@@ -25,6 +25,7 @@ class Company(db.Model):
     company_logo = db.Column(db.String(60), nullable=False)
     users = db.relationship('User', backref='user_company', lazy=True)
     vehicles = db.relationship('Vehicle', backref='vehicle_company', lazy=True)
+    travelwarrants = db.relationship('TravelWarrant', backref='travelwarrants_company', lazy=True)
 
     def __repr__(self):
         return self.companyname
@@ -73,9 +74,30 @@ class Vehicle(db.Model):
 
 class TravelWarrant(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    with_task = db.Column(db.String(50), nullable=False)
+    workplace = db.Column(db.String(50), nullable=False)
+    abroad = db.Column(db.Boolean, nullable=False)
+    abroad_contry = db.Column(db.String(50), nullable=False) # čekboks za putovanje u inostranstvo
+    relation = db.Column(db.String(150), nullable=False)
+    date_start = db.Column(db.DateTime, nullable=False)
+    date_end = db.Column(db.DateTime, nullable=False)
+    trip_approved_by = db.Column(db.String(50), nullable=False)                 # putnovanje odobrio
+    travel_expenses_paid_by = db.Column(db.String(50), nullable=False)          # npr firma zaposlenog ili firma kod koje se ide (kupac, dobavljač)
+    advance_payment_amount = db.Column(db.Integer, nullable=False)              # iznos akontacije
+    advance_payment_amount_currency = db.Column(db.String(3), nullable=False)   # valuta (rsd, eur, dol...)
+    amount_of_daily_wages = db.Column(db.Integer, nullable=False)               # iznos dnevnice
+    amount_of_daily_wages_currency = db.Column(db.String(3), nullable=False)    # valuta (rsd, eur, dol...)
+    approve_usage_of = db.Column(db.String(30), nullable=False)                 #odobrava se upotreba (ili: službenog [lista vozila]. ličnog vozila [tip, marka registracija], drugo [autobus, avion...]
+        #dodati podkategorije koje će da budu viljive u odnosu na odabranu opciju (službenog, ličnog, drugo)
+    km_start = db.Column(db.Integer, nullable=False)
+    km_end = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.Integer, nullable=False)                              #(1 - priprema, 2 - u delu, 3 - završen, 4 - arhiviran)
+
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     #nastaviti sa dodavanjem potrebnih polja (nakon definisanja), napisati formu (forms.py), dodati funkciju (routes.py) i napraviti html fajl
+
 
 
 db.create_all()

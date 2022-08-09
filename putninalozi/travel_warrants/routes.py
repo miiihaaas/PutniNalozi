@@ -3,6 +3,7 @@ from flask import  render_template, url_for, flash, redirect
 from putninalozi import db
 # from putninalozi.travel_warrants.forms import TravelWarrantForm
 from putninalozi.models import TravelWarrant
+from putninalozi.travel_warrants.forms import CreateTravelWarrantForm
 from flask_login import login_user, login_required, logout_user, current_user
 
 
@@ -14,4 +15,5 @@ travel_warrants = Blueprint('travel_warrants', __name__)
 def travel_warrant():
     # if current_user.is_authenticated:
     #     return redirect(url_for('main.home'))
-    return render_template('travel_warrant.html', title='Travel Warrant')
+    form = CreateTravelWarrantForm()
+    return render_template('travel_warrant.html', title='Travel Warrant', form=form)
