@@ -34,6 +34,7 @@ def register_u():
                         company_id=Company.query.filter_by(companyname=current_user.user_company.companyname).first().id) #Company.query.filter_by(companyname=form.company_id.data).first().id) #int(current_user.company_id)) ##
         elif current_user.authorization == 's_admin':
             user = User(email=form.email.data,
+                        old_email=form.email.data,
                         password=hashed_password,
                         name=form.name.data,
                         surname=form.surname.data,

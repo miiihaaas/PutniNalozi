@@ -58,7 +58,7 @@ class User(db.Model, UserMixin):
         return User.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.id}', '{self.email}', '{self.name}', '{self.surname}', '{self.authorization}')"
+        return self.name + " " + self.surname
 
 
 class Vehicle(db.Model):
@@ -73,7 +73,7 @@ class Vehicle(db.Model):
 
 
 class TravelWarrant(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    travel_warrant_id = db.Column(db.Integer, primary_key=True)
     with_task = db.Column(db.String(50), nullable=False)
     workplace = db.Column(db.String(50), nullable=False)
     abroad = db.Column(db.Boolean, nullable=False)
@@ -81,6 +81,8 @@ class TravelWarrant(db.Model):
     relation = db.Column(db.String(150), nullable=False)
     date_start = db.Column(db.DateTime, nullable=False)
     date_end = db.Column(db.DateTime, nullable=False)
+    time_start = db.Column(db.DateTime, nullable=False)
+    time_end = db.Column(db.DateTime, nullable=False)
     trip_approved_by = db.Column(db.String(50), nullable=False)                 # putnovanje odobrio
     travel_expenses_paid_by = db.Column(db.String(50), nullable=False)          # npr firma zaposlenog ili firma kod koje se ide (kupac, dobavljač)
     advance_payment_amount = db.Column(db.Integer, nullable=False)              # iznos akontacije

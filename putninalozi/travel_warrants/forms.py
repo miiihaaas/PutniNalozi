@@ -1,14 +1,22 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, SelectField
+from wtforms import StringField, BooleanField, SelectField, DateField, TimeField
 from wtforms.validators import DataRequired
+from putninalozi.models import Company, User
+from flask_login import current_user
 
 
 
 class CreateTravelWarrantForm(FlaskForm):
+    choices=User.query.all()
+    user_id = SelectField('User ID', choices=choices)
     with_task = StringField('Sa Zadatkom: ', validators=[DataRequired()])
     workplace = StringField('Radno Mesto: ', validators=[DataRequired()]) ###
     abroad = BooleanField('Putovanje U Inostranstvo')
     abroad_contry = StringField('Država: ', validators=[DataRequired()])
+    date_start = DateField('Polazno Vreme: ', format='dd.mm.yyyy' )
+    time_start = TimeField('Polazno Vreme: ', format='%d-%m-%Y' )
+    date_end = DateField('Vreme Završetka: ', format='dd.mm.yyyy' )
+    time_end = TimeField('Vreme Završetka: ', format='%d-%m-%Y' )
     relation = StringField('Relacija:', validators=[DataRequired()])
     trip_approved_by = StringField('Putovanje Odobrio: ', validators=[DataRequired()])
     travel_expenses_paid_by = StringField('Putne Troškove Plaća: ', validators=[DataRequired()])

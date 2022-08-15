@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ legend }}</legend>
+
+
+            <div class="form-group">
+                {{ form.vehicle_type.label(class="form-control-label") }}
+
+                {% if form.vehicle_type.errors %}
+                    {{ form.vehicle_type(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.vehicle_type.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.vehicle_type(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.vehicle_brand.label(class="form-control-label") }}
+
+                {% if form.vehicle_brand.errors %}
+                    {{ form.vehicle_brand(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.vehicle_brand.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.vehicle_brand(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.vehicle_registration.label(class="form-control-label") }}
+
+                {% if form.vehicle_registration.errors %}
+                    {{ form.vehicle_registration(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.vehicle_registration.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.vehicle_registration(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.company_id.label(class="form-control-label") }}
+
+                {% if form.company_id.errors %}
+                    {{ form.company_id(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.company_id.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.company_id(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+
+        </fieldset>
+        <div class="form-group">
+          {{ form.submit(class="btn btn-outline-info") }}
+          {% if current_user.authorization == 's_admin' or current_user.authorization == 'c_admin' %}
+            <div>
+              <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Delete</button>
+            </div>
+          {% endif %}
+        </div>
+  </form>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DeleteModalLabel">Delete Vehicle?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label for="input_password">To delete vehicle you need to confirm your password:</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <form  action="{{ url_for('vehicles.delete_vehicle', vehicle_id=vehicle.id) }}" method="post">
+          <input class="btn btn-danger" type="submit" value="Delete Vehicle">
+          <input type="password" id="input_password" name="input_password" value="" placeholder="confirm your password to delete vehicle">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content%}
