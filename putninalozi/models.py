@@ -89,8 +89,18 @@ class TravelWarrant(db.Model):
     advance_payment_amount_currency = db.Column(db.String(3), nullable=False)   # valuta (rsd, eur, dol...)
     amount_of_daily_wages = db.Column(db.Integer, nullable=False)               # iznos dnevnice
     amount_of_daily_wages_currency = db.Column(db.String(3), nullable=False)    # valuta (rsd, eur, dol...)
-    approve_usage_of = db.Column(db.String(30), nullable=False)                 #odobrava se upotreba (ili: službenog [lista vozila]. ličnog vozila [tip, marka registracija], drugo [autobus, avion...]
-        #dodati podkategorije koje će da budu viljive u odnosu na odabranu opciju (službenog, ličnog, drugo)
+    approve_usage_of = db.Column(db.String(30), nullable=False)                 #odobrava se upotreba (ili: službenog [lista vozila]. ličnog vozila [tip, marka, registracija], drugo [autobus, avion...]
+#1 službeno vozilo
+    approve_usage_of_lisa_vozila = db.Column(db.String(30), nullable=True)
+#2 sa kolegom koji koristi službeno vozilo
+    approve_usage_of_sa_kolegom = db.Column(db.Integer, nullable=True)
+#3 lično vozilo
+    approve_usage_of_licno_vozilo_tip = db.Column(db.String(30), nullable=True)
+    approve_usage_of_licno_vozilo_marka = db.Column(db.String(30), nullable=True)
+    approve_usage_of_licno_vozilo_registracija = db.Column(db.String(30), nullable=True)
+#4 drugo (autobus, taksi, avion...)
+    approve_usage_of_drugo = db.Column(db.String(30), nullable=True)
+
     km_start = db.Column(db.Integer, nullable=False)
     km_end = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Integer, nullable=False)                              #(1 - priprema, 2 - u delu, 3 - završen, 4 - arhiviran)

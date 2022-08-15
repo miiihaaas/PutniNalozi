@@ -49,7 +49,10 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
             pass
         else:
             abort(403)
+    print(Company.query.filter_by(id=vehicle.company_id).first().id)
     form = UpdateVehicleForm()
+    # form.company_id=Company.query.filter_by(id=vehicle.company_id).first().id
+    # form.process()
     if form.validate_on_submit():
         vehicle.vehicle_type = form.vehicle_type.data.upper()
         vehicle.vehicle_brand = form.vehicle_brand.data.upper()
@@ -66,7 +69,10 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         form.vehicle_type.data = vehicle.vehicle_type
         form.vehicle_brand.data = vehicle.vehicle_brand
         form.vehicle_registration.data = vehicle.vehicle_registration
-        form.company_id.data = vehicle.company_id
+        # form.company_id.data = Company.query.filter_by(id=vehicle.company_id).first().id
+        # form.company_id.data = int(vehicle.company_id)
+        form.company_id.process_data(Company.query.filter_by(id=vehicle.company_id).first().id)
+        # print(form.company_id.data)
     return render_template('vehicle.html', title="Edit Vehicle", vehicle=vehicle, form=form, legend='Edit Vehicle')
 
 
@@ -82,7 +88,7 @@ def delete_vehicle(vehicle_id):
         if current_user.authorization == 'c_user':
             abort(403)
         elif current_user.authorization == 'c_admin':
-            if current_user.user_company.id != vehicle.user_company.id:
+            if current_user.user_company.id != vehicle.vehicle_company.id:
                 abort(403)
             db.session.delete(vehicle)
             db.session.commit()
