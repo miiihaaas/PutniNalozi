@@ -1,6 +1,14 @@
-from putninalozi.models import User, Vehicle, Company
+
+from putninalozi.models import User, Vehicle, Company, TravelWarrant
 from putninalozi import db
 
+###########################
+## primer kako obrisati samo 1 tabelu (npr zbog promene struktre u models.py):
+## TravelWarrant.__table__.drop(db.engine)
+## posle toga kreriraš sve:
+## db.create_all()
+## link: https://stackoverflow.com/questions/35918605/how-to-delete-a-table-in-sqlalchemy
+###########################
 
 helios=Company(companyname='HELIOS SRBIJA', company_address='Radovana Grkovića', company_address_number='24', company_zip_code='32300', company_city='Gornji Milanovac', company_state='Srbija', company_pib='123456789', company_mb='12345678', company_site='www.helios.rs', company_mail='info@helios.rs', company_phone='032771000', company_logo="")
 metalac=Company(companyname='METALAC AD', company_address='Kralja Aleksandra', company_address_number='212', company_zip_code='32300', company_city='Gornji Milanovac', company_state='Srbija', company_pib='123456789', company_mb='12345678', company_site='https://www.metalac.com/', company_mail='metalac@metalac.rs', company_phone='032770311', company_logo="")

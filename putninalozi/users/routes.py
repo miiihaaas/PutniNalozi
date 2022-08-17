@@ -65,11 +65,12 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         user.email = form.email.data
         user.old_email = form.old_email.data
 
-        if current_user.authorization != 'c_user':
+        if current_user.authorization != 's_user':
+            user.authorization = user.authorization
+        else:
             user.authorization = form.authorization.data
         if current_user.authorization == 's_admin':
             user.company_id = Company.query.filter_by(companyname=form.company_id.data).first().id
-
 
         db.session.commit()
         flash('Profile was updated', 'success')

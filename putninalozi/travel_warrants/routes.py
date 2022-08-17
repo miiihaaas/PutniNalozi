@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect
 from putninalozi import db
 # from putninalozi.travel_warrants.forms import TravelWarrantForm
-from putninalozi.models import TravelWarrant
+from putninalozi.models import TravelWarrant, User
 from putninalozi.travel_warrants.forms import CreateTravelWarrantForm
 from flask_login import login_user, login_required, logout_user, current_user
 
@@ -10,12 +10,20 @@ from flask_login import login_user, login_required, logout_user, current_user
 travel_warrants = Blueprint('travel_warrants', __name__)
 
 
+@travel_warrants.route("/travel_warrant_list")
+def travel_warrant_list():
+    warrants = TravelWarrant.query.all()
+    return render_template('travel_warrant_list.html', title='Travel Warrants', warrants=warrants)
 
-@travel_warrants.route("/travel_warrant", methods=['GET', 'POST'])
-def travel_warrant():
+
+@travel_warrants.route("/register_tw", methods=['GET', 'POST'])
+def register_tw():
     # if current_user.is_authenticated:
     #     return redirect(url_for('main.home'))
-    form = CreateTravelWarrantForm()
+    print(f'{current_user.user_company.id=}')
+    users_list = User.query.filter_by(company_id=current_user.user_company.id).all()
+    print(users_list)
+    form = CreateTravelWarrantForm(users_list)
     if form.validate_on_submit():
         if current_user.authorization == 'c_admin':
             warrant = TravelWarrant(
@@ -43,11 +51,11 @@ def travel_warrant():
             )
             db.session.add(warrant)
             db.session.commit()
+            flash(f'Travel Warrant: (!!!dodaj kod za broj putnog naloga!!!) has been created successfully!', 'success')
         elif current_user.authorization == 's_admin':
             warrant = TravelWarrant(
                 with_task=with_task.data
             )
             db.session.add(warrant)
             db.session.commit()
-    flash(f'Travel Warrant: (!!!dodaj kod za broj putnog naloga!!!) has been created successfully!', 'success')
-    return render_template('travel_warrant.html', title='Travel Warrant', form=form)
+    return render_template('register_tw.html', title='Create Travel Warrant', form=form)

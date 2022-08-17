@@ -6,6 +6,7 @@ from flask_login import current_user
 
 
 
+
 class CreateTravelWarrantForm(FlaskForm):
     user_id = SelectField('Zaposleni:', choices=User.query.all())
     with_task = StringField('Sa Zadatkom: ', validators=[DataRequired()])
@@ -23,7 +24,6 @@ class CreateTravelWarrantForm(FlaskForm):
     advance_payment_amount_currency = SelectField('Valuta', validators=[DataRequired()], choices=[('rsd', 'DIN'),('eur', '€'),('usd', '$')])
     amount_of_daily_wages = StringField('Iznos Dnevnice: ', validators=[DataRequired()])
     amount_of_daily_wages_currency = SelectField('Valuta', validators=[DataRequired()], choices=[('rsd', 'DIN'),('eur', '€'),('usd', '$')])
-    approve_usage_of = SelectField('Odobrava se upotreba: ', validators=[DataRequired()], choices=['službenog vozila', 'sa kolegom (ukucati broj putnog naloga kolege)', 'ličnog vozila', 'drugo (autobus, avion...)'])
     km_start = StringField('Početna Kilometraža', validators=[DataRequired()])
     km_end = StringField('Završna Kilometraža', validators=[DataRequired()])
     approve_usage_of_lisa_vozila = SelectField('Službeno Vozilo:', choices=Vehicle.query.all())
@@ -34,6 +34,7 @@ class CreateTravelWarrantForm(FlaskForm):
     approve_usage_of_drugo = StringField('Drugo (autobus, avion, taksi, rentakar...) :', validators=[DataRequired()])
     submit = SubmitField('Sačuvaj Putni Nalog')
     #nastaviti
+
 
 class EditTravelWarrantForm(FlaskForm):
     pass

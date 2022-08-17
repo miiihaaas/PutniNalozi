@@ -1,53 +1,73 @@
 {% extends "layout.html" %}
 {% block content %}
+
 {% if current_user.authorization != 'c_user' %}
   <a class="btn btn-info btn-sm m-1" href="{{ url_for('users.register_u') }}">Register New User</a>
 {% endif %}
-<table  border="1" class="table">
+<hr>
+
+<table id="data" border="1" class="table table-striped">
   {% if current_user.authorization == 's_admin' %}
-    <tr id="header">
-      <th>Name Surname</th>
-      <th>Company</th>
-      <th>Authorization</th>
-      <th>email</th>
-      <th>Dodeljena Vozila</th>
-    </tr>
-    {% for user in users %}
-      <tr>
-        <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
-        <td>{{ user.user_company.companyname }}</td>
-        <td>{{ user.authorization }}</td>
-        <td>{{ user.email }}</td>
+    <thead>
+      <tr id="header">
+        <th>Name Surname</th>
+        <th>Company</th>
+        <th>Authorization</th>
+        <th>email</th>
       </tr>
-    {% endfor %}
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr>
+          <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
+          <td>{{ user.user_company.companyname }}</td>
+          <td>{{ user.authorization }}</td>
+          <td>{{ user.email }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
   {% elif current_user.authorization == 'c_admin' %}
-    <tr id="header">
-      <th>Name Surname</th>
-      <th>email</th>
-      <th>Dodeljena Vozila</th>
-    </tr>
-    {% for user in users %}
-      {% if user.user_company.id == current_user.user_company.id %}
-        <tr>
-          <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
-          <td>{{ user.email }}</td>
-        </tr>
-      {% endif %}
-    {% endfor %}
+    <thead>
+      <tr id="header">
+        <th>Name Surname</th>
+        <th>email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        {% if user.user_company.id == current_user.user_company.id %}
+          <tr>
+            <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
+            <td>{{ user.email }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
   {% else %}
-    <tr id="header">
-      <th>Name Surname</th>
-      <th>email</th>
-      <th>Dodeljena Vozila</th>
-    </tr>
-    {% for user in users %}
-      {% if user.id == current_user.id %}
-        <tr>
-          <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
-          <td>{{ user.email }}</td>
-        </tr>
-      {% endif %}
-    {% endfor %}
+    <thead>
+      <tr id="header">
+        <th>Name Surname</th>
+        <th>email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        {% if user.id == current_user.id %}
+          <tr>
+            <td> <a class="mr-2" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Edit User">{{ user.name }} {{ user.surname }}</a> </td>
+            <td>{{ user.email }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
   {% endif %}
 </table>
-{% endblock content%}
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+{% endblock %}

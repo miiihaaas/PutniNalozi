@@ -3,37 +3,53 @@
 {% if current_user.authorization != 'c_user' %}
   <a class="btn btn-info btn-sm m-1" href="{{ url_for('vehicles.register_v') }}">Register New Vehicle</a>
 {% endif %}
-<table width="200" border="1" class="table">
+<table id="data" border="1" class="table table-striped">
   {% if current_user.authorization == 's_admin' %}
-    <tr>
-      <th>Vehicle Type</th>
-      <th>Vehicle Brand</th>
-      <th>Vehicle Registration</th>
-      <th>Company</th>
-    </tr>
-    {% for vehicle in vehicles %}
+    <thead>
       <tr>
-        <td><a class="mr-2" href="{{ url_for('vehicles.vehicle_profile', vehicle_id=vehicle.id) }}" title="Edit Vehicle">{{ vehicle.vehicle_type }}</a></td>
-        <td>{{ vehicle.vehicle_brand }}</td>
-        <td>{{ vehicle.vehicle_registration }}</td>
-        <td><a class="mr-2" href="#" title="Edit Company">{{ vehicle.vehicle_company.companyname }}</a></td>
+        <th>Vehicle Type</th>
+        <th>Vehicle Brand</th>
+        <th>Vehicle Registration</th>
+        <th>Company</th>
       </tr>
-    {% endfor %}
-  {% elif current_user.authorization == 'c_admin' %}
-    <tr>
-      <th>Vehicle Type</th>
-      <th>Vehicle Brand</th>
-      <th>Vehicle Registration</th>
-    </tr>
-    {% for vehicle in vehicles %}
-      {% if vehicle.vehicle_company.id == current_user.user_company.id %}
+    </thead>
+    <tbody>
+      {% for vehicle in vehicles %}
         <tr>
           <td><a class="mr-2" href="{{ url_for('vehicles.vehicle_profile', vehicle_id=vehicle.id) }}" title="Edit Vehicle">{{ vehicle.vehicle_type }}</a></td>
           <td>{{ vehicle.vehicle_brand }}</td>
           <td>{{ vehicle.vehicle_registration }}</td>
+          <td><a class="mr-2" href="#" title="Edit Company">{{ vehicle.vehicle_company.companyname }}</a></td>
         </tr>
-      {% endif %}
-    {% endfor %}
+      {% endfor %}
+    </tbody>
+  {% elif current_user.authorization == 'c_admin' %}
+    <thead>
+      <tr>
+        <th>Vehicle Type</th>
+        <th>Vehicle Brand</th>
+        <th>Vehicle Registration</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for vehicle in vehicles %}
+        {% if vehicle.vehicle_company.id == current_user.user_company.id %}
+          <tr>
+            <td><a class="mr-2" href="{{ url_for('vehicles.vehicle_profile', vehicle_id=vehicle.id) }}" title="Edit Vehicle">{{ vehicle.vehicle_type }}</a></td>
+            <td>{{ vehicle.vehicle_brand }}</td>
+            <td>{{ vehicle.vehicle_registration }}</td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
   {% endif %}
 </table>
 {% endblock content%}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+{% endblock %}

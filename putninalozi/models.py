@@ -89,7 +89,6 @@ class TravelWarrant(db.Model):
     advance_payment_amount_currency = db.Column(db.String(3), nullable=False)   # valuta (rsd, eur, dol...)
     amount_of_daily_wages = db.Column(db.Integer, nullable=False)               # iznos dnevnice
     amount_of_daily_wages_currency = db.Column(db.String(3), nullable=False)    # valuta (rsd, eur, dol...)
-    approve_usage_of = db.Column(db.String(30), nullable=False)                 #odobrava se upotreba (ili: službenog [lista vozila]. ličnog vozila [tip, marka, registracija], drugo [autobus, avion...]
 #1 službeno vozilo
     approve_usage_of_lisa_vozila = db.Column(db.String(30), nullable=True)
 #2 sa kolegom koji koristi službeno vozilo
@@ -109,6 +108,9 @@ class TravelWarrant(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     #nastaviti sa dodavanjem potrebnih polja (nakon definisanja), napisati formu (forms.py), dodati funkciju (routes.py) i napraviti html fajl
+
+    def __repr__(self):
+        return f"Travel Warrant('{self.travel_warrant_id=}', '{self.with_task=}', '{self.workplace=}'', '{self.abroad_contry=}', '{self.relation=}')"
 
 
 

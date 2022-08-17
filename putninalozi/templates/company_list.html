@@ -3,13 +3,17 @@
 {% if current_user.authorization == 's_admin' %}
   <a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}">Register New Company</a>
 {% endif %}
-<table width="300" border="1" class="table">
-  <tr>
-    <th>Company Name</th>
-    <th>Address</th>
-    <th>City - State</th>
-    <th>Contacts</th>
-  </tr>
+<hr>
+<table id="data" border="1" class="table table-striped">
+  <thead>
+    <tr>
+      <th>Company Name</th>
+      <th>Address</th>
+      <th>City - State</th>
+      <th>Contacts</th>
+    </tr>
+  </thead>
+  <tbody>
   {% if current_user.authorization == 's_admin' %}
     {% for company in companys %}
       <tr>
@@ -30,6 +34,15 @@
         </tr>
       {% endif %}
     {% endfor %}
+  </tbody>
   {% endif %}
 </table>
 {% endblock content%}
+
+{% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#data').DataTable();
+    });
+  </script>
+{% endblock %}

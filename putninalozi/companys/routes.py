@@ -83,6 +83,8 @@ def company_profile(company_id): #ovo je funkcija za editovanje user-a
         company.company_mail=form.company_mail.data
         company.company_phone=form.company_phone.data
         db.session.commit()
+        flash('Company details has been updated.', 'success')
+        return redirect(url_for('companys.company_list', title='Companies', companys=companys))
     elif request.method == 'GET':
         form.companyname.data=company.companyname
         form.company_address.data=company.company_address
