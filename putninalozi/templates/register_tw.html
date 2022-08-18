@@ -1,345 +1,146 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Travel Warrant - work in progress</h1>
-    <div class="form-group">
-        {{ form.user_id.label(class="form-control-label") }}
+<div class="content-section">
+  <form method="POST" action="">
+    {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Create New Travel Warrant</legend>
+        <div class="form-group">
+          {{ form.with_task.label(class="form-control-label") }}
 
-        {% if form.user_id.errors %}
-            {{ form.user_id(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.user_id.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.user_id(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.with_task.label(class="form-control-label") }}
-
-        {% if form.with_task.errors %}
-            {{ form.with_task(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.with_task.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.with_task(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.workplace.label(class="form-control-label") }}
-
-        {% if form.workplace.errors %}
-            {{ form.workplace(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.workplace.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.workplace(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <p>
-      <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-        Putovanje U Inostranstvo
-      </button>
-    </p>
-    <div class="collapse" id="collapseExample">
-      <div class="card card-body">
-        {{ form.abroad_contry.label(class="form-control-label") }}
-
-        {% if form.abroad_contry.errors %}
-            {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.abroad_contry.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.abroad_contry(class="form-control form-control-lg") }}
-        {% endif %}
-      </div>
-    </div>
-
-    <div class="form-group">
-        {{ form.relation.label(class="form-control-label") }}
-
-        {% if form.relation.errors %}
-            {{ form.relation(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.relation.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.relation(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.date_start.label(class="form-control-label") }}
-
-        {% if form.date_start.errors %}
-            {{ form.date_start(class="form-control form-control-lg is-invalid") }}
-            {{ form.time_start(class="form-control form-control-lg") }}
-            <div class="invalid-feedback">
-                {% for error in form.date_start.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.date_start(class="form-control form-control-lg") }}
-            {{ form.time_start(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.date_end.label(class="form-control-label") }}
-
-        {% if form.date_end.errors %}
-            {{ form.date_end(class="form-control form-control-lg is-invalid") }}
-            {{ form.time_end(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.date_end.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.date_end(class="form-control form-control-lg") }}
-            {{ form.time_end(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.trip_approved_by.label(class="form-control-label") }}
-
-        {% if form.trip_approved_by.errors %}
-            {{ form.trip_approved_by(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.trip_approved_by.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.trip_approved_by(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.travel_expenses_paid_by.label(class="form-control-label") }}
-
-        {% if form.travel_expenses_paid_by.errors %}
-            {{ form.travel_expenses_paid_by(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.travel_expenses_paid_by.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.travel_expenses_paid_by(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.advance_payment_amount.label(class="form-control-label") }}
-
-        {% if form.advance_payment_amount.errors %}
-            {{ form.advance_payment_amount(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.advance_payment_amount.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.advance_payment_amount(class="form-control form-control-lg") }} {{ form.advance_payment_amount_currency(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.amount_of_daily_wages.label(class="form-control-label") }}
-
-        {% if form.amount_of_daily_wages.errors %}
-            {{ form.amount_of_daily_wages(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.amount_of_daily_wages.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.amount_of_daily_wages(class="form-control form-control-lg") }} {{ form.amount_of_daily_wages_currency(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        Odobrava se upotreba:
-    </div>
-
-    <div id="accordion">
-      <div class="card">
-        <div class="card-header" id="headingOne">
-          <h5 class="mb-0">
-            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              - Službenog Vozila
-            </button>
-          </h5>
-        </div>
-        <div id="collapseOne" class="collapse hide" aria-labelledby="headingOne" data-parent="#accordion">
-          <div class="card-body">
-            {{ form.approve_usage_of_lisa_vozila.label(class="form-control-label") }}
-
-            {% if form.approve_usage_of_lisa_vozila.errors %}
-                {{ form.approve_usage_of_lisa_vozila(class="form-control form-control-lg is-invalid") }}
+            {% if form.with_task.errors %}
+                {{ form.with_task(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
-                    {% for error in form.approve_usage_of_lisa_vozila.errors %}
+                    {% for error in form.with_task.errors %}
                         <span>{{ error }}</span>
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.approve_usage_of_lisa_vozila(class="form-control form-control-lg") }}
+                {{ form.with_task(class="form-control form-control-lg") }}
             {% endif %}
-          </div>
         </div>
-      </div>
+        <div class="form-group">
+          {{ form.user_id.label(class="form-control-label") }}
 
-      <div id="accordion">
-        <div class="card">
-          <div class="card-header" id="headingTwo">
-            <h5 class="mb-0">
-              <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                - Službenog Vozila (Sa Kolegom)
-              </button>
-            </h5>
+            {% if form.user_id.errors %}
+                {{ form.user_id(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.user_id.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.user_id(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.user_id.label(class="form-control-label") }}
+
+            {% if form.company_id.errors %}
+                {{ form.company_id(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.company_id.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.company_id(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="checkbox-card">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="Država: " onclick="dynInput(this);" class="checkme" /> Putovanje U Inostranstvo
+            </label>
           </div>
-          <div id="collapseTwo" class="collapse hide" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body">
-              {{ form.approve_usage_of_sa_kolegom.label(class="form-control-label") }}
+          <div class="form-box">
+            {{ form.abroad_contry.label(class="form-control-label") }}
 
-              {% if form.approve_usage_of_sa_kolegom.errors %}
-                  {{ form.approve_usage_of_sa_kolegom(class="form-control form-control-lg is-invalid") }}
+              {% if form.abroad_contry.errors %}
+                  {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
                   <div class="invalid-feedback">
-                      {% for error in form.approve_usage_of_sa_kolegom.errors %}
+                      {% for error in form.abroad_contry.errors %}
                           <span>{{ error }}</span>
                       {% endfor %}
                   </div>
               {% else %}
-                  {{ form.approve_usage_of_sa_kolegom(class="form-control form-control-lg") }}
+                  {{ form.abroad_contry(class="form-control form-control-lg") }}
               {% endif %}
-            </div>
+          </div>
+        </div>
+        <br>
+        <div class="form-box">
+          {{ form.relation.label(class="form-control-label") }}
+
+            {% if form.relation.errors %}
+                {{ form.relation(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.relation.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.relation(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="form-box">
+          {{ form.start_datetime.label(class="form-control-label") }}
+
+            {% if form.start_datetime.errors %}
+                {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.start_datetime.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+        </div>
+        <div class="form-box">
+          {{ form.end_datetime.label(class="form-control-label") }}
+
+            {% if form.end_datetime.errors %}
+                {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.end_datetime.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+        </div>
+
+
+
+        <br>
+        <div class="form-group">
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+            <label class="custom-control-label" for="customRadio1">Službeno Vozilo:</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+            <label class="custom-control-label" for="customRadio2">Broj Koleginog Putnog Naloga:</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
+            <label class="custom-control-label" for="customRadio3">Lično Vozilo:</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input">
+            <label class="custom-control-label" for="customRadio4">Drugo:</label>
           </div>
         </div>
 
-        <div id="accordion">
-          <div class="card">
-            <div class="card-header" id="headingTree">
-              <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTree" aria-expanded="true" aria-controls="collapseTree">
-                  - Ličnog Vozila
-                </button>
-              </h5>
-            </div>
-            <div id="collapseTree" class="collapse hide" aria-labelledby="headingTree" data-parent="#accordion">
-              <div class="card-body">
-                {{ form.approve_usage_of_licno_vozilo_tip.label(class="form-control-label") }}
-
-                {% if form.approve_usage_of_licno_vozilo_tip.errors %}
-                    {{ form.approve_usage_of_licno_vozilo_tip(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.approve_usage_of_licno_vozilo_tip.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.approve_usage_of_licno_vozilo_tip(class="form-control form-control-lg") }}
-                {% endif %}
-              </div>
-              <div class="card-body">
-                {{ form.approve_usage_of_licno_vozilo_marka.label(class="form-control-label") }}
-
-                {% if form.approve_usage_of_licno_vozilo_marka.errors %}
-                    {{ form.approve_usage_of_licno_vozilo_marka(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.approve_usage_of_licno_vozilo_marka.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.approve_usage_of_licno_vozilo_marka(class="form-control form-control-lg") }}
-                {% endif %}
-              </div>
-              <div class="card-body">
-                {{ form.approve_usage_of_licno_vozilo_registracija.label(class="form-control-label") }}
-
-                {% if form.approve_usage_of_licno_vozilo_registracija.errors %}
-                    {{ form.approve_usage_of_licno_vozilo_registracija(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.approve_usage_of_licno_vozilo_registracija.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.approve_usage_of_licno_vozilo_registracija(class="form-control form-control-lg") }}
-                {% endif %}
-              </div>
-            </div>
-          </div>
-          <div id="accordion">
-            <div class="card">
-              <div class="card-header" id="headingFour">
-                <h5 class="mb-0">
-                  <button class="btn btn-link" data-toggle="collapse" data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                    - Drugo
-                  </button>
-                </h5>
-              </div>
-              <div id="collapseFour" class="collapse hide" aria-labelledby="headingFour" data-parent="#accordion">
-                <div class="card-body">
-                  {{ form.approve_usage_of_drugo.label(class="form-control-label") }}
-
-                  {% if form.approve_usage_of_drugo.errors %}
-                      {{ form.approve_usage_of_drugo(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.approve_usage_of_drugo.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.approve_usage_of_drugo(class="form-control form-control-lg") }}
-                  {% endif %}
-                </div>
-              </div>
-            </div>
 
 
 
-
-    <div class="form-group">
-        {{ form.km_start.label(class="form-control-label") }}
-
-        {% if form.km_start.errors %}
-            {{ form.km_start(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.km_start.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.km_start(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-        {{ form.km_end.label(class="form-control-label") }}
-
-        {% if form.km_end.errors %}
-            {{ form.km_end(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-                {% for error in form.km_end.errors %}
-                    <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-        {% else %}
-            {{ form.km_end(class="form-control form-control-lg") }}
-        {% endif %}
-    </div>
-    <div class="form-group">
-      {{ form.submit(class="btn btn-outline-info") }}
-    </div>
-
-
+      </fieldset>
+      <div class="form-group">
+        {{ form.submit(class="btn btn-outline-info") }}
+      </div>
+  </form>
+</div>
 {% endblock content%}

@@ -43,7 +43,7 @@ def register_u():
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.name.data} {form.surname.data}!', 'success')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('users.user_list'))
     return render_template('register_u.html', title='Register New User', form=form, legend='Add New User')
 
 
