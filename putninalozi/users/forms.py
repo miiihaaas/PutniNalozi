@@ -19,6 +19,9 @@ class RegistrationUserForm(FlaskForm):
         if user:
             raise ValidationError('That email is taken, please choose a different one')
 
+    def reset(self):
+        self.__init__()
+
 
 class UpdateUserForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -33,13 +36,9 @@ class UpdateUserForm(FlaskForm):
         print(f'{old_email.data=}')
         user = User.query.filter_by(old_email=old_email.data).first()
         print(user)
-        # print(f'{user.old_email=}')
-        # print(f'{user.email=}')
-        # user = User.query.filter_by(email=user.old_email).first()
-        # if user.old_email != user.email:
-        #     user = User.query.filter_by(email=email.data).first()
-        #     if user:
-        #         raise ValidationError('That email is taken, please choose a different one')
+
+    def reset(self):
+        self.__init__()
 
 
 

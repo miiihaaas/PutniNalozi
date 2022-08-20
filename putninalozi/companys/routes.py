@@ -12,13 +12,19 @@ companys = Blueprint('companys', __name__)
 
 @companys.route("/company_list")
 def company_list():
+    if not current_user.is_authenticated:
+        flash('You have to be logged in to access this page', 'danger')
+        return redirect(url_for('users.login'))
     companys = Company.query.all()
     return render_template('company_list.html', title='Companies', companys=companys)
 
 
 @companys.route("/register_c", methods=['GET', 'POST'])
 def register_c():
-    if current_user.is_authenticated and current_user.authorization != 's_admin':
+    if not current_user.is_authenticated:
+        flash('You have to be logged in to access this page', 'danger')
+        return redirect(url_for('users.login'))
+    elif current_user.is_authenticated and current_user.authorization != 's_admin':
         return redirect(url_for('main.home'))
     form = RegistrationCompanyForm()
     if form.validate_on_submit():
@@ -57,10 +63,13 @@ def save_picture(form_picture):
 
 
 @companys.route("/company/<int:company_id>", methods=['GET', 'POST'])
-@login_required
+# @login_required
 def company_profile(company_id): #ovo je funkcija za editovanje user-a
     company = Company.query.get_or_404(company_id)
-    if current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
+    if not current_user.is_authenticated:
+        flash('You have to be logged in to access this page', 'danger')
+        return redirect(url_for('users.login'))
+    elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
         abort(403)
     elif current_user.user_company.id != company.id and current_user.authorization != 's_admin':
         abort(403)

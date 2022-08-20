@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Work in progress</h1>
+    <hr>
+    <h1>{{ warrant.travel_warrant_id }}</h1>
+    <h1>{{ warrant.with_task }}</h1>
+    <h1>{{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }}</h1>
+    <h1>{{ warrant.travelwarrant_company.companyname }}</h1>
+    <h1>{{ warrant.abroad_contry }}</h1>
+    <h1>{{ warrant.relation }}</h1>
+    <h1>{{ warrant.start_datetime }}</h1>
+    <h1>{{ warrant.end_datetime }}</h1>
+{% endblock content%}

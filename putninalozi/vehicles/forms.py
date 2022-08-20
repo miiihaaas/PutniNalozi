@@ -11,6 +11,9 @@ class RegistrationVehicleForm(FlaskForm):
     company_id = SelectField('Company ID', validators=[DataRequired()], choices=Company.query.all())
     submit = SubmitField('Register Vehicle')
 
+    def reset(self):
+        self.__init__()
+
 
 class UpdateVehicleForm(FlaskForm):
     vehicle_type = SelectField('Vehicle Type', validators=[DataRequired()], choices=[('atmbl', 'AUTOMOBIL'),('kmb', 'KOMBI'),('kmn', 'KAMION')])
@@ -18,3 +21,6 @@ class UpdateVehicleForm(FlaskForm):
     vehicle_registration = StringField('Vehicle Registration', validators=[DataRequired(), Length(min=9, max=12)]) # GM 047-DD
     company_id = SelectField('Company ID', validators=[DataRequired()], choices=Company.query.all())
     submit = SubmitField('Update Vehicle')
+
+    def reset(self):
+        self.__init__()

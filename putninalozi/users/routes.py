@@ -12,16 +12,24 @@ users = Blueprint('users', __name__)
 
 @users.route("/user_list")
 def user_list():
+    if not current_user.is_authenticated:
+        flash('You have to be logged in to access this page', 'danger')
+        return redirect(url_for('users.login'))
     users = User.query.all()
     return render_template('user_list.html', title='Users', users=users)
 
 
 @users.route("/register_u", methods=['GET', 'POST'])
-@login_required
+# @login_required
 def register_u():
-    if current_user.is_authenticated and (current_user.authorization != 'c_admin' and current_user.authorization != 's_admin'):
+    if not current_user.is_authenticated:
+        flash('You have to be logged in to access this page', 'danger')
+        return redirect(url_for('users.login'))
+    elif current_user.is_authenticated and (current_user.authorization != 'c_admin' and current_user.authorization != 's_admin'):
+        flash('You do not have authorization to access this page', 'danger')
         return redirect(url_for('main.home'))
     form = RegistrationUserForm()
+    form.reset()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         if current_user.authorization == 'c_admin':
@@ -50,15 +58,19 @@ def register_u():
 
 
 @users.route("/user/<int:user_id>", methods=['GET', 'POST'])
-@login_required
+# @login_required
 def user_profile(user_id): #ovo je funkcija za editovanje user-a
     user = User.query.get_or_404(user_id)
-    if current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
-        if current_user.id == user.id:
-            pass
-        else:
+    if not current_user.is_authenticated:
+        flash('You have to be logged in to access this page', 'danger')
+        return redirect(url_for('users.login'))
+    elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
+        if current_user.id != user.id:
             abort(403)
+    elif current_user.user_company.id != user.user_company.id:
+        abort(403)
     form = UpdateUserForm()
+    form.reset()
     if form.validate_on_submit():
         user.name = form.name.data
         user.surname = form.surname.data
@@ -108,18 +120,14 @@ def logout():
     return redirect(url_for('main.home'))
 
 
-@users.route("/account")
-@login_required
-def account():
-    return render_template('account.html', title='Account')
-
-
 @users.route("/user/<int:user_id>/delete", methods=['POST'])
 @login_required
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
-    print(f'debug - {request.form.get("input_password")}')
-    if not bcrypt.check_password_hash(current_user.password, request.form.get("input_password")):
+    if not current_user.is_authenticated:
+        flash('You have to be logged in to access this page', 'danger')
+        return redirect(url_for('users.login'))
+    elif not bcrypt.check_password_hash(current_user.password, request.form.get("input_password")):
         print('nije dobar password')
         abort(403)
     else:
@@ -130,7 +138,7 @@ def delete_user(user_id):
                 abort(403)
             db.session.delete(user)
             db.session.commit()
-            flash(f'User {user.username} has been deleted', 'success' )
+            flash(f'User {user.name} {user.surname} has been deleted', 'success' )
             return redirect(url_for('users.user_list'))
         else:
             db.session.delete(user)
