@@ -45,8 +45,8 @@ def register_tw():
 
         db.session.add(warrant)
         db.session.commit()
-        create_pdf_form(warrant)
-        send_email(warrant, current_user)
+        file_name = create_pdf_form(warrant)
+        send_email(warrant, current_user, file_name)
         flash(f'Travel Warrant number: {warrant.travel_warrant_id} has been created successfully!', 'success')
         return redirect('travel_warrant_list')
     print('nije dobra validacija')
