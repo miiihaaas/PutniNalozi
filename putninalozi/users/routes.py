@@ -5,6 +5,7 @@ from putninalozi.users.forms import RegistrationUserForm, LoginForm, UpdateUserF
 from putninalozi.models import Company, User
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_mail import Message
+from wtforms.validators import ValidationError
 
 
 users = Blueprint('users', __name__)
@@ -67,32 +68,55 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
         if current_user.id != user.id:
             abort(403)
+    elif current_user.authorization == 's_admin':
+        pass
     elif current_user.user_company.id != user.user_company.id:
         abort(403)
+
     form = UpdateUserForm()
     form.reset()
+
     if form.validate_on_submit():
         user.name = form.name.data
         user.surname = form.surname.data
-        user.email = form.email.data
-        user.old_email = form.old_email.data
 
-        if current_user.authorization != 's_user':
+        if user.email == form.email.data:
+            user.email = form.email.data
+        else:
+            validate_email = User.query.filter_by(email=form.email.data).first()
+            if validate_email:
+                flash('That email is taken, please choose a different one', 'danger')
+                return render_template('user.html', title="Edit User", user=user, form=form, legend='Edit User')
+            else:
+                user.email = form.email.data
+
+        user.old_email = form.old_email.data # !!!!briši atribut 'old_email'!!!!
+
+        if current_user.authorization != 's_admin':
             user.authorization = user.authorization
         else:
             user.authorization = form.authorization.data
+
         if current_user.authorization == 's_admin':
-            user.company_id = Company.query.filter_by(companyname=form.company_id.data).first().id
+            user.company_id = form.company_id.data
+        else:
+            user.company_id = user.company_id
 
         db.session.commit()
         flash('Profile was updated', 'success')
-        return redirect(url_for('users.user_list')) #vidi da li je bolje na neko drugo mesto da ga prebaci
+        return redirect(url_for('users.user_list'))
     elif request.method == 'GET':
         form.name.data = user.name
         form.surname.data = user.surname
         form.email.data = user.email
 
-        form.old_email.data = user.email
+        form.authorization.choices = [('c_user', 'USER'),('c_admin', 'ADMIN')]
+        form.authorization.data = user.authorization
+
+        form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
+        form.company_id.data = str(user.company_id)
+
+        form.old_email.data = user.email # !!!!briši atribut 'old_email'!!!!
     return render_template('user.html', title="Edit User", user=user, form=form, legend='Edit User')
 
 

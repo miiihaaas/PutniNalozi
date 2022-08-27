@@ -29,7 +29,6 @@ def register_c():
     form = RegistrationCompanyForm()
     if form.validate_on_submit():
         company = Company(companyname=form.companyname.data.upper(),
-                            companyname_short=form.companyname_short.data.upper(),
                             company_address=form.company_address.data.upper(),
                             company_address_number=form.company_address_number.data,
                             company_zip_code=form.company_zip_code.data,

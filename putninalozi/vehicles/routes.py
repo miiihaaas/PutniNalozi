@@ -60,7 +60,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
             abort(403)
     print(Company.query.filter_by(id=vehicle.company_id).first().id)
     form = UpdateVehicleForm()
-    form.reset()
+    # form.reset()
     # form.company_id=Company.query.filter_by(id=vehicle.company_id).first().id
     # form.process()
     if form.validate_on_submit():
@@ -68,9 +68,9 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         vehicle.vehicle_brand = form.vehicle_brand.data.upper()
         vehicle.vehicle_registration = form.vehicle_registration.data.upper()
         if current_user.authorization == 'c_admin':
-            company_id=int(current_user.company_id)
+            vehicle.company_id=int(current_user.company_id)
         elif current_user.authorization == 's_admin':
-            vehicle.company_id = Company.query.filter_by(companyname=form.company_id.data).first().id
+            vehicle.company_id = form.company_id.data
 
         db.session.commit()
         flash('Vehicle profile was updated', 'success')
@@ -79,10 +79,8 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         form.vehicle_type.data = vehicle.vehicle_type
         form.vehicle_brand.data = vehicle.vehicle_brand
         form.vehicle_registration.data = vehicle.vehicle_registration
-        # form.company_id.data = Company.query.filter_by(id=vehicle.company_id).first().id
-        # form.company_id.data = int(vehicle.company_id)
-        form.company_id.process_data(Company.query.filter_by(id=vehicle.company_id).first().id)
-        # print(form.company_id.data)
+        form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
+        form.company_id.data = str(vehicle.company_id)
     return render_template('vehicle.html', title="Edit Vehicle", vehicle=vehicle, form=form, legend='Edit Vehicle')
 
 

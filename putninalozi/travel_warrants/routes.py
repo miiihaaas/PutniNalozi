@@ -30,8 +30,11 @@ def register_tw():
     if not current_user.is_authenticated:
         flash('You have to be logged in to access this page', 'danger')
         return redirect(url_for('users.login'))
+    user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
+    print(user_list)
     form = CreateTravelWarrantForm()
     form.reset()
+    form.user_id.choices = user_list
     if form.validate_on_submit():
         warrant = TravelWarrant(
             with_task=form.with_task.data,
