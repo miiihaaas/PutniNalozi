@@ -60,9 +60,8 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
             abort(403)
     print(Company.query.filter_by(id=vehicle.company_id).first().id)
     form = UpdateVehicleForm()
-    # form.reset()
-    # form.company_id=Company.query.filter_by(id=vehicle.company_id).first().id
-    # form.process()
+    form.reset()
+
     if form.validate_on_submit():
         vehicle.vehicle_type = form.vehicle_type.data.upper()
         vehicle.vehicle_brand = form.vehicle_brand.data.upper()
@@ -76,7 +75,8 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         flash('Vehicle profile was updated', 'success')
         return redirect(url_for('vehicles.vehicle_list')) #vidi da li je bolje na neko drugo mesto da ga prebaci
     elif request.method == 'GET':
-        form.vehicle_type.data = vehicle.vehicle_type
+
+        form.vehicle_type.data = str(vehicle.vehicle_type)
         form.vehicle_brand.data = vehicle.vehicle_brand
         form.vehicle_registration.data = vehicle.vehicle_registration
         form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]

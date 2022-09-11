@@ -35,18 +35,20 @@ def register_u():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         if current_user.authorization == 'c_admin':
             user = User(email=form.email.data,
-                        old_email=form.email.data,
                         password=hashed_password,
                         name=form.name.data,
                         surname=form.surname.data,
+                        gender=form.gender.data,
+                        workplace=form.workplace.data,
                         authorization=form.authorization.data,
                         company_id=Company.query.filter_by(companyname=current_user.user_company.companyname).first().id) #Company.query.filter_by(companyname=form.company_id.data).first().id) #int(current_user.company_id)) ##
         elif current_user.authorization == 's_admin':
             user = User(email=form.email.data,
-                        old_email=form.email.data,
                         password=hashed_password,
                         name=form.name.data,
                         surname=form.surname.data,
+                        gender=form.gender.data,
+                        workplace=form.workplace.data,
                         authorization=form.authorization.data,
                         company_id=Company.query.filter_by(companyname=form.company_id.data).first().id)
         db.session.add(user)
@@ -79,6 +81,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     if form.validate_on_submit():
         user.name = form.name.data
         user.surname = form.surname.data
+        user.workplace = form.workplace.data
 
         if user.email == form.email.data:
             user.email = form.email.data
@@ -90,12 +93,12 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
             else:
                 user.email = form.email.data
 
-        user.old_email = form.old_email.data # !!!!briši atribut 'old_email'!!!!
-
         if current_user.authorization != 's_admin':
             user.authorization = user.authorization
         else:
             user.authorization = form.authorization.data
+
+        user.gender = form.gender.data
 
         if current_user.authorization == 's_admin':
             user.company_id = form.company_id.data
@@ -108,15 +111,17 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     elif request.method == 'GET':
         form.name.data = user.name
         form.surname.data = user.surname
+        form.workplace.data = user.workplace
         form.email.data = user.email
 
         form.authorization.choices = [('c_user', 'USER'),('c_admin', 'ADMIN')]
         form.authorization.data = user.authorization
 
+        form.gender.choices = [(0, 'SREDNJI'),(1, 'MUŠKI'),(2, 'ŽENSKI')]
+        form.gender.data = user.gender
+
         form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
         form.company_id.data = str(user.company_id)
-
-        form.old_email.data = user.email # !!!!briši atribut 'old_email'!!!!
     return render_template('user.html', title="Edit User", user=user, form=form, legend='Edit User')
 
 

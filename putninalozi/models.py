@@ -34,12 +34,12 @@ class Company(db.Model):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    # username = db.Column(db.String(20), unique=True, nullable=False) #predlog je da bude standardizovano: npr prva tri slova prezimena, imena (PANMIH, SIMDUS)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    old_email = db.Column(db.String(120), unique=False, nullable=False)
     password = db.Column(db.String(60), nullable = False)
     name = db.Column(db.String(20), unique=False, nullable=False)
     surname = db.Column(db.String(20), unique=False, nullable=False)
+    gender = db.Column(db.String(1)) #(0, "srednji"), (1, "muški"), (2, "ženski")
+    workplace = db.Column(db.String(20), unique=False, nullable=False)
     authorization = db.Column(db.String(10), nullable = False) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_user', lazy=True)
@@ -74,13 +74,31 @@ class Vehicle(db.Model):
 
 class TravelWarrant(db.Model):
     travel_warrant_id = db.Column(db.Integer, primary_key=True)
-    with_task = db.Column(db.String(50), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    with_task = db.Column(db.String(50), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     abroad_contry = db.Column(db.String(50), nullable=True)
     relation = db.Column(db.String(150), nullable=False)
     start_datetime = db.Column(db.DateTime, nullable=True)
     end_datetime = db.Column(db.DateTime, nullable=True)
+
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=True)
+    together_with = db.Column(db.Integer, nullable=True)
+    personal_type = db.Column(db.String(10), nullable=True)
+    personal_brand = db.Column(db.String(10), nullable=True)
+    personal_registration = db.Column(db.String(12), nullable=True)
+    other = db.Column(db.String(50), nullable=True) #avion, bus, taksi...
+
+    advance_payment = db.Column(db.Integer, nullable=False)
+    advance_payment_currency = db.Column(db.String(5), nullable=False)
+    daily_wage = db.Column(db.Integer, nullable=False)
+    daily_wage_currency = db.Column(db.String(5), nullable=False)
+    costs_pays = db.Column(db.String(20), nullable=False)
+
+    km_start = db.Column(db.Integer, nullable=True)
+    km_end = db.Column(db.Integer, nullable=True)
+
+    status = db.Column(db.Integer, nullable=False)
     #nastaviti sa dodavanjem potrebnih polja (nakon definisanja), napisati formu (forms.py), dodati funkciju (routes.py) i napraviti html fajl
 
     def __repr__(self):

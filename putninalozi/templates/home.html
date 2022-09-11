@@ -1,6 +1,29 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Mićko Ćićko</h1>
-    <h1>Vićko Ćićko</h1>
-    <h1>Mina ne veruje</h1>
+<table id="data" border="1" class="table table-striped">
+  <thead>
+    <tr id="header">
+      <th>Modul</th>
+      <th>Opis Modula</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Company</a> </td>
+      <td>Kreiranje i editovanje kompanije</td>
+    </tr>
+    <tr>
+      <td> <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vehicle</a> </td>
+      <td>Kreiranje i editovanje vozila</td>
+    </tr>
+    <tr>
+      <td> <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">User</a> </td>
+      <td>Kreiranje i editovanje korisnika</td>
+    </tr>
+    <tr>
+      <td> <a class="nav-item nav-link" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Travel Warrant</a> </td>
+      <td>Kreiranje i obračunavanje putnih naloga</td>
+    </tr>
+  </tbody>
+</table>
 {% endblock content%}

@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect, abort
 from putninalozi import db
 # from putninalozi.travel_warrants.forms import TravelWarrantForm
-from putninalozi.models import TravelWarrant, User
+from putninalozi.models import TravelWarrant, User, Vehicle
 from putninalozi.travel_warrants.forms import CreateTravelWarrantForm
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
@@ -32,24 +32,40 @@ def register_tw():
         return redirect(url_for('users.login'))
     user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
     print(user_list)
+    vehicle_list = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).group_by('vehicle_type').all()]
     form = CreateTravelWarrantForm()
     form.reset()
     form.user_id.choices = user_list
+    form.vehicle_id.choices = vehicle_list
     if form.validate_on_submit():
         warrant = TravelWarrant(
-            with_task=form.with_task.data,
             user_id=form.user_id.data,
+            with_task=form.with_task.data,
             company_id=User.query.filter_by(id=form.user_id.data).first().user_company.id,  #form.company_id.data,
             abroad_contry=form.abroad_contry.data.upper(),
             relation=form.relation.data,
             start_datetime=form.start_datetime.data,
-            end_datetime=form.end_datetime.data
+            end_datetime=form.end_datetime.data,
+            vehicle_id=form.vehicle_id.data,
+            together_with=form.together_with.data,
+            personal_type=form.personal_type.data,
+            personal_brand=form.personal_brand.data,
+            personal_registration=form.personal_registration.data,
+            other=form.other.data,
+            advance_payment=form.advance_payment.data,
+            advance_payment_currency=form.advance_payment_currency.data,
+            daily_wage=form.daily_wage.data,
+            daily_wage_currency=form.daily_wage_currency.data,
+            costs_pays=form.costs_pays.data,
+            km_start=1,
+            km_end=1,
+            status=1
         )
 
         db.session.add(warrant)
         db.session.commit()
-        file_name = create_pdf_form(warrant)
-        send_email(warrant, current_user, file_name)
+        # file_name = create_pdf_form(warrant)
+        # send_email(warrant, current_user, file_name)
         flash(f'Travel Warrant number: {warrant.travel_warrant_id} has been created successfully!', 'success')
         return redirect('travel_warrant_list')
     print('nije dobra validacija')

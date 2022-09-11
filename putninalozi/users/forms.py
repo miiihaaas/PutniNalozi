@@ -11,6 +11,8 @@ class RegistrationUserForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()]) #stavljaće se podrazumevana šifra tipa: korisnik1234
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=20)])
     surname = StringField('Surname', validators=[DataRequired(), Length(min=2, max=20)])
+    gender = SelectField('Gender', validators=[DataRequired()], choices = [(0, 'SREDNJI'),(1, 'MUŠKI'),(2, 'ŽENSKI')])
+    workplace = StringField('Workplace', validators=[DataRequired(), Length(min=2, max=20)])
     authorization = SelectField('Authorization Level', validators=[DataRequired()], choices = [('c_user', 'USER'),('c_admin', 'ADMIN')])
     company_id = SelectField('Company ID', choices=Company.query.all()) #Company.query.all()  vs  [(1, 'Helios'),(2, 'Metalac')]
     submit = SubmitField('Register User')
@@ -26,9 +28,10 @@ class RegistrationUserForm(FlaskForm):
 
 class UpdateUserForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    old_email = StringField('Old Email', validators=[DataRequired(), Email()]) # !!!!briši atribut 'old_email'!!!!
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=20)])
     surname = StringField('Surname', validators=[DataRequired(), Length(min=2, max=20)])
+    gender = SelectField('Gender', validators=[DataRequired()], choices=[(0, 'SREDNJI'), (1, 'MUŠKI'), (2, 'ŽENSKI')])
+    workplace = StringField(label='Workplace', validators=[DataRequired(), Length(min=2, max=20)])
     authorization = SelectField('Authorization Level', validators=[DataRequired()], choices = [('c_user', 'USER'),('c_admin', 'ADMIN')]) #[('c_user', 'USER'),('c_admin', 'ADMIN')]) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
     company_id = SelectField('Company ID', choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]) #, choices=Company.query.all())
     submit = SubmitField('Update User')
