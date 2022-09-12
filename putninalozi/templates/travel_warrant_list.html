@@ -20,7 +20,7 @@
           <td> <a class="mr-2" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" title="Edit Travel Warrant"> {{ warrant.travel_warrant_id }} </a> </td>
           <td> {{ warrant.travelwarrant_company.companyname }} </td>
           <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} </td>
-          <td> ### </td>
+          <td> {{ warrant.travelwarrant_vehicle.vehicle_type }} - {{warrant.travelwarrant_vehicle.vehicle_brand}} ( {{warrant.travelwarrant_vehicle.vehicle_registration}} )</td>
         </tr>
       {% endfor %}
     </tbody>
@@ -38,7 +38,7 @@
           <tr>
             <td> <a class="mr-2" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" title="Edit Travel Warrant"> {{ warrant.travel_warrant_id }} </a> </td>
             <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
-            <td> ### </td>
+            <td> {{ warrant.travelwarrant_vehicle.vehicle_type }} - {{warrant.travelwarrant_vehicle.vehicle_brand}} ( {{warrant.travelwarrant_vehicle.vehicle_registration}} ) </td>
           </tr>
         {% endif %}
       {% endfor %}
@@ -57,7 +57,7 @@
           <tr>
             <td> <a class="mr-2" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" title="Edit Travel Warrant"> {{ warrant.travel_warrant_id }} </a> </td>
             <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
-            <td> ### </td>
+            <td> {{ warrant.travelwarrant_vehicle.vehicle_type }} - {{warrant.travelwarrant_vehicle.vehicle_brand}} ( {{warrant.travelwarrant_vehicle.vehicle_registration}} ) </td>
           </tr>
         {% endif %}
       {% endfor %}

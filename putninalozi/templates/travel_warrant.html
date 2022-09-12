@@ -1,13 +1,190 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Work in progress</h1>
+    <h1>Broj putnog naloga: {{ warrant.travel_warrant_id }}</h1>
     <hr>
-    <h1>{{ warrant.travel_warrant_id }}</h1>
-    <h1>{{ warrant.with_task }}</h1>
-    <h1>{{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }}</h1>
-    <h1>{{ warrant.travelwarrant_company.companyname }}</h1>
-    <h1>{{ warrant.abroad_contry }}</h1>
-    <h1>{{ warrant.relation }}</h1>
-    <h1>{{ warrant.start_datetime }}</h1>
-    <h1>{{ warrant.end_datetime }}</h1>
+    <h3>Radnik-ca {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} raspoređen-a na poslove radnog mesta {{ warrant.travelwarrant_user.workplace }} upućuje se na službeni put dana {{warrant.start_datetime}} u {{ warrant.relation }} sa zadatkom: {{ warrant.with_task }}</h3>
+    <br>
+    <h3>Na službenom putu koristi prevozno sredstvo registarske tablice: {{ warrant.travelwarrant_vehicle.vehicle_registration }}</h3>
+    <br>
+    <h3>Dnevnica za ovo služebno putovanje pripada u iznosu od: {{ warrant.daily_wage }} {{ warrant.daily_wage_currency }}</h3>
+    <h3>Na službenom putu će se zadržati najdalje do {{ warrant.end_datetime }}, a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana</h3>
+    <br>
+    <h3>Putni troškovi padaju na teret: {{ warrant.costs_pays }}</h3>
+    <br>
+    <h3>Odobravam isplatu akontacije u iznosu od: {{ warrant.advance_payment }} {{ warrant.advance_payment_currency }}</h3>
+    <hr>
+    <div class="content-section">
+      <form method="POST" action="">
+        {{ form.hidden_tag() }}
+          <fieldset>
+          <div class="form-box">
+            {{ form.start_datetime.label(class="form-control-label") }}
+
+              {% if form.start_datetime.errors %}
+                  {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.start_datetime.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
+              {% endif %}
+          </div>
+          <div class="form-box">
+            {{ form.end_datetime.label(class="form-control-label") }}
+
+              {% if form.end_datetime.errors %}
+                  {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.end_datetime.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
+              {% endif %}
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input">
+            <label class="custom-control-label" for="customRadio1">Službeno Vozilo:</label>
+          </div>
+          <div class="form-box">
+            {{ form.vehicle_id.label(class="form-control-label") }}
+
+              {% if form.vehicle_id.errors %}
+                  {{ form.vehicle_id(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.vehicle_id.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.vehicle_id(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+          <br>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+            <label class="custom-control-label" for="customRadio2">Broj Koleginog Putnog Naloga:</label>
+          </div>
+          <div class="form-box">
+            {{ form.together_with.label(class="form-control-label") }}
+
+              {% if form.together_with.errors %}
+                  {{ form.together_with(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.together_with.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.together_with(class="form-control form-control-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
+              {% endif %}
+          </div>
+          <br>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio3" name="customRadio" class="custom-control-input">
+            <label class="custom-control-label" for="customRadio3">Lično Vozilo:</label>
+          </div>
+          <div class="form-box">
+            {{ form.personal_type.label(class="form-control-label") }}
+
+              {% if form.personal_type.errors %}
+                  {{ form.personal_type(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.personal_type.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.personal_type(class="form-control form-control-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
+              {% endif %}
+          </div>
+          <div class="form-box">
+            {{ form.personal_brand.label(class="form-control-label") }}
+
+              {% if form.personal_brand.errors %}
+                  {{ form.personal_brand(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.personal_brand.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.personal_brand(class="form-control form-control-lg", placeholder="Uneti brend ličnog vozila") }}
+              {% endif %}
+          </div>
+          <div class="form-box">
+            {{ form.personal_registration.label(class="form-control-label") }}
+
+              {% if form.personal_registration.errors %}
+                  {{ form.personal_registration(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.personal_registration.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.personal_registration(class="form-control form-control-lg", placeholder="Uneti registraciju ličnog vozila") }}
+              {% endif %}
+          </div>
+          <br>
+          <div class="custom-control custom-radio">
+            <input type="radio" id="customRadio4" name="customRadio" class="custom-control-input">
+            <label class="custom-control-label" for="customRadio4">Drugo:</label>
+          </div>
+          <div class="form-box">
+            {{ form.other.label(class="form-control-label") }}
+
+              {% if form.other.errors %}
+                  {{ form.other(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.other.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.other(class="form-control form-control-lg", placeholder="Avion, Autobus, Taxi ...") }}
+              {% endif %}
+          </div>
+          <br>
+          <br>
+          <div class="form-box">
+            {{ form.km_start.label(class="form-control-label") }}
+
+              {% if form.km_start.errors %}
+                  {{ form.km_start(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.km_start.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.km_start(class="form-control form-control-lg", placeholder="Avion, Autobus, Taxi ...") }}
+              {% endif %}
+          </div>
+          <div class="form-box">
+            {{ form.km_end.label(class="form-control-label") }}
+
+              {% if form.km_end.errors %}
+                  {{ form.km_end(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.km_end.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.km_end(class="form-control form-control-lg", placeholder="Avion, Autobus, Taxi ...") }}
+              {% endif %}
+          </div>
+      </fieldset>
+
+  </form>
+</div>
+<div class="form-group">
+  {{ form.submit(class="btn btn-outline-info") }}
+</div>
+
+
 {% endblock content%}

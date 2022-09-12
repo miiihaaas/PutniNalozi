@@ -67,6 +67,7 @@ class Vehicle(db.Model):
     vehicle_brand = db.Column(db.String(10), nullable = False)
     vehicle_registration = db.Column(db.String(12), nullable = False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_vehicle', lazy=True)
 
     def __repr__(self):
         return f"Vehicle('{self.id}', '{self.vehicle_type}', '{self.vehicle_brand}'', '{self.vehicle_registration}', '{self.company_id}')"

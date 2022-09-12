@@ -1,19 +1,19 @@
 from flask import Blueprint
-from flask import  render_template, url_for, flash, redirect, abort
+from flask import  render_template, url_for, flash, redirect, abort, request
 from putninalozi import db
 # from putninalozi.travel_warrants.forms import TravelWarrantForm
 from putninalozi.models import TravelWarrant, User, Vehicle
-from putninalozi.travel_warrants.forms import CreateTravelWarrantForm
+from putninalozi.travel_warrants.forms import CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 
 
 travel_warrants = Blueprint('travel_warrants', __name__)
-
-def users_list():
-    users_list = User.query.filter_by(company_id=current_user.user_company.id).all()
-    return users_list
+#
+# def users_list():
+#     users_list = User.query.filter_by(company_id=current_user.user_company.id).all()
+#     return users_list
 
 
 @travel_warrants.route("/travel_warrant_list")
@@ -82,4 +82,45 @@ def travel_warrant_profile(warrant_id):
         abort(403)
     elif current_user.authorization == 'c_user' and current_user.id != warrant.travelwarrant_user.id:
         abort(403)
-    return render_template('travel_warrant.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant')
+
+    if current_user.authorization == 'c_user':
+        form = EditUserTravelWarrantForm()
+        form.reset()
+
+        if form.validate_on_submit():
+            warrant.start_datetime = form.start_datetime.data
+            warrant.end_datetime = form.end_datetime.data
+            warrant.vehicle_id = form.vehicle_id.data
+            warrant.together_with = form.together_with.data
+            warrant.personal_type = form.personal_type.data
+            warrant.personal_brand = form.personal_brand.data
+            warrant.personal_registration = form.personal_registration.data
+            warrant.other = form.other.data
+
+            warrant.km_start = form.km_start.data
+            warrant.km_end = form.km_end.data
+
+            db.session.commit()
+            flash('Travel Warrant was updated', 'success')
+            return redirect(url_for('travel_warrants.travel_warrant_list'))
+        elif request.method == 'GET':
+            form.start_datetime.data = warrant.start_datetime
+            form.end_datetime.data = warrant.end_datetime
+            form.vehicle_id.choices = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).group_by('vehicle_type').all()]
+            form.vehicle_id.data = warrant.vehicle_id
+            form.together_with.data = warrant.together_with
+            form.personal_type.data = warrant.personal_type
+            form.personal_brand.data = warrant.personal_brand
+            form.personal_registration.data = warrant.personal_registration
+            form.other.data = warrant.other
+            form.km_start.data = warrant.km_start
+            form.km_end.data = warrant.km_end
+        return render_template('travel_warrant.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant', form=form)
+
+    else:
+        form = EditAdminTravelWarrantForm()
+        form.reset()
+
+        if form.validate_on_submit():
+            pass
+        return render_template('travel_warrant.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant')
