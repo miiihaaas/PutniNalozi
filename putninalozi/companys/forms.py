@@ -16,7 +16,7 @@ class RegistrationCompanyForm(FlaskForm):
     company_site = StringField('Web Site', validators=[DataRequired(), Length(min=5, max=50)])
     company_mail = StringField('Email', validators=[DataRequired(), Email()])
     company_phone = StringField('Phone Number', validators=[DataRequired(), Length(min=9, max=13)])
-    company_logo = "" #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
+    company_logo = FileField('Update Logo', validators=[FileAllowed(['jpg', 'png'])]) #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
     submit = SubmitField('Register Company')
 
     def validate_companyname(self, companyname):

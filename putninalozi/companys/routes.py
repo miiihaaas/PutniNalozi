@@ -38,7 +38,8 @@ def register_c():
                             company_mb=form.company_mb.data,
                             company_site=form.company_site.data,
                             company_mail=form.company_mail.data,
-                            company_phone=form.company_phone.data)
+                            company_phone=form.company_phone.data,
+                            company_logo="")
         db.session.add(company)
         db.session.commit()
         flash(f'Company {form.companyname.data} has been created successfully!', 'success')

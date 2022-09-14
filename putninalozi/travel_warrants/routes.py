@@ -74,7 +74,13 @@ def register_tw():
 
 @travel_warrants.route("/travel_warrant/<int:warrant_id>", methods=['GET', 'POST'])
 def travel_warrant_profile(warrant_id):
+    rod = []
     warrant = TravelWarrant.query.get_or_404(warrant_id)
+    if warrant.travelwarrant_user.gender == "1":
+        rod=["Radnik", "raspoređen"]
+    elif warrant.travelwarrant_user.gender == "2":
+        rod=["Radnica", "raspoređena"]
+
     if not current_user.is_authenticated:
         flash('You have to be logged in to access this page', 'danger')
         return redirect(url_for('users.login'))
@@ -86,6 +92,7 @@ def travel_warrant_profile(warrant_id):
     if current_user.authorization == 'c_user':
         form = EditUserTravelWarrantForm()
         form.reset()
+
 
         if form.validate_on_submit():
             warrant.start_datetime = form.start_datetime.data
@@ -115,7 +122,13 @@ def travel_warrant_profile(warrant_id):
             form.other.data = warrant.other
             form.km_start.data = warrant.km_start
             form.km_end.data = warrant.km_end
-        return render_template('travel_warrant.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant', form=form)
+
+            if warrant.travelwarrant_user.gender == 1:
+                rod=["Radnik", "raspoređen"]
+            elif warrant.travelwarrant_user.gender == 2:
+                rod=["Radnica", "raspoređena"]
+
+        return render_template('travel_warrant.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant', form=form, rod=rod)
 
     else:
         form = EditAdminTravelWarrantForm()
@@ -123,4 +136,4 @@ def travel_warrant_profile(warrant_id):
 
         if form.validate_on_submit():
             pass
-        return render_template('travel_warrant.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant')
+        return render_template('travel_warrant.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant', form=form)
