@@ -85,8 +85,8 @@ class TravelWarrant(db.Model):
 
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=True)
     together_with = db.Column(db.Integer, nullable=True)
-    personal_type = db.Column(db.String(10), nullable=True)
-    personal_brand = db.Column(db.String(10), nullable=True)
+    personal_type = db.Column(db.String(50), nullable=True)
+    personal_brand = db.Column(db.String(50), nullable=True)
     personal_registration = db.Column(db.String(12), nullable=True)
     other = db.Column(db.String(50), nullable=True) #avion, bus, taksi...
 
@@ -94,7 +94,7 @@ class TravelWarrant(db.Model):
     advance_payment_currency = db.Column(db.String(5), nullable=False)
     daily_wage = db.Column(db.Integer, nullable=False)
     daily_wage_currency = db.Column(db.String(5), nullable=False)
-    costs_pays = db.Column(db.String(20), nullable=False)
+    costs_pays = db.Column(db.String(50), nullable=False)
 
     km_start = db.Column(db.Integer, nullable=True)
     km_end = db.Column(db.Integer, nullable=True)

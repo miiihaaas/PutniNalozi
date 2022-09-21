@@ -11,7 +11,8 @@
         <th>Br Putnog Naloga</th>
         <th>Company</th>
         <th>Zaposleni</th>
-        <th>Dodeljeno Vozilo</th>
+        <th>Transport</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
@@ -20,7 +21,8 @@
           <td> <a class="mr-2" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" title="Edit Travel Warrant"> {{ warrant.travel_warrant_id }} </a> </td>
           <td> {{ warrant.travelwarrant_company.companyname }} </td>
           <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} </td>
-          <td> {{ warrant.travelwarrant_vehicle.vehicle_type }} - {{warrant.travelwarrant_vehicle.vehicle_brand}} ( {{warrant.travelwarrant_vehicle.vehicle_registration}} )</td>
+          <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
+          <td> {{ warrant.status }} </td>
         </tr>
       {% endfor %}
     </tbody>
@@ -29,7 +31,8 @@
       <tr id="header">
         <th>Br Putnog Naloga</th>
         <th>Zaposleni</th>
-        <th>Dodeljeno Vozilo</th>
+        <th>Transport</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
@@ -38,7 +41,8 @@
           <tr>
             <td> <a class="mr-2" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" title="Edit Travel Warrant"> {{ warrant.travel_warrant_id }} </a> </td>
             <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
-            <td> {{ warrant.travelwarrant_vehicle.vehicle_type }} - {{warrant.travelwarrant_vehicle.vehicle_brand}} ( {{warrant.travelwarrant_vehicle.vehicle_registration}} ) </td>
+            <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} {{warrant.travelwarrant_vehicle.vehicle_brand}} {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
+            <td> {{ warrant.status }} </td>
           </tr>
         {% endif %}
       {% endfor %}
@@ -48,7 +52,8 @@
       <tr id="header">
         <th>Br Putnog Naloga</th>
         <th>Zaposleni</th>
-        <th>Dodeljeno Vozilo</th>
+        <th>Transport</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
@@ -57,13 +62,15 @@
           <tr>
             <td> <a class="mr-2" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" title="Edit Travel Warrant"> {{ warrant.travel_warrant_id }} </a> </td>
             <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
-            <td> {{ warrant.travelwarrant_vehicle.vehicle_type }} - {{warrant.travelwarrant_vehicle.vehicle_brand}} ( {{warrant.travelwarrant_vehicle.vehicle_registration}} ) </td>
+            <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} {{warrant.travelwarrant_vehicle.vehicle_brand}} {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
+            <td> {{ warrant.status }} </td>
           </tr>
         {% endif %}
       {% endfor %}
     </tbody>
   {% endif %}
 </table>
+
 {% endblock content%}
 
 {% block scripts %}

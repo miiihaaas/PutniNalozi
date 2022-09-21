@@ -4,7 +4,15 @@ from putninalozi import db
 
 x = input('da li žeiš da izezeš User u excel? (y/n)')
 if x=='y':
-    records = db.session.query(User.id, User.email, User.password, User.name, User.surname, User.authorization, User.company_id).all()
+    records = db.session.query(User.id,
+                                User.email,
+                                User.password,
+                                User.name,
+                                User.surname,
+                                User.gender,
+                                User.workplace,
+                                User.authorization,
+                                User.company_id).all()
     df = pd.DataFrame(data=records, )
 
     print(df)
@@ -21,6 +29,37 @@ if x=='y':
 
     with pd.ExcelWriter('backup_data.xlsx', mode='a', if_sheet_exists='replace') as writer: #if_sheet_exists{‘error’, ‘new’, ‘replace’, ‘overlay’}, default ‘error’
         df.to_excel(writer, sheet_name='Company_export')
+
+x = input('da li žeiš da izezeš TravelWarrant u excel? (y/n)')
+if x=='y':
+    records = db.session.query(TravelWarrant.travel_warrant_id,
+                                    TravelWarrant.user_id,
+                                    TravelWarrant.with_task,
+                                    TravelWarrant.company_id,
+                                    TravelWarrant.abroad_contry,
+                                    TravelWarrant.relation,
+                                    TravelWarrant.start_datetime,
+                                    TravelWarrant.end_datetime,
+                                    TravelWarrant.vehicle_id,
+                                    TravelWarrant.together_with,
+                                    TravelWarrant.personal_type,
+                                    TravelWarrant.personal_brand,
+                                    TravelWarrant.personal_registration,
+                                    TravelWarrant.other,
+                                    TravelWarrant.advance_payment,
+                                    TravelWarrant.advance_payment_currency,
+                                    TravelWarrant.daily_wage,
+                                    TravelWarrant.daily_wage_currency,
+                                    TravelWarrant.costs_pays,
+                                    TravelWarrant.km_start,
+                                    TravelWarrant.km_end,
+                                    TravelWarrant.status).all()
+    df = pd.DataFrame(data=records, )
+
+    print(df)
+
+    with pd.ExcelWriter('backup_data.xlsx', mode='a', if_sheet_exists='replace') as writer: #if_sheet_exists{‘error’, ‘new’, ‘replace’, ‘overlay’}, default ‘error’
+        df.to_excel(writer, sheet_name='Warrants_export')
 
 x = input('da li žeiš da masovno uneseš korisnike iz exel fajla? (y/n)')
 if x=="y":
