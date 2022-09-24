@@ -10,7 +10,7 @@ from putninalozi import db
 class CreateTravelWarrantForm(FlaskForm):
     user_id = SelectField('Zaposleni:', validators=[DataRequired()], choices=[]) #[(u.id, u.name+" " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #umesto users: db.session.query(User.id,User.name,User.surname).all()
     with_task = StringField('Sa Zadatkom: ', validators=[DataRequired()])
-    company_id = SelectField('Company ID', validators=[DataRequired()], choices=[(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).all()])
+    company_id = SelectField('Kompanija: ', validators=[DataRequired()], choices=[(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).all()])
     abroad_contry = StringField('Država: ')
     relation = StringField('Relacija: ', validators=[DataRequired()])
     start_datetime = DateTimeField('Polazno Vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])

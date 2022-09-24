@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 {% if current_user.authorization != 'c_user' %}
-  <a class="btn btn-info btn-sm m-1" href="{{ url_for('vehicles.register_v') }}">Register New Vehicle</a>
+  <a class="btn btn-info btn-sm m-1" href="{{ url_for('vehicles.register_v') }}">Registruj Novo Vozilo</a>
 {% endif %}
 <table id="data" border="1" class="table table-striped">
   {% if current_user.authorization == 's_admin' %}
     <thead>
       <tr>
-        <th>Vehicle Type</th>
-        <th>Vehicle Brand</th>
-        <th>Vehicle Registration</th>
-        <th>Company</th>
+        <th>Tip Vozila</th>
+        <th>Brend</th>
+        <th>Registracija</th>
+        <th>Kompanija</th>
       </tr>
     </thead>
     <tbody>
@@ -26,9 +26,9 @@
   {% elif current_user.authorization == 'c_admin' %}
     <thead>
       <tr>
-        <th>Vehicle Type</th>
-        <th>Vehicle Brand</th>
-        <th>Vehicle Registration</th>
+        <th>Tip Vozila</th>
+        <th>Brend</th>
+        <th>Registracija</th>
       </tr>
     </thead>
     <tbody>

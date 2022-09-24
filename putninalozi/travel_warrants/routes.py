@@ -19,7 +19,7 @@ travel_warrants = Blueprint('travel_warrants', __name__)
 @travel_warrants.route("/travel_warrant_list")
 def travel_warrant_list():
     if not current_user.is_authenticated:
-        flash('You have to be logged in to access this page', 'danger')
+        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     warrants = TravelWarrant.query.all()
     return render_template('travel_warrant_list.html', title='Travel Warrants', warrants=warrants)
@@ -28,7 +28,7 @@ def travel_warrant_list():
 @travel_warrants.route("/register_tw", methods=['GET', 'POST'])
 def register_tw():
     if not current_user.is_authenticated:
-        flash('You have to be logged in to access this page', 'danger')
+        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
     print(user_list)
@@ -133,12 +133,12 @@ def register_tw():
 
         db.session.add(warrant)
         db.session.commit()
-        # file_name = create_pdf_form(warrant)
-        # send_email(warrant, current_user, file_name)
-        flash(f'Travel Warrant number: {warrant.travel_warrant_id} has been created successfully!', 'success')
+        file_name = create_pdf_form(warrant)
+        send_email(warrant, current_user, file_name)
+        flash(f'Putni nalog broj: {warrant.travel_warrant_id} je uspešno kreiran!', 'success')
         return redirect('travel_warrant_list')
     print('nije dobra validacija')
-    return render_template('register_tw.html', title='Create Travel Warrant', form=form)
+    return render_template('register_tw.html', title='Kreiranje Putnog naloga', legend='Kreiranje Novog Putnog naloga', form=form)
 
 
 @travel_warrants.route("/travel_warrant/<int:warrant_id>", methods=['GET', 'POST'])
@@ -151,7 +151,7 @@ def travel_warrant_profile(warrant_id):
         rod=["Radnica", "raspoređena"]
     #
     if not current_user.is_authenticated:
-        flash('You have to be logged in to access this page', 'danger')
+        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization != 's_admin' and current_user.user_company.id != warrant.travelwarrant_company.id:
         abort(403)
@@ -199,7 +199,7 @@ def travel_warrant_profile(warrant_id):
             warrant.status = int(form.status.data)
 
             db.session.commit()
-            flash('Travel Warrant was updated', 'success')
+            flash('Putni nalog je ažuriran.', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
             # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
@@ -231,7 +231,7 @@ def travel_warrant_profile(warrant_id):
 
         print(f'EditUser: {form.errors=}')
 
-        return render_template('travel_warrant_user.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant - User View', form=form, rod=rod)
+        return render_template('travel_warrant_user.html', title='Uređivanje Putnog Naloga', warrant=warrant, legend='Uređivanje Putnog Naloga - User View', form=form, rod=rod)
 
     else:
         form = EditAdminTravelWarrantForm()
@@ -274,7 +274,7 @@ def travel_warrant_profile(warrant_id):
             warrant.status = int(form.status.data)
 
             db.session.commit()
-            flash('Travel Warrant was updated', 'success')
+            flash('Putni nalog je ažuriran', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
             form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
@@ -306,4 +306,4 @@ def travel_warrant_profile(warrant_id):
 
         print(f'EditAdmin: {form.errors=}')
 
-        return render_template('travel_warrant.html', title='Edit Travel Warrant', warrant=warrant, legend='Edit Travel Warrant - Admin View', form=form, rod=rod)
+        return render_template('travel_warrant.html', title='Uređivanje Putnog Naloga', warrant=warrant, legend='Uređivanje Putnog Naloga - Admin View', form=form, rod=rod)

@@ -11,12 +11,12 @@ vehicles = Blueprint('vehicles', __name__)
 @vehicles.route("/vehicle_list")
 def vehicle_list():
     if not current_user.is_authenticated:
-        flash('You have to be logged in to access this page', 'danger')
+        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
         abort(403)
     vehicles = Vehicle.query.all()
-    return render_template('vehicle_list.html', title='Vehicles', vehicles=vehicles)
+    return render_template('vehicle_list.html', title='Vozila', vehicles=vehicles)
 
 
 @vehicles.route("/register_v", methods=['GET', 'POST'])
@@ -40,9 +40,9 @@ def register_v():
                                 company_id=Company.query.filter_by(companyname=form.company_id.data).first().id)
             db.session.add(vehicle)
             db.session.commit()
-        flash(f'Vehicle with registration: {form.vehicle_registration.data} has been created successfully!', 'success')
+        flash(f'Vozilo registracije: {form.vehicle_registration.data} je uspešno registrovano!', 'success')
         return redirect(url_for('vehicles.vehicle_list'))
-    return render_template('register_v.html', title='Register New Vehicle', form=form)
+    return render_template('register_v.html', title='Registracija Novog Vozila', form=form, legend='Registracija Novog Vozila')
 
 
 
@@ -51,7 +51,7 @@ def register_v():
 def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
     vehicle = Vehicle.query.get_or_404(vehicle_id)
     if not current_user.is_authenticated:
-        flash('You have to be logged in to access this page', 'danger')
+        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
         abort(403)
@@ -72,7 +72,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
             vehicle.company_id = form.company_id.data
 
         db.session.commit()
-        flash('Vehicle profile was updated', 'success')
+        flash('Profil vozila je ažuriran', 'success')
         return redirect(url_for('vehicles.vehicle_list')) #vidi da li je bolje na neko drugo mesto da ga prebaci
     elif request.method == 'GET':
 
@@ -81,7 +81,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         form.vehicle_registration.data = vehicle.vehicle_registration
         form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
         form.company_id.data = str(vehicle.company_id)
-    return render_template('vehicle.html', title="Edit Vehicle", vehicle=vehicle, form=form, legend='Edit Vehicle')
+    return render_template('vehicle.html', title="Uređivanje Vozila", vehicle=vehicle, form=form, legend='Uređivanje Vozila')
 
 
 @vehicles.route("/vehicle/<int:vehicle_id>/delete", methods=['POST'])
@@ -100,10 +100,10 @@ def delete_vehicle(vehicle_id):
                 abort(403)
             db.session.delete(vehicle)
             db.session.commit()
-            flash(f'Vehicle {vehicle.vehicle_brand} has been deleted', 'success' )
+            flash(f'Vozilo {vehicle.vehicle_brand} je obrisano', 'success' )
             return redirect(url_for('vehicles.vehicle_list'))
         else:
             db.session.delete(vehicle)
             db.session.commit()
-            flash(f'Vehicle: {vehicle.vehicle_brand} has been deleted', 'success' )
+            flash(f'Vozilo: {vehicle.vehicle_brand} je obrisano', 'success' )
             return redirect(url_for('vehicles.vehicle_list'))

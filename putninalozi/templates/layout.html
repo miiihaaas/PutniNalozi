@@ -34,7 +34,7 @@
               {% if current_user.is_authenticated %}
                 <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
                 <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
-                <a class="nav-item nav-link" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Travel Warrant</a>
+                <a class="nav-item nav-link" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni Nalog</a>
               {% else %}
                 <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Home</a>
                 <a class="nav-item nav-link" href="{{ url_for('main.about') }}">About</a>
@@ -44,21 +44,20 @@
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
                 {% if current_user.authorization == 's_admin' %}
-                  <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Company</a>
-                  <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vehicle</a>
-                  <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">User</a>
-                  <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                  <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Kompanija</a>
+                  <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vozilo</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">Korisnik</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Odjaviti Se</a>
                 {% elif current_user.authorization == 'c_admin'%}
-                  <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Company</a>
-                  <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vehicle</a>
-                  <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">User</a>
-                  <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                  <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Kompanija</a>
+                  <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vozilo</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">Korisnik</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Odjaviti Se</a>
                 {% else %}
-                  <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">User</a>
-                  <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+                  <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Odjaviti Se</a>
                 {% endif %}
               {% else %}
-                <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Login</a>
+                <a class="nav-item nav-link" href="{{ url_for('users.login') }}">Prijavljivanje</a>
               {% endif %}
             </div>
           </div>

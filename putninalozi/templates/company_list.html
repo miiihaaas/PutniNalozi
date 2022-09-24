@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
 {% if current_user.authorization == 's_admin' %}
-  <a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}">Register New Company</a>
+  <a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}">Kreiraj Novu Kompaniju</a>
 {% endif %}
 <hr>
 <table id="data" border="1" class="table table-striped">
   <thead>
     <tr>
-      <th>Company Name</th>
-      <th>Address</th>
-      <th>City - State</th>
-      <th>Contacts</th>
+      <th>Kompanija</th>
+      <th>Adresa</th>
+      <th>Mesto - Država</th>
+      <th>Kontakti</th>
     </tr>
   </thead>
   <tbody>

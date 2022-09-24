@@ -2,7 +2,7 @@
 {% block content %}
 
 {% if current_user.authorization != 'c_user' %}
-  <a class="btn btn-info btn-sm m-1" href="{{ url_for('users.register_u') }}">Register New User</a>
+  <a class="btn btn-info btn-sm m-1" href="{{ url_for('users.register_u') }}">Registruj Novog Korisnika</a>
 {% endif %}
 <hr>
 
@@ -10,9 +10,9 @@
   {% if current_user.authorization == 's_admin' %}
     <thead>
       <tr id="header">
-        <th>Name Surname</th>
-        <th>Company</th>
-        <th>Authorization</th>
+        <th>Ime Prezime</th>
+        <th>Kompanija</th>
+        <th>Autorizacija</th>
         <th>email</th>
       </tr>
     </thead>
@@ -29,7 +29,7 @@
   {% elif current_user.authorization == 'c_admin' %}
     <thead>
       <tr id="header">
-        <th>Name Surname</th>
+        <th>Ime Prezime</th>
         <th>email</th>
       </tr>
     </thead>
@@ -46,7 +46,7 @@
   {% else %}
     <thead>
       <tr id="header">
-        <th>Name Surname</th>
+        <th>Ime Prezime</th>
         <th>email</th>
       </tr>
     </thead>
