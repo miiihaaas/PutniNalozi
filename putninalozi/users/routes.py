@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect, request, abort
 from putninalozi import db, bcrypt, mail
 from putninalozi.users.forms import RegistrationUserForm, LoginForm, UpdateUserForm, RequestResetForm, ResetPasswordForm
-from putninalozi.models import Company, User
+from putninalozi.models import Company, User, Vehicle
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_mail import Message
 from wtforms.validators import ValidationError
@@ -31,6 +31,7 @@ def register_u():
         return redirect(url_for('main.home'))
     form = RegistrationUserForm()
     form.reset()
+    form.default_vehicle.choices = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         if current_user.authorization == 'c_admin':
@@ -41,7 +42,8 @@ def register_u():
                         gender=form.gender.data,
                         workplace=form.workplace.data,
                         authorization=form.authorization.data,
-                        company_id=Company.query.filter_by(companyname=current_user.user_company.companyname).first().id) #Company.query.filter_by(companyname=form.company_id.data).first().id) #int(current_user.company_id)) ##
+                        company_id=Company.query.filter_by(companyname=current_user.user_company.companyname,
+                        default_vehicle=form.default_vehicle.data).first().id) #Company.query.filter_by(companyname=form.company_id.data).first().id) #int(current_user.company_id)) ##
         elif current_user.authorization == 's_admin':
             user = User(email=form.email.data,
                         password=hashed_password,
@@ -50,7 +52,8 @@ def register_u():
                         gender=form.gender.data,
                         workplace=form.workplace.data,
                         authorization=form.authorization.data,
-                        company_id=Company.query.filter_by(companyname=form.company_id.data).first().id)
+                        company_id=Company.query.filter_by(companyname=form.company_id.data,
+                        default_vehicle=form.default_vehicle.data).first().id)
         db.session.add(user)
         db.session.commit()
         flash(f'Napravljen je nalog: {form.name.data} {form.surname.data}!', 'success')
@@ -77,7 +80,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
 
     form = UpdateUserForm()
     form.reset()
-
+    form.default_vehicle.choices = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
     if form.validate_on_submit():
         user.name = form.name.data
         user.surname = form.surname.data
@@ -104,6 +107,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
             user.company_id = form.company_id.data
         else:
             user.company_id = user.company_id
+        user.default_vehicle = form.default_vehicle.data
 
         db.session.commit()
         flash('Profile was updated', 'success')
@@ -122,6 +126,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
 
         form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
         form.company_id.data = str(user.company_id)
+        form.default_vehicle.data = str(user.default_vehicle)
     return render_template('user.html', title="Uredi Korisnika", user=user, form=form, legend='Uredi Korisnika')
 
 

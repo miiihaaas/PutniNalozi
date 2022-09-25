@@ -30,9 +30,9 @@ def register_tw():
     if not current_user.is_authenticated:
         flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
+    user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
     print(user_list)
-    vehicle_list = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).group_by('vehicle_type').all()]
+    vehicle_list = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
     form = CreateTravelWarrantForm()
     form.reset()
     form.user_id.choices = user_list
@@ -116,7 +116,7 @@ def register_tw():
                 relation=form.relation.data,
                 start_datetime=form.start_datetime.data,
                 end_datetime=form.end_datetime.data,
-                vehicle_id=form.vehicle_id.data,
+                vehicle_id=form.vehicle_id.data, #ovde napraviti kod da bude podrazumevano vozilo
                 together_with="",
                 personal_type="",
                 personal_brand="",
@@ -136,6 +136,7 @@ def register_tw():
         file_name = create_pdf_form(warrant)
         send_email(warrant, current_user, file_name)
         flash(f'Putni nalog broj: {warrant.travel_warrant_id} je uspešno kreiran!', 'success')
+        flash(f'{warrant.travelwarrant_user.name} je dobio mejl sa detaljima putnog naloga', 'success')
         return redirect('travel_warrant_list')
     print('nije dobra validacija')
     return render_template('register_tw.html', title='Kreiranje Putnog naloga', legend='Kreiranje Novog Putnog naloga', form=form)
@@ -162,9 +163,9 @@ def travel_warrant_profile(warrant_id):
         form = EditUserTravelWarrantForm()
         form.reset()
         # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
-        form.vehicle_id.choices = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).group_by('vehicle_type').all()]
+        form.vehicle_id.choices = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
         form.personal_type.choices = [('', '----'), ('ATMBL', 'AUTOMOBIL'),('KMB', 'KOMBI'),('KMN', 'KAMION')]
-        form.status.choices=[(1, "kreiran"), (2, "u delu")]
+        form.status.choices=[(1, "kreiran"), (2, "završen")]
 
         if form.validate_on_submit():
             # warrant.user_id = form.user_id.data
@@ -202,7 +203,7 @@ def travel_warrant_profile(warrant_id):
             flash('Putni nalog je ažuriran.', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
-            # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
+            # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
             # form.user_id.data = warrant.user_id
             form.with_task.data = warrant.with_task
             # form.company_id.data = str(User.query.filter_by(id=form.user_id.data).first().user_company.id)
@@ -210,8 +211,8 @@ def travel_warrant_profile(warrant_id):
             form.relation.data = warrant.relation
             form.start_datetime.data = warrant.start_datetime
             form.end_datetime.data = warrant.end_datetime
-            form.vehicle_id.choices =[('', '----')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).group_by('vehicle_type').all()]
-            form.vehicle_id.data = str(warrant.vehicle_id)
+            form.vehicle_id.choices =[('', '----')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+            form.vehicle_id.data = str(User.query(id=form.user_id.data).first().default_vehicle) #str(warrant.vehicle_id)
             form.together_with.data = warrant.together_with
             form.personal_type.choices = [('', '----'), ('ATMBL', 'AUTOMOBIL'),('KMB', 'KOMBI'),('KMN', 'KAMION')]
             form.personal_type.data = warrant.personal_type
@@ -226,7 +227,7 @@ def travel_warrant_profile(warrant_id):
             # form.costs_pays.data = warrant.costs_pays
             form.km_start.data = warrant.km_start
             form.km_end.data = warrant.km_end
-            form.status.choices=[(1, "kreiran"), (2, "u delu")]
+            form.status.choices=[(1, "kreiran"), (2, "završen")]
             form.status.data = str(warrant.status)
 
         print(f'EditUser: {form.errors=}')
@@ -236,10 +237,10 @@ def travel_warrant_profile(warrant_id):
     else:
         form = EditAdminTravelWarrantForm()
         form.reset()
-        form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
-        form.vehicle_id.choices = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).group_by('vehicle_type').all()]
+        form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
+        form.vehicle_id.choices = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
         form.personal_type.choices = [('', '----'), ('ATMBL', 'AUTOMOBIL'),('KMB', 'KOMBI'),('KMN', 'KAMION')]
-        form.status.choices=[(1, "kreiran"), (2, "u delu")]
+        form.status.choices=[(1, "kreiran"), (2, "završen"), (3, "obračunat")]
 
         if form.validate_on_submit():
             warrant.user_id = form.user_id.data
@@ -277,7 +278,7 @@ def travel_warrant_profile(warrant_id):
             flash('Putni nalog je ažuriran', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
-            form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
+            form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
             form.user_id.data = warrant.user_id
             form.with_task.data = warrant.with_task
             form.company_id.data = str(User.query.filter_by(id=form.user_id.data).first().user_company.id)
@@ -285,7 +286,7 @@ def travel_warrant_profile(warrant_id):
             form.relation.data = warrant.relation
             form.start_datetime.data = warrant.start_datetime
             form.end_datetime.data = warrant.end_datetime
-            form.vehicle_id.choices =[('', '----')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).group_by('vehicle_type').all()]
+            form.vehicle_id.choices =[('', '----')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
             form.vehicle_id.data = str(warrant.vehicle_id)
             form.together_with.data = warrant.together_with
             form.personal_type.choices = [('', '----'), ('ATMBL', 'AUTOMOBIL'),('KMB', 'KOMBI'),('KMN', 'KAMION')]
@@ -301,7 +302,7 @@ def travel_warrant_profile(warrant_id):
             form.costs_pays.data = warrant.costs_pays
             form.km_start.data = warrant.km_start
             form.km_end.data = warrant.km_end
-            form.status.choices=[(1, "kreiran"), (2, "u delu")]
+            form.status.choices=[(1, "kreiran"), (2, "završen"), (3, "obračunat")]
             form.status.data = str(warrant.status)
 
         print(f'EditAdmin: {form.errors=}')

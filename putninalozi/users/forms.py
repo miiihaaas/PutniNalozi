@@ -15,6 +15,7 @@ class RegistrationUserForm(FlaskForm):
     workplace = StringField('Radno Mesto', validators=[DataRequired(), Length(min=2, max=20)])
     authorization = SelectField('Nivo Autorizacije', validators=[DataRequired()], choices = [('c_user', 'USER'),('c_admin', 'ADMIN')])
     company_id = SelectField('Kompanija', choices=Company.query.all()) #Company.query.all()  vs  [(1, 'Helios'),(2, 'Metalac')]
+    default_vehicle = SelectField('Dodeljeno Vozilo', validators=[DataRequired()], choices = [])
     submit = SubmitField('Registruj Korisnika')
 
     def validate_email(self, email):
@@ -34,6 +35,7 @@ class UpdateUserForm(FlaskForm):
     workplace = StringField(label='Radno Mesto', validators=[DataRequired(), Length(min=2, max=20)])
     authorization = SelectField('Nivo Autorizacije', validators=[DataRequired()], choices = [('c_user', 'USER'),('c_admin', 'ADMIN')]) #[('c_user', 'USER'),('c_admin', 'ADMIN')]) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
     company_id = SelectField('Kompanija', choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]) #, choices=Company.query.all())
+    default_vehicle = SelectField('Dodeljeno Vozilo', validators=[DataRequired()], choices = [])
     submit = SubmitField('Ažuriraj Korisnika')
 
     def reset(self):

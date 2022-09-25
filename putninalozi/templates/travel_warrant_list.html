@@ -32,6 +32,7 @@
         <th>Br</th>
         <th>Zaposleni</th>
         <th>Transport</th>
+        <th>Datum</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -42,6 +43,7 @@
             <td> <a class="mr-2" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" title="Edit Travel Warrant"> {{ warrant.travel_warrant_id }} </a> </td>
             <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
             <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} {{warrant.travelwarrant_vehicle.vehicle_brand}} {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
+            <td> {{ warrant.start_datetime }} </td>
             <td> {{ warrant.status }} </td>
           </tr>
         {% endif %}
@@ -53,6 +55,7 @@
         <th>Br</th>
         <th>Zaposleni</th>
         <th>Transport</th>
+        <th>Datum</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -63,6 +66,7 @@
             <td> <a class="mr-2" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" title="Edit Travel Warrant"> {{ warrant.travel_warrant_id }} </a> </td>
             <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
             <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} {{warrant.travelwarrant_vehicle.vehicle_brand}} {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
+            <td> {{ warrant.start_datetime.date() }} </td>
             <td> {{ warrant.status }} </td>
           </tr>
         {% endif %}

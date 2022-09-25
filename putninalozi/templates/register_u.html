@@ -109,7 +109,6 @@
                 {% endif %}
                 <div class="form-group">
                     {{ form.authorization.label(class="form-control-label") }}
-
                     {% if form.authorization.errors %}
                         {{ form.authorization(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -119,6 +118,19 @@
                         </div>
                     {% else %}
                         {{ form.authorization(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.default_vehicle.label(class="form-control-label") }}
+                    {% if form.default_vehicle.errors %}
+                        {{ form.default_vehicle(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.default_vehicle.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.default_vehicle(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
             </fieldset>

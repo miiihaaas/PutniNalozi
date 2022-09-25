@@ -160,6 +160,32 @@
                 {% endif %}
             </div>
             <div class="form-group">
+                {{ form.cashier_email.label(class="form-control-label") }}
+                {% if form.cashier_email.errors %}
+                    {{ form.cashier_email(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.cashier_email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.cashier_email(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.CEO.label(class="form-control-label") }}
+                {% if form.CEO.errors %}
+                    {{ form.CEO(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.CEO.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.CEO(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
               {{ form.company_logo.label() }}
               {{ form.company_logo(class="form-control-file") }}
               {% if form.company_logo.errors %}

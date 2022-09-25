@@ -10,7 +10,9 @@
       <th>Kompanija</th>
       <th>Adresa</th>
       <th>Mesto - Država</th>
+      {% if current_user.authorization == 's_admin' %}
       <th>Kontakti</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -30,7 +32,6 @@
           <td><a class="mr-2" href="{{ url_for('companys.company_profile', company_id=company.id) }}" title="Edit Company">{{ company.companyname }}</a></td>
           <td>{{ company.company_address }} {{ company.company_address_number }}</td>
           <td>{{ company.company_city }} {{ company.company_state }}</td>
-          <td>{{ company.company_site }} / {{ company.company_mail }} / {{ company.company_phone }}</td>
         </tr>
       {% endif %}
     {% endfor %}

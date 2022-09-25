@@ -9,7 +9,6 @@
 
             <div class="form-group">
                 {{ form.name.label(class="form-control-label") }}
-
                 {% if form.name.errors %}
                     {{ form.name(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
@@ -23,7 +22,6 @@
             </div>
             <div class="form-group">
                 {{ form.surname.label(class="form-control-label") }}
-
                 {% if form.surname.errors %}
                     {{ form.surname(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
@@ -37,7 +35,6 @@
             </div>
             <div class="form-group">
                 {{ form.gender.label(class="form-control-label") }}
-
                 {% if form.gender.errors %}
                     {{ form.gender(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
@@ -51,7 +48,6 @@
             </div>
             <div class="form-group">
                 {{ form.workplace.label(class="form-control-label") }}
-
                 {% if form.workplace.errors %}
                     {{ form.workplace(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
@@ -65,7 +61,6 @@
             </div>
             <div class="form-group">
                 {{ form.email.label(class="form-control-label") }}
-
                 {% if form.email.errors %}
                     {{ form.email(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
@@ -81,7 +76,6 @@
             {% if current_user.authorization == 's_admin'%}
               <div class="form-group">
                   {{ form.company_id.label(class="form-control-label") }}
-
                   {% if form.company_id.errors %}
                       {{ form.company_id(class="form-control form-control-lg is-invalid") }}
                       <div class="invalid-feedback">
@@ -99,7 +93,6 @@
             {% if current_user.authorization == 's_admin'%}
               <div class="form-group">
                   {{ form.authorization.label(class="form-control-label") }}
-
                   {% if form.authorization.errors %}
                       {{ form.authorization(class="form-control form-control-lg is-invalid") }}
                       <div class="invalid-feedback">
@@ -114,6 +107,19 @@
             {% else %}
               {{ form.authorization(class="sr-only form-control form-control-lg") }}
             {% endif %}
+            <div class="form-group">
+                {{ form.default_vehicle.label(class="form-control-label") }}
+                {% if form.default_vehicle.errors %}
+                    {{ form.default_vehicle(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.default_vehicle.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.default_vehicle(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
         </fieldset>
         <div class="form-group">
           {{ form.submit(class="btn btn-outline-info") }}

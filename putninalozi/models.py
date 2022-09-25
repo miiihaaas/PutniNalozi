@@ -10,8 +10,7 @@ def load_user(user_id):
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    companyname = db.Column(db.String(20), unique=True, nullable=False)         #Helios, Metalac, Tetrapak, Foka, Papir Print
-    # companyname_short = db.Column(db.String(5), unique=True, nullable=False)    #HLS, MTLC,TTRPK, FOKA, PPRPT
+    companyname = db.Column(db.String(20), unique=True, nullable=False)
     company_address = db.Column(db.String(20), unique=False, nullable=False)
     company_address_number = db.Column(db.Integer, nullable=False)
     company_zip_code = db.Column(db.Integer, nullable=False)
@@ -23,6 +22,8 @@ class Company(db.Model):
     company_mail = db.Column(db.String(120), unique=True, nullable=False)
     company_phone = db.Column(db.Integer, nullable=False)
     company_logo = db.Column(db.String(60), nullable=False)
+    cashier_email = db.Column(db.String(120), unique=True, nullable=False) #mejl blagajnika koji će se koristiti kada se zatvrori nalog da pošalje pdf sa preračunatim računima i potrebnoj uplati
+    CEO = db.Column(db.String(120), nullable=False) #ime i prezime direkora (osobe) koji odobrava putovanje, akontaciju ...
     users = db.relationship('User', backref='user_company', lazy=True)
     vehicles = db.relationship('Vehicle', backref='vehicle_company', lazy=True)
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_company', lazy=True)
@@ -42,6 +43,7 @@ class User(db.Model, UserMixin):
     workplace = db.Column(db.String(20), unique=False, nullable=False)
     authorization = db.Column(db.String(10), nullable = False) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
+    default_vehicle = db.Column(db.Integer) #kod radnika koji imaju svoj auto, da bude podrazumevana vrednost id tog vozila
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_user', lazy=True)
 
     def get_reset_token(self, expires_sec=1800):

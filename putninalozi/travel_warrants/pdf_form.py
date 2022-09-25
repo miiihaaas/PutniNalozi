@@ -50,7 +50,6 @@ def replace_serbian_characters(string):
     return string
 
 
-
 def create_pdf_form(warrant):
     ################################ tutorial links: ################################
     # https://www.youtube.com/watch?v=q70xzDG6nls&ab_channel=ChartExplorers
@@ -58,6 +57,10 @@ def create_pdf_form(warrant):
     # https://www.youtube.com/watch?v=FcrW-ESdY-A&t=1s&ab_channel=ChartExplorers
     # https://www.youtube.com/watch?v=K917aOsfnDc&ab_channel=ChartExplorers
     #################################################################################
+    # https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
+    # https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
+    # https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
+    # https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
 
     rod = []
     if warrant.travelwarrant_user.gender == "1":
@@ -81,9 +84,16 @@ def create_pdf_form(warrant):
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
     company_name = warrant.travelwarrant_company.companyname
     company_address = replace_serbian_characters(warrant.travelwarrant_company.company_address) + f" {warrant.travelwarrant_company.company_address_number}"
+    company_zip_code = warrant.travelwarrant_company.company_zip_code
     company_city = replace_serbian_characters(warrant.travelwarrant_company.company_city)
+    company_state = replace_serbian_characters(warrant.travelwarrant_company.company_state)
+    company_pib = warrant.travelwarrant_company.company_pib
+    company_mb = warrant.travelwarrant_company.company_mb
+    company_phone = warrant.travelwarrant_company.company_phone
+    company_mail = warrant.travelwarrant_company.company_mail
+    company_site = warrant.travelwarrant_company.company_site
 
-    text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {abroad_contry} sa zadatkom: {with_task}
+    text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}
 
 Na službenom putu koristi prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration}{warrant.personal_registration}
 
@@ -94,39 +104,40 @@ Na službenom putu će se zadržati najdalje do {end_datetime},a u roku od 48h p
 Putni troškovi padaju na teret: {costs_pays}
 
 {f'Odobravam isplatu akontacije u iznosu od: {warrant.advance_payment} {warrant.advance_payment_currency}' if warrant.advance_payment > 0 else ""}
+
+Nalogodavac: {warrant.travelwarrant_company.CEO}
 '''
 
     text_form = replace_serbian_characters(text_form)
 
     class PDF(FPDF):
         def header(self):
-            # # Logo
-            # self.image(company_logo, 10, 8, 25)
-            # font
-            self.set_font('times', 'B', 20)
-            # Padding
-            self.cell(80)
-            # Title
-            self.cell(30, 10, 'PUTNI NALOG', border=False, ln=1, align='C')
-            # Line break
-            self.ln(20)
-            # Page footer
-        def footer(self):
             # Logo
-            self.image(company_logo, 1, 275, 25)
-            # Set position of the footer
-            self.set_y(-15)
+            self.image(company_logo, 1, 1, 25)
             # set font
             self.set_font('times', 'I', 8)
             # Kompanija
-            self.cell(0, 3, f'                         {company_name}', ln=True, align='L')
+            self.cell(50, 3, f'                         {company_name}', ln=False, align='L')
+            # PIB
+            self.cell(0, 3, f'                         PIB: {company_pib}', ln=False, align='L')
+            # web stranica
+            self.cell(1, 3, f'                         web: {company_site}', ln=True, align='R')
             # adresa
-            self.cell(0, 3, f'                         {company_address}', ln=True, align='L')
+            self.cell(50, 3, f'                         {company_address}', ln=False, align='L')
+            # MB
+            self.cell(0, 3, f'                         MB: {company_mb}', ln=False, align='L')
+            # email
+            self.cell(1, 3, f'                         email: {company_mail}', ln=True, align='R')
             # mesto
-            self.cell(0, 3, f'                         {company_city}', ln=True, align='L')
-            # Page number
-            self.cell(0, 3, f'Strana {self.page_no()}/{{nb}}', align='R')
-
+            self.cell(0, 3, f'                         {company_zip_code} {company_city}', ln=False, align='L')
+            # telefon
+            self.cell(1, 3, f'                         tel: {company_phone}', ln=True, align='R')
+            # Država
+            self.cell(8, 3, f'                         {company_state}', ln=True, align='L')
+            # linija
+            pdf.line(10, 30, 200, 30)
+        def footer(self):
+            pass
 
     pdf = PDF()
     pdf.alias_nb_pages()

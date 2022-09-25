@@ -39,7 +39,9 @@ def register_c():
                             company_site=form.company_site.data,
                             company_mail=form.company_mail.data,
                             company_phone=form.company_phone.data,
-                            company_logo="")
+                            company_logo="",
+                            cashier_email=form.cashier_email.data,
+                            CEO=form.CEO.data)
         db.session.add(company)
         db.session.commit()
         flash(f'Kompanija: {form.companyname.data} je uspešno kreirana!', 'success')
@@ -91,6 +93,8 @@ def company_profile(company_id): #ovo je funkcija za editovanje user-a
         company.company_site=form.company_site.data
         company.company_mail=form.company_mail.data
         company.company_phone=form.company_phone.data
+        company.cashier_email=form.cashier_email.data
+        company.CEO=form.CEO.data
         db.session.commit()
         flash('Podaci kompanije su ažurirani.', 'success')
         return redirect(url_for('companys.company_list', title='Kompanije', companys=companys))
@@ -106,6 +110,8 @@ def company_profile(company_id): #ovo je funkcija za editovanje user-a
         form.company_site.data=company.company_site
         form.company_mail.data=company.company_mail
         form.company_phone.data=company.company_phone
+        form.cashier_email.data=company.cashier_email
+        form.CEO.data=company.CEO
         form.company_logo.data=company.company_logo
     image_file = url_for('static', filename='company_logos/' + company.company_logo)
     print(image_file)
