@@ -212,7 +212,7 @@ def travel_warrant_profile(warrant_id):
             form.start_datetime.data = warrant.start_datetime
             form.end_datetime.data = warrant.end_datetime
             form.vehicle_id.choices =[('', '----')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
-            form.vehicle_id.data = str(User.query(id=form.user_id.data).first().default_vehicle) #str(warrant.vehicle_id)
+            form.vehicle_id.data = str(warrant.vehicle_id)
             form.together_with.data = warrant.together_with
             form.personal_type.choices = [('', '----'), ('ATMBL', 'AUTOMOBIL'),('KMB', 'KOMBI'),('KMN', 'KAMION')]
             form.personal_type.data = warrant.personal_type
