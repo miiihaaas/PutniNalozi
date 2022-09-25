@@ -42,8 +42,8 @@ def register_u():
                         gender=form.gender.data,
                         workplace=form.workplace.data,
                         authorization=form.authorization.data,
-                        company_id=Company.query.filter_by(companyname=current_user.user_company.companyname,
-                        default_vehicle=form.default_vehicle.data).first().id) #Company.query.filter_by(companyname=form.company_id.data).first().id) #int(current_user.company_id)) ##
+                        company_id=Company.query.filter_by(companyname=current_user.user_company.companyname).first().id,
+                        default_vehicle=form.default_vehicle.data) #Company.query.filter_by(companyname=form.company_id.data).first().id) #int(current_user.company_id)) ##
         elif current_user.authorization == 's_admin':
             user = User(email=form.email.data,
                         password=hashed_password,
@@ -52,8 +52,8 @@ def register_u():
                         gender=form.gender.data,
                         workplace=form.workplace.data,
                         authorization=form.authorization.data,
-                        company_id=Company.query.filter_by(companyname=form.company_id.data,
-                        default_vehicle=form.default_vehicle.data).first().id)
+                        company_id=Company.query.filter_by(companyname=form.company_id.data).first().id,
+                        default_vehicle=form.default_vehicle.data)
         db.session.add(user)
         db.session.commit()
         flash(f'Napravljen je nalog: {form.name.data} {form.surname.data}!', 'success')
