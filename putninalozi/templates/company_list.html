@@ -19,7 +19,7 @@
   {% if current_user.authorization == 's_admin' %}
     {% for company in companys %}
       <tr>
-        <td><a class="mr-2" href="{{ url_for('companys.company_profile', company_id=company.id) }}" title="Edit Company">{{ company.companyname }}</a></td>
+        <td><a class="mr-2 btn btn-info" href="{{ url_for('companys.company_profile', company_id=company.id) }}" title="Uredđivanje Kompanije">{{ company.companyname }}</a></td>
         <td>{{ company.company_address }} {{ company.company_address_number }}</td>
         <td>{{ company.company_city }} {{ company.company_state }}</td>
         <td>{{ company.company_site }} / {{ company.company_mail }} / {{ company.company_phone }}</td>
@@ -29,7 +29,7 @@
     {% for company in companys %}
       {% if company.companyname == current_user.user_company.companyname %}
         <tr>
-          <td><a class="mr-2" href="{{ url_for('companys.company_profile', company_id=company.id) }}" title="Edit Company">{{ company.companyname }}</a></td>
+          <td><a class="mr-2 btn btn-info" href="{{ url_for('companys.company_profile', company_id=company.id) }}" title="Uredđivanje Kompanije">{{ company.companyname }}</a></td>
           <td>{{ company.company_address }} {{ company.company_address_number }}</td>
           <td>{{ company.company_city }} {{ company.company_state }}</td>
         </tr>

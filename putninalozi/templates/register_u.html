@@ -71,12 +71,11 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.gender(class="form-control form-control-lg") }}
+                        {{ form.gender(class="form-select form-select-lg") }}
                     {% endif %}
                 </div>
                 <div class="form-group">
                     {{ form.workplace.label(class="form-control-label") }}
-
                     {% if form.workplace.errors %}
                         {{ form.workplace(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -92,7 +91,6 @@
                 {% if current_user.authorization == 's_admin'%}
                   <div class="form-group">
                       {{ form.company_id.label(class="form-control-label") }}
-
                       {% if form.company_id.errors %}
                           {{ form.company_id(class="form-control form-control-lg is-invalid") }}
                           <div class="invalid-feedback">
@@ -101,11 +99,11 @@
                               {% endfor %}
                           </div>
                       {% else %}
-                          {{ form.company_id(class="form-control form-control-lg") }}
+                          {{ form.company_id(class="form-select form-select-lg") }}
                       {% endif %}
                   </div>
                 {% else %}
-                  {{ form.company_id(class="sr-only form-control form-control-lg") }}
+                  {{ form.company_id(class="sr-only form-select form-select-lg") }}
                 {% endif %}
                 <div class="form-group">
                     {{ form.authorization.label(class="form-control-label") }}
@@ -117,7 +115,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.authorization(class="form-control form-control-lg") }}
+                        {{ form.authorization(class="form-select form-select-lg") }}
                     {% endif %}
                 </div>
                 <div class="form-group">
@@ -130,7 +128,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.default_vehicle(class="form-control form-control-lg") }}
+                        {{ form.default_vehicle(class="form-select form-select-lg") }}
                     {% endif %}
                 </div>
             </fieldset>

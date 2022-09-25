@@ -142,7 +142,7 @@
                           {% endfor %}
                       </div>
                   {% else %}
-                      {{ form.vehicle_id(class="form-control form-control-lg") }}
+                      {{ form.vehicle_id(class="form-select form-select-lg") }}
                   {% endif %}
               </div>
               <div class="form-box">
@@ -222,7 +222,7 @@
                           {% endfor %}
                       </div>
                   {% else %}
-                      {{ form.personal_type(class="form-control form-control-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
+                      {{ form.personal_type(class="form-select form-select-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
                   {% endif %}
               </div>
               <div class="form-box">
@@ -282,7 +282,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="form-box">
         {{ form.status.label(class="form-control-label") }}
           {% if form.status.errors %}

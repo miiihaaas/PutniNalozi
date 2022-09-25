@@ -46,7 +46,7 @@
                   {% endfor %}
               </div>
           {% else %}
-              {{ form.user_id(class="form-control form-control-lg") }}
+              {{ form.user_id(class="form-select form-select-lg") }}
           {% endif %}
       </div>
       <div class="form-box">
@@ -72,7 +72,7 @@
                   {% endfor %}
               </div>
           {% else %}
-              {{ form.company_id(class="form-control form-control-lg") }}
+              {{ form.company_id(class="form-select form-select-lg") }}
           {% endif %}
       </div>
       <br>
@@ -167,7 +167,7 @@
                           {% endfor %}
                       </div>
                   {% else %}
-                      {{ form.vehicle_id(class="form-control form-control-lg") }}
+                      {{ form.vehicle_id(class="form-select form-select-lg") }}
                   {% endif %}
               </div>
               <div class="form-box">
@@ -247,7 +247,7 @@
                           {% endfor %}
                       </div>
                   {% else %}
-                      {{ form.personal_type(class="form-control form-control-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
+                      {{ form.personal_type(class="form-select form-select-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
                   {% endif %}
               </div>
               <div class="form-box">
@@ -332,7 +332,7 @@
                   {% endfor %}
               </div>
           {% else %}
-              {{ form.advance_payment_currency(class="form-control form-control-lg") }}
+              {{ form.advance_payment_currency(class="form-select form-select-lg") }}
           {% endif %}
       </div>
       <div class="form-box">
@@ -360,7 +360,7 @@
                   {% endfor %}
               </div>
           {% else %}
-              {{ form.daily_wage_currency(class="form-control form-control-lg") }}
+              {{ form.daily_wage_currency(class="form-select form-select-lg") }}
           {% endif %}
       </div>
       <div class="form-box">

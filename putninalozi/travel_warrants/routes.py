@@ -134,7 +134,7 @@ def register_tw():
         db.session.add(warrant)
         db.session.commit()
         file_name = create_pdf_form(warrant)
-        send_email(warrant, current_user, file_name)
+        # send_email(warrant, current_user, file_name)
         flash(f'Putni nalog broj: {warrant.travel_warrant_id} je uspešno kreiran!', 'success')
         flash(f'{warrant.travelwarrant_user.name} je dobio mejl sa detaljima putnog naloga', 'success')
         return redirect('travel_warrant_list')
