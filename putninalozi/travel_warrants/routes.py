@@ -139,7 +139,7 @@ def register_tw():
         flash(f'{warrant.travelwarrant_user.name} je dobio mejl sa detaljima putnog naloga', 'success')
         return redirect('travel_warrant_list')
     print('nije dobra validacija')
-    return render_template('register_tw.html', title='Kreiranje Putnog naloga', legend='Kreiranje Novog Putnog naloga', form=form)
+    return render_template('register_tw.html', title='Kreiranje Putnog naloga', legend='Kreiranje novog putnog naloga', form=form)
 
 
 @travel_warrants.route("/travel_warrant/<int:warrant_id>", methods=['GET', 'POST'])
@@ -232,7 +232,7 @@ def travel_warrant_profile(warrant_id):
 
         print(f'EditUser: {form.errors=}')
 
-        return render_template('travel_warrant_user.html', title='Uređivanje Putnog Naloga', warrant=warrant, legend='Uređivanje Putnog Naloga - User View', form=form, rod=rod)
+        return render_template('travel_warrant_user.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled korisnika)', form=form, rod=rod)
 
     else:
         form = EditAdminTravelWarrantForm()
@@ -307,4 +307,4 @@ def travel_warrant_profile(warrant_id):
 
         print(f'EditAdmin: {form.errors=}')
 
-        return render_template('travel_warrant.html', title='Uređivanje Putnog Naloga', warrant=warrant, legend='Uređivanje Putnog Naloga - Admin View', form=form, rod=rod)
+        return render_template('travel_warrant.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', form=form, rod=rod)

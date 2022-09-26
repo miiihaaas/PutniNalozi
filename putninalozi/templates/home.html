@@ -8,22 +8,29 @@
     </tr>
   </thead>
   <tbody>
+    {% if current_user.authorization != 'c_user' %}
     <tr>
-      <td> <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Company</a> </td>
-      <td>Kreiranje i editovanje kompanije</td>
+      <td> <a class="btn btn-info" href="{{ url_for('companys.company_list') }}">Kompanija</a> </td>
+      <td>Unos i promena podataka o kompaniji</td>
     </tr>
     <tr>
-      <td> <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vehicle</a> </td>
-      <td>Kreiranje i editovanje vozila</td>
+      <td> <a class="btn btn-info" href="{{ url_for('vehicles.vehicle_list') }}">Vozila</a> </td>
+      <td>Unos i promena podataka o vozilima</td>
     </tr>
     <tr>
-      <td> <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">User</a> </td>
-      <td>Kreiranje i editovanje korisnika</td>
+      <td> <a class="btn btn-info" href="{{ url_for('users.user_list') }}">Korisnici</a> </td>
+      <td>Kreiranje i izmena korisničkih naloga</td>
     </tr>
     <tr>
-      <td> <a class="nav-item nav-link" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Travel Warrant</a> </td>
-      <td>Kreiranje i obračunavanje putnih naloga</td>
+      <td> <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni nalozi</a> </td>
+      <td>Kreiranje i administriranje putnih naloga</td>
     </tr>
+    {% else %}
+    <tr>
+      <td> <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni nalozi</a> </td>
+      <td>Kreiranje i administriranje putnih naloga</td>
+    </tr>
+    {% endif %}
   </tbody>
 </table>
 {% endblock content%}

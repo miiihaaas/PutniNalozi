@@ -52,7 +52,7 @@
           <div class="card-header" id="headingZero">
             <h5 class="mb-0">
               <button type="button" class="btn" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
-                Putovanje U Inostranstvo
+                Putovanje u inostranstvo
               </button>
             </h5>
           </div>
@@ -102,7 +102,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
+                {{ form.start_datetime(class="form-control form-control-lg", type="date") }}
             {% endif %}
         </div>
         <div class="form-box">
@@ -116,7 +116,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
+                {{ form.end_datetime(class="form-control form-control-lg", type="date") }}
             {% endif %}
         </div>
 
@@ -179,7 +179,7 @@
             <div class="card-header" id="headingThree">
               <h5 class="mb-0">
                 <button type="button" class="btn collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  Lično Vozilo:
+                  Lično vozilo:
                 </button>
               </h5>
             </div>

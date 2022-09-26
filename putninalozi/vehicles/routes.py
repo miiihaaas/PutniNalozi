@@ -42,7 +42,7 @@ def register_v():
             db.session.commit()
         flash(f'Vozilo registracije: {form.vehicle_registration.data} je uspešno registrovano!', 'success')
         return redirect(url_for('vehicles.vehicle_list'))
-    return render_template('register_v.html', title='Registracija Novog Vozila', form=form, legend='Registracija Novog Vozila')
+    return render_template('register_v.html', title='Registracija novog vozila', form=form, legend='Registracija novog vozila')
 
 
 
@@ -81,7 +81,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         form.vehicle_registration.data = vehicle.vehicle_registration
         form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
         form.company_id.data = str(vehicle.company_id)
-    return render_template('vehicle.html', title="Uređivanje Vozila", vehicle=vehicle, form=form, legend='Uređivanje Vozila')
+    return render_template('vehicle.html', title="Uređivanje vozila", vehicle=vehicle, form=form, legend='Uređivanje vozila')
 
 
 @vehicles.route("/vehicle/<int:vehicle_id>/delete", methods=['POST'])

@@ -58,7 +58,7 @@ def register_u():
         db.session.commit()
         flash(f'Napravljen je nalog: {form.name.data} {form.surname.data}!', 'success')
         return redirect(url_for('users.user_list'))
-    return render_template('register_u.html', title='Registacija Novog Korisnika', form=form, legend='Registracija Novog Korisnika')
+    return render_template('register_u.html', title='Registracija novog korisnika', form=form, legend='Registracija novog korisnika')
 
 
 
@@ -92,7 +92,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
             validate_email = User.query.filter_by(email=form.email.data).first()
             if validate_email:
                 flash('Taj mejl je već postoji, izabeite drugači emal', 'danger')
-                return render_template('user.html', title="Uredi Korisnika", user=user, form=form, legend='Uredi Korisnika')
+                return render_template('user.html', title="Uredi korisnčke podatke", user=user, form=form, legend='Uredi korisnčke podatke')
             else:
                 user.email = form.email.data
 
@@ -121,13 +121,13 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         form.authorization.choices = [('c_user', 'USER'),('c_admin', 'ADMIN')]
         form.authorization.data = user.authorization
 
-        form.gender.choices = [(0, 'SREDNJI'),(1, 'MUŠKI'),(2, 'ŽENSKI')]
+        form.gender.choices = [(0, 'srednji'),(1, 'muški'),(2, 'žemski')]
         form.gender.data = user.gender
 
         form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
         form.company_id.data = str(user.company_id)
         form.default_vehicle.data = str(user.default_vehicle)
-    return render_template('user.html', title="Uredi Korisnika", user=user, form=form, legend='Uredi Korisnika')
+    return render_template('user.html', title="Uredi korisnčke podatke", user=user, form=form, legend='Uredi korisnčke podatke')
 
 
 

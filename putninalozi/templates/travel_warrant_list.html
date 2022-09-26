@@ -1,17 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
 {% if current_user.authorization != 'c_user' %}
-  <a class="btn btn-info btn-sm m-1" href="{{ url_for('travel_warrants.register_tw') }}">Kreiranje Novog Putnog Naloga</a>
+  <a class="btn btn-info btn-sm m-1" href="{{ url_for('travel_warrants.register_tw') }}">Kreiranje novog putnog naloga</a>
 {% endif %}
 <hr>
 <table id="data" border="1" class="table table-striped">
   {% if current_user.authorization == 's_admin' %}
     <thead>
       <tr id="header">
-        <th>Br</th>
+        <th>Br.</th>
         <th>Kompanija</th>
         <th>Zaposleni</th>
-        <th>Transport</th>
+        <th>Vozilo</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -29,9 +29,9 @@
   {% elif current_user.authorization == 'c_admin' %}
     <thead>
       <tr id="header">
-        <th>Br</th>
+        <th>Br.</th>
         <th>Zaposleni</th>
-        <th>Transport</th>
+        <th>Vozilo</th>
         <th>Datum</th>
         <th>Status</th>
       </tr>
@@ -52,9 +52,9 @@
   {% else %}
     <thead>
       <tr id="header">
-        <th>Br</th>
+        <th>Br.</th>
         <th>Zaposleni</th>
-        <th>Transport</th>
+        <th>Vozilo</th>
         <th>Datum</th>
         <th>Status</th>
       </tr>

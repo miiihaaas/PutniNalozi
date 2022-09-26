@@ -46,7 +46,7 @@ def register_c():
         db.session.commit()
         flash(f'Kompanija: {form.companyname.data} je uspešno kreirana!', 'success')
         return redirect(url_for('main.home'))
-    return render_template('register_c.html', title='Kreiranje Nove Kompanije', legend='Kreiranje Nove Kompanije', form=form)
+    return render_template('register_c.html', title='Kreiranje nove kompanije', legend='Kreiranje nove kompanije', form=form)
 
 
 def save_picture(form_picture):
@@ -115,4 +115,4 @@ def company_profile(company_id): #ovo je funkcija za editovanje user-a
         form.company_logo.data=company.company_logo
     image_file = url_for('static', filename='company_logos/' + company.company_logo)
     print(image_file)
-    return render_template('company.html', title='Uređivanje Podataka Kompanije', company=company, form=form, legend='Uređivanje Podataka Kompanije', image_file=image_file)
+    return render_template('company.html', title='Uređivanje podataka kompanije', company=company, form=form, legend='Uređivanje podataka kompanije', image_file=image_file)

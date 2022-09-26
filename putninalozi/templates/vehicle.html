@@ -18,7 +18,7 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.vehicle_type(class="form-control form-control-lg") }}
+                    {{ form.vehicle_type(class="form-select form-select-lg") }}
                 {% endif %}
             </div>
             <div class="form-group">
@@ -61,11 +61,11 @@
                           {% endfor %}
                       </div>
                   {% else %}
-                      {{ form.company_id(class="form-control form-control-lg") }}
+                      {{ form.company_id(class="form-select form-select-lg") }}
                   {% endif %}
               </div>
             {% else %}
-              {{ form.company_id(class="sr-only form-control form-control-lg") }}
+              {{ form.company_id(class="sr-only form-select form-select-lg") }}
             {% endif %}
 
 
