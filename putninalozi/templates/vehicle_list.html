@@ -47,9 +47,13 @@
 {% endblock content%}
 
 {% block scripts %}
-  <script>
-    $(document).ready(function () {
-      $('#data').DataTable();
-    });
-  </script>
+<script>
+  $(document).ready(function () {
+    $('#data').DataTable( {
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/sr-SP.json"
+      }
+    } );
+  } );
+</script>
 {% endblock %}
