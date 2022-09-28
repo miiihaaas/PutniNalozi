@@ -69,6 +69,7 @@ def create_pdf_form(warrant):
         rod=["Radnica", "raspoređena", "Koleginice"]
 
     warrant_id = warrant.travel_warrant_id
+    warrant_number = warrant.travel_warrant_number
     name = replace_serbian_characters(warrant.travelwarrant_user.name)
     surname = replace_serbian_characters(warrant.travelwarrant_user.surname)
     workplace = replace_serbian_characters(warrant.travelwarrant_user.workplace)
@@ -143,13 +144,13 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}
     pdf.alias_nb_pages()
     pdf.add_page()
     pdf.set_font('times','B', 16)
-    pdf.cell(0, 30, f'NALOG ZA SLUZBENO PUTOVANJE: #{warrant_id}', ln=True, align='C')
+    pdf.cell(0, 30, f'NALOG ZA SLUZBENO PUTOVANJE: {warrant_number}', ln=True, align='C')
 
     pdf.set_font('times','', 12)
     pdf.multi_cell(0, 5, text_form, ln=True)
 
     path = "putninalozi/static/pdf_forms/"
-    file_name = f'{warrant_id}-{company_name}-{name} {surname}.pdf'
+    file_name = f'{warrant_number} {company_name}-{name} {surname}.pdf'
     pdf.output(path + file_name)
     return file_name
 

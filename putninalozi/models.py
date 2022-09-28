@@ -77,6 +77,7 @@ class Vehicle(db.Model):
 
 class TravelWarrant(db.Model):
     travel_warrant_id = db.Column(db.Integer, primary_key=True)
+    travel_warrant_number = db.Column(db.String(50), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     with_task = db.Column(db.String(50), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)

@@ -91,9 +91,8 @@
                 {{ form.relation(class="form-control form-control-lg") }}
             {% endif %}
         </div>
-        <div class="form-box">
+        <div class="form-box col-md-3">
           {{ form.start_datetime.label(class="form-control-label") }}
-
             {% if form.start_datetime.errors %}
                 {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -102,12 +101,11 @@
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.start_datetime(class="form-control form-control-lg", type="date") }}
+                {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
             {% endif %}
         </div>
-        <div class="form-box">
+        <div class="form-box col-md-3">
           {{ form.end_datetime.label(class="form-control-label") }}
-
             {% if form.end_datetime.errors %}
                 {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -116,7 +114,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.end_datetime(class="form-control form-control-lg", type="date") }}
+                {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
             {% endif %}
         </div>
 

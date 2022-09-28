@@ -18,7 +18,7 @@
     <tbody>
       {% for warrant in warrants %}
         <tr>
-          <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_id }} </a> </td>
+          <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
           <td> {{ warrant.travelwarrant_company.companyname }} </td>
           <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} </td>
           <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
@@ -40,7 +40,7 @@
       {% for warrant in warrants %}
         {% if current_user.user_company.id == warrant.travelwarrant_company.id %}
           <tr>
-            <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_id }} </a> </td>
+            <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
             <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
             <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} {{warrant.travelwarrant_vehicle.vehicle_brand}} {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
             <td> {{ warrant.start_datetime }} </td>
@@ -63,7 +63,7 @@
       {% for warrant in warrants %}
         {% if current_user.id == warrant.travelwarrant_user.id %}
           <tr>
-            <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_id }} </a> </td>
+            <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
             <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
             <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} {{warrant.travelwarrant_vehicle.vehicle_brand}} {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
             <td> {{ warrant.start_datetime.date() }} </td>
@@ -74,6 +74,47 @@
     </tbody>
   {% endif %}
 </table>
+
+<div class="form-group">
+  {% if current_user.authorization == 's_admin' or current_user.authorization == 'c_admin' %}
+    <div>
+      <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Kreiranje novog putnog naloga</button>
+    </div>
+  {% endif %}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="DeleteModalLabel">Kreiranje novog putnog naloga</h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+  <label for="input_password">Izaberite zaposlenog i datum putovanja: </label>
+  <div class="form-group">
+    datum
+    <input type="password" id="input_password" name="input_password" value="" placeholder="ispravi ovaj deo">
+  </div>
+  <div class="form-group">
+    zaposleni - dropdown meni
+    <input type="password" id="input_password" name="input_password" value="" placeholder="ispravi ovaj deo">
+  </div>
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Nazad</button>
+<form  action="" method="post"> <!-- ovde treba dodati valjda nešto (action="...") -->
+  <input class="btn btn-info" type="submit" value="Dalje">
+</form>
+</div>
+</div>
+</div>
+</div>
+
+
 
 {% endblock content%}
 
