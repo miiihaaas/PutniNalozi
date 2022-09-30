@@ -3,7 +3,7 @@ from flask import  render_template, url_for, flash, redirect, abort, request
 from putninalozi import db
 # from putninalozi.travel_warrants.forms import TravelWarrantForm
 from putninalozi.models import TravelWarrant, User, Vehicle
-from putninalozi.travel_warrants.forms import CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm
+from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
@@ -16,40 +16,62 @@ travel_warrants = Blueprint('travel_warrants', __name__)
 #     return users_list
 
 
-@travel_warrants.route("/travel_warrant_list")
+@travel_warrants.route("/travel_warrant_list", methods=['GET', 'POST'])
 def travel_warrant_list():
     if not current_user.is_authenticated:
         flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
+
     warrants = TravelWarrant.query.all()
-    return render_template('travel_warrant_list.html', title='Travel Warrants', warrants=warrants)
+    form = PreCreateTravelWarrantForm()
+    form.user_id.choices = [(0, '-----')] + [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
+    if form.validate_on_submit():
+        korisnik_id = form.user_id.data
+        datum = form.start_datetime.data
+        return redirect(url_for('travel_warrants.register_tw',korisnik_id=korisnik_id, datum=datum))
 
 
-@travel_warrants.route("/register_tw", methods=['GET', 'POST'])
-def register_tw():
+    return render_template('travel_warrant_list.html', title='Travel Warrants', warrants=warrants, form=form)
+
+
+@travel_warrants.route("/register_tw/<int:korisnik_id>/<datum>", methods=['GET', 'POST'])
+def register_tw(korisnik_id, datum):
     if not current_user.is_authenticated:
         flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
     print(user_list)
     vehicle_list = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+
+    print(f'{korisnik_id=}, {datum=}')
+    datum = datetime.strptime(datum, '%Y-%m-%d %H:%M:%S') #'2022-09-27 15:02:00'
+    print(type(datum))
+    print(datum)
+
+    ime_prezime = User.query.filter_by(id=korisnik_id).first().name + " " + User.query.filter_by(id=korisnik_id).first().surname
+    print(ime_prezime)
+
+    brojac = len(TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
+                                                                                                        datum.replace(hour=0, minute=0, second=0, microsecond=0),
+                                                                                                        datum.replace(hour=23, minute=59, second=59, microsecond=9))).all())
+    print(f'{korisnik_id=}, {datum=}, {brojac=}')
+    podrazumevano_vozilo = User.query.filter_by(id=korisnik_id).first().default_vehicle
+    print(f'{podrazumevano_vozilo=}')
+
     form = CreateTravelWarrantForm()
     form.reset()
     form.user_id.choices = user_list
+    form.user_id.data = str(korisnik_id)
     form.vehicle_id.choices = vehicle_list
+    form.vehicle_id.data = str(podrazumevano_vozilo)
+    form.start_datetime.data = datum
 
-    # brojac=len(TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter_by(start_datetime=form.start_datetime.data).all()) #count
-    # brojac = len(TravelWarrant.query.filter_by(company_id=3).filter(TravelWarrant.start_datetime.between(
-    #                                                                                                     form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
-    #                                                                                                     form.start_datetime.data.replace(hour=23, minute=59, second=59, microsecond=9))).all()) # zameniti datetime.datetime da se dobije iz form.start_datetime.data
-
-    brojac = 0
     if form.validate_on_submit():
         if form.together_with.data != None:
             warrant = TravelWarrant(
-                user_id=form.user_id.data,
+                user_id=korisnik_id,
                 with_task=form.with_task.data,
-                company_id=User.query.filter_by(id=form.user_id.data).first().user_company.id,  #form.company_id.data,
+                company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
                 start_datetime=form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
@@ -71,9 +93,9 @@ def register_tw():
                 travel_warrant_number=form.start_datetime.data.strftime('%Y%m%d') + str(-brojac-1))
         elif form.personal_brand.data != "":
             warrant = TravelWarrant(
-                user_id=form.user_id.data,
+                user_id=korisnik_id,
                 with_task=form.with_task.data,
-                company_id=User.query.filter_by(id=form.user_id.data).first().user_company.id,  #form.company_id.data,
+                company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
                 start_datetime=form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
@@ -95,9 +117,9 @@ def register_tw():
                 travel_warrant_number=form.start_datetime.data.strftime('%Y%m%d') + str(-brojac-1))
         elif form.other.data != "":
             warrant = TravelWarrant(
-                user_id=form.user_id.data,
+                user_id=korisnik_id,
                 with_task=form.with_task.data,
-                company_id=User.query.filter_by(id=form.user_id.data).first().user_company.id,  #form.company_id.data,
+                company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
                 start_datetime=form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
@@ -119,9 +141,9 @@ def register_tw():
                 travel_warrant_number=form.start_datetime.data.strftime('%Y%m%d') + str(-brojac-1))
         else:
             warrant = TravelWarrant(
-                user_id=form.user_id.data,
+                user_id=korisnik_id,
                 with_task=form.with_task.data,
-                company_id=User.query.filter_by(id=form.user_id.data).first().user_company.id,  #form.company_id.data,
+                company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
                 start_datetime=form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
@@ -144,13 +166,14 @@ def register_tw():
 
         db.session.add(warrant)
         db.session.commit()
-        file_name = create_pdf_form(warrant)
+        # file_name = create_pdf_form(warrant)
         # send_email(warrant, current_user, file_name)
-        flash(f'Putni nalog broj: {warrant.travel_warrant_id} je uspešno kreiran!', 'success')
+        flash(f'Putni nalog broj: {warrant.travel_warrant_number} je uspešno kreiran!', 'success')
         flash(f'{warrant.travelwarrant_user.name} je dobio mejl sa detaljima putnog naloga', 'success')
-        return redirect('travel_warrant_list')
-    print('nije dobra validacija')
-    return render_template('register_tw.html', title='Kreiranje Putnog naloga', legend='Kreiranje novog putnog naloga', form=form)
+        return redirect(url_for('travel_warrants.travel_warrant_list'))
+    return render_template('register_tw.html', title='Kreiranje Putnog naloga',
+                            legend='Kreiranje putnog naloga, zaposleni: ',
+                            form=form, ime_prezime=ime_prezime)
 
 
 @travel_warrants.route("/travel_warrant/<int:warrant_id>", methods=['GET', 'POST'])

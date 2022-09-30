@@ -7,6 +7,12 @@ from putninalozi import db
 # from putninalozi.travel_warrants.routes import users_list
 
 
+class PreCreateTravelWarrantForm(FlaskForm):
+    user_id = SelectField('Zaposleni:', validators=[DataRequired()], choices=[]) #[(u.id, u.name+" " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #umesto users: db.session.query(User.id,User.name,User.surname).all()
+    start_datetime = DateTimeField('Polazno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
+    submit = SubmitField('Dalje')
+
+
 class CreateTravelWarrantForm(FlaskForm):
     user_id = SelectField('Zaposleni:', validators=[DataRequired()], choices=[]) #[(u.id, u.name+" " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #umesto users: db.session.query(User.id,User.name,User.surname).all()
     with_task = StringField('Sa zadatkom: ', validators=[DataRequired()])

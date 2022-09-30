@@ -1,7 +1,56 @@
 {% extends "layout.html" %}
 {% block content %}
 {% if current_user.authorization != 'c_user' %}
-  <a class="btn btn-info btn-sm m-1" href="{{ url_for('travel_warrants.register_tw') }}">Kreiranje novog putnog naloga</a>
+<form method="POST" action="">
+  {{ form.hidden_tag() }}
+  <div id="accordionZero">
+    <div class="accordion" id="accordionZero">
+      <div class="accordion-item">
+        <div class="accordion-header" id="headingZero">
+          <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
+            <h1>Kreiranje novog putnog naloga</h1>
+          </button>
+        </div>
+
+        <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
+          <div class="card-body">
+            <div class="form-group">
+              {{ form.user_id.label(class="form-control-label") }}
+                {% if form.user_id.errors %}
+                    {{ form.user_id(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.user_id.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.user_id(class="form-select form-select-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-box">
+              {{ form.start_datetime.label(class="form-control-label") }}
+                {% if form.start_datetime.errors %}
+                    {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.start_datetime.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
+                {% endif %}
+            </div>
+            <br>
+            <div class="form-group">
+              {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 {% endif %}
 <hr>
 <table id="data" border="1" class="table table-striped">
@@ -74,46 +123,7 @@
     </tbody>
   {% endif %}
 </table>
-
-<div class="form-group">
-  {% if current_user.authorization == 's_admin' or current_user.authorization == 'c_admin' %}
-    <div>
-      <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Kreiranje novog putnog naloga</button>
-    </div>
-  {% endif %}
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-<div class="modal-header">
-<h5 class="modal-title" id="DeleteModalLabel">Kreiranje novog putnog naloga</h5>
-<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-  <span aria-hidden="true">&times;</span>
-</button>
-</div>
-<div class="modal-body">
-  <label for="input_password">Izaberite zaposlenog i datum putovanja: </label>
-  <div class="form-group">
-    datum
-    <input type="password" id="input_password" name="input_password" value="" placeholder="ispravi ovaj deo">
-  </div>
-  <div class="form-group">
-    zaposleni - dropdown meni
-    <input type="password" id="input_password" name="input_password" value="" placeholder="ispravi ovaj deo">
-  </div>
-</div>
-<div class="modal-footer">
-<button type="button" class="btn btn-secondary" data-dismiss="modal">Nazad</button>
-<form  action="" method="post"> <!-- ovde treba dodati valjda nešto (action="...") -->
-  <input class="btn btn-info" type="submit" value="Dalje">
 </form>
-</div>
-</div>
-</div>
-</div>
-
 
 
 {% endblock content%}

@@ -162,7 +162,7 @@ def delete_user(user_id):
         flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif not bcrypt.check_password_hash(current_user.password, request.form.get("input_password")):
-        print('nije dobar password')
+        print('Pogrešna lozinka!')
         abort(403)
     else:
         if current_user.authorization == 'c_user':

@@ -104,6 +104,8 @@ class TravelWarrant(db.Model):
 
     status = db.Column(db.Integer, nullable=False)
     #nastaviti sa dodavanjem potrebnih polja (nakon definisanja), napisati formu (forms.py), dodati funkciju (routes.py) i napraviti html fajl
+    #placeholder za PDF fajl
+    #troškovi - ili možda napraviti posebnu tabelu za troškove??? i povezati sumu za ovu prmenjivu???
 
     def __repr__(self):
         return f"Travel Warrant('{self.travel_warrant_id=}', '{self.with_task=}', '{self.user_id=}')"
