@@ -35,87 +35,115 @@
             </div>
           </div>
         </div>
-      <div class="form-box">
-        {{ form.with_task.label(class="form-control-label") }}
-          {% if form.with_task.errors %}
-              {{ form.with_task(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.with_task.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.with_task(class="form-control form-control-lg") }}
-          {% endif %}
       </div>
       <br>
-      <div id="accordionAbrod">
-      <div class="accordion-item">
-        <div class="accordion-header" id="headingAbrod">
-            <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseAbrod" aria-expanded="false" aria-controls="collapseAbrod">
-              Putovanje U Inostranstvo
-            </button>
-        </div>
-        <div id="collapseAbrod" class="collapse" aria-labelledby="headingAbrod" data-parent="#accordionAbrod">
-          <div class="card-body">
-            {{ form.abroad_contry.label(class="form-control-label") }}
+      <div class="row">
 
-              {% if form.abroad_contry.errors %}
-                  {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
-                  <div class="invalid-feedback">
-                      {% for error in form.abroad_contry.errors %}
-                          <span>{{ error }}</span>
-                      {% endfor %}
-                  </div>
-              {% else %}
-                  {{ form.abroad_contry(class="form-control form-control-lg") }}
-              {% endif %}
+        <div class="col" id="accordionAbrod">
+            <br>
+        <div class="accordion-item">
+          <div class="accordion-header" id="headingAbrod">
+              <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseAbrod" aria-expanded="false" aria-controls="collapseAbrod">
+                Putovanje U Inostranstvo
+              </button>
+          </div>
+          <div id="collapseAbrod" class="collapse" aria-labelledby="headingAbrod" data-parent="#accordionAbrod">
+            <div class="card-body">
+              {{ form.abroad_contry.label(class="form-control-label") }}
+                {% if form.abroad_contry.errors %}
+                    {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.abroad_contry.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.abroad_contry(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
           </div>
         </div>
-      </div>
-      </div>
-      <div class="form-box">
-        {{ form.relation.label(class="form-control-label") }}
+        </div>
+        <div class="col form-box">
+          {{ form.relation.label(class="form-control-label") }}
 
-          {% if form.relation.errors %}
-              {{ form.relation(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.relation.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.relation(class="form-control form-control-lg") }}
-          {% endif %}
+            {% if form.relation.errors %}
+                {{ form.relation(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.relation.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.relation(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
       </div>
-      <div class="form-box">
-        {{ form.start_datetime.label(class="form-control-label") }}
+      <br>
+      <div class="row">
+        <div class="col form-box">
+          {{ form.with_task.label(class="form-control-label") }}
+            {% if form.with_task.errors %}
+                {{ form.with_task(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.with_task.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.with_task(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-box">
+          {{ form.start_datetime.label(class="form-control-label") }}
+            {% if form.start_datetime.errors %}
+                {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.start_datetime.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+        </div>
 
-          {% if form.start_datetime.errors %}
-              {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.start_datetime.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
-          {% endif %}
       </div>
-      <div class="form-box">
-        {{ form.end_datetime.label(class="form-control-label") }}
+      <div class="row">
+        <div class="col form-box">
+          {{ form.status.label(class="form-control-label") }}
+            {% if form.status.errors %}
+                {{ form.status(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.status.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.status(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-box">
+          {{ form.end_datetime.label(class="form-control-label") }}
+            {% if form.end_datetime.errors %}
+                {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.end_datetime.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+        </div>
+      </div>
 
-          {% if form.end_datetime.errors %}
-              {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.end_datetime.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
-          {% endif %}
-      </div>
+
+
+
+      <br>
+
+
       <br>
       <div id="accordion">
         <div class="accordion-item">
@@ -281,19 +309,7 @@
         </div>
       </div>
 
-      <div class="form-box">
-        {{ form.status.label(class="form-control-label") }}
-          {% if form.status.errors %}
-              {{ form.status(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.status.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.status(class="form-control form-control-lg") }}
-          {% endif %}
-      </div>
+
     </fieldset>
     <div class="form-group">
       {{ form.submit(class="btn btn-outline-info") }}

@@ -42,47 +42,80 @@
           </div>
         </div>
       </div>
-      <div class="form-group">
-          {{ form.user_id.label(class="form-control-label") }}
-          {% if form.user_id.errors %}
-              {{ form.user_id(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.user_id.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.user_id(class="form-select form-select-lg") }}
-          {% endif %}
+      <div class="row">
+        <div class="col form-group">
+            {{ form.user_id.label(class="form-control-label") }}
+            {% if form.user_id.errors %}
+                {{ form.user_id(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.user_id.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.user_id(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-box">
+          {{ form.company_id.label(class="form-control-label") }}
+            {% if form.company_id.errors %}
+                {{ form.company_id(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.company_id.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.company_id(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
       </div>
-      <div class="form-box">
-        {{ form.with_task.label(class="form-control-label") }}
-          {% if form.with_task.errors %}
-              {{ form.with_task(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.with_task.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.with_task(class="form-control form-control-lg") }}
-          {% endif %}
+      <div class="row">
+        <div class="col form-box col-md-6">
+          {{ form.with_task.label(class="form-control-label") }}
+            {% if form.with_task.errors %}
+                {{ form.with_task(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.with_task.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.with_task(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-box col-md-3">
+          {{ form.start_datetime.label(class="form-control-label") }}
+
+            {% if form.start_datetime.errors %}
+                {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.start_datetime.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+        </div>
+        <div class="col form-box col-md-3">
+          {{ form.end_datetime.label(class="form-control-label") }}
+
+            {% if form.end_datetime.errors %}
+                {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.end_datetime.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+        </div>
       </div>
-      <div class="form-box">
-        {{ form.company_id.label(class="form-control-label") }}
-          {% if form.company_id.errors %}
-              {{ form.company_id(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.company_id.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.company_id(class="form-select form-select-lg") }}
-          {% endif %}
-      </div>
-      <br>
-      <div id="accordionAbrod">
+      <div class="row">
+      <div class="col" id="accordionAbrod">
+        <br>
       <div class="accordion-item">
         <div class="accordion-header" id="headingAbrod">
             <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseAbrod" aria-expanded="false" aria-controls="collapseAbrod">
@@ -107,7 +140,7 @@
         </div>
       </div>
       </div>
-      <div class="form-box">
+      <div class="col form-box">
         {{ form.relation.label(class="form-control-label") }}
 
           {% if form.relation.errors %}
@@ -121,34 +154,97 @@
               {{ form.relation(class="form-control form-control-lg") }}
           {% endif %}
       </div>
-      <div class="form-box">
-        {{ form.start_datetime.label(class="form-control-label") }}
-
-          {% if form.start_datetime.errors %}
-              {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.start_datetime.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
-          {% endif %}
       </div>
-      <div class="form-box">
-        {{ form.end_datetime.label(class="form-control-label") }}
+      <br>
+      <div class="row">
+        <div class="col form-box">
+          {{ form.costs_pays.label(class="form-control-label") }}
+            {% if form.costs_pays.errors %}
+                {{ form.costs_pays(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.costs_pays.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.costs_pays(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
 
-          {% if form.end_datetime.errors %}
-              {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.end_datetime.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
-          {% endif %}
+        <div class="col form-box">
+          {{ form.daily_wage.label(class="form-control-label") }}
+
+            {% if form.daily_wage.errors %}
+                {{ form.daily_wage(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.daily_wage.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.daily_wage(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-box col-md-2">
+          {{ form.daily_wage_currency.label(class="form-control-label") }}
+
+            {% if form.daily_wage_currency.errors %}
+                {{ form.daily_wage_currency(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.daily_wage_currency.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.daily_wage_currency(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
       </div>
+      <div class="row">
+        <div class="col form-box">
+          {{ form.status.label(class="form-control-label") }}
+            {% if form.status.errors %}
+                {{ form.status(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.status.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.status(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-box">
+          {{ form.advance_payment.label(class="form-control-label") }}
+
+            {% if form.advance_payment.errors %}
+                {{ form.advance_payment(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.advance_payment.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.advance_payment(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-box col-md-2">
+          {{ form.advance_payment_currency.label(class="form-control-label") }}
+
+            {% if form.advance_payment_currency.errors %}
+                {{ form.advance_payment_currency(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.advance_payment_currency.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.advance_payment_currency(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
+      </div>
+
+
       <br>
       <div id="accordion">
         <div class="accordion-item">
@@ -305,88 +401,9 @@
           </div>
         </div>
       </div>
-      <div class="form-box">
-        {{ form.advance_payment.label(class="form-control-label") }}
 
-          {% if form.advance_payment.errors %}
-              {{ form.advance_payment(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.advance_payment.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.advance_payment(class="form-control form-control-lg") }}
-          {% endif %}
-      </div>
-      <div class="form-box">
-        {{ form.advance_payment_currency.label(class="form-control-label") }}
 
-          {% if form.advance_payment_currency.errors %}
-              {{ form.advance_payment_currency(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.advance_payment_currency.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.advance_payment_currency(class="form-select form-select-lg") }}
-          {% endif %}
-      </div>
-      <div class="form-box">
-        {{ form.daily_wage.label(class="form-control-label") }}
 
-          {% if form.daily_wage.errors %}
-              {{ form.daily_wage(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.daily_wage.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.daily_wage(class="form-control form-control-lg") }}
-          {% endif %}
-      </div>
-      <div class="form-box">
-        {{ form.daily_wage_currency.label(class="form-control-label") }}
-
-          {% if form.daily_wage_currency.errors %}
-              {{ form.daily_wage_currency(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.daily_wage_currency.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.daily_wage_currency(class="form-select form-select-lg") }}
-          {% endif %}
-      </div>
-      <div class="form-box">
-        {{ form.costs_pays.label(class="form-control-label") }}
-          {% if form.costs_pays.errors %}
-              {{ form.costs_pays(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.costs_pays.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.costs_pays(class="form-control form-control-lg") }}
-          {% endif %}
-      </div>
-      <div class="form-box">
-        {{ form.status.label(class="form-control-label") }}
-          {% if form.status.errors %}
-              {{ form.status(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.status.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.status(class="form-control form-control-lg") }}
-          {% endif %}
-      </div>
     </fieldset>
     <div class="form-group">
       {{ form.submit(class="btn btn-outline-info") }}

@@ -14,12 +14,12 @@ class PreCreateTravelWarrantForm(FlaskForm):
 
 
 class CreateTravelWarrantForm(FlaskForm):
-    user_id = SelectField('Zaposleni:', validators=[DataRequired()], choices=[]) #[(u.id, u.name+" " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #umesto users: db.session.query(User.id,User.name,User.surname).all()
+    # user_id = SelectField('Zaposleni:', validators=[DataRequired()], choices=[]) #[(u.id, u.name+" " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #umesto users: db.session.query(User.id,User.name,User.surname).all()
     with_task = StringField('Sa zadatkom: ', validators=[DataRequired()])
     company_id = SelectField('Kompanija: ', validators=[DataRequired()], choices=[(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).all()])
     abroad_contry = StringField('Država: ')
     relation = StringField('Relacija: ', validators=[DataRequired()])
-    start_datetime = DateTimeField('Polazno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
+    # start_datetime = DateTimeField('Polazno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     end_datetime = DateTimeField('Završno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()], choices=[])
@@ -101,7 +101,7 @@ class EditUserTravelWarrantForm(FlaskForm):
     km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
 
-    submit = SubmitField('Ažuriraj putni malog')
+    submit = SubmitField('Ažuriraj putni nalog')
 
     def reset(self):
         self.__init__()

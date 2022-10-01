@@ -4,37 +4,140 @@
   <form method="POST" action="">
     {{ form.hidden_tag() }}
       <fieldset class="form-group">
-        <legend class="border-bottom mb-4">{{legend}} {{ ime_prezime }}</legend>
-        <div class="form-group">
-          {{ form.user_id.label(class="form-control-label") }}
-            {% if form.user_id.errors %}
-                {{ form.user_id(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.user_id.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.user_id(class="form-select form-select-lg") }}
-            {% endif %}
+        <legend class="border-bottom mb-4">{{legend}} {{ ime_prezime }} ({{ datum }})</legend>
+        <div class="row">
+          <div class=" col form-group">
+            {{ form.with_task.label(class="form-control-label") }}
+              {% if form.with_task.errors %}
+                  {{ form.with_task(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.with_task.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.with_task(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+          <div class="col form-box col-md-2">
+            {{ form.end_datetime.label(class="form-control-label") }}
+              {% if form.end_datetime.errors %}
+                  {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.end_datetime.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
+              {% endif %}
+          </div>
         </div>
-        <div class="form-group">
-          {{ form.with_task.label(class="form-control-label") }}
-            {% if form.with_task.errors %}
-                {{ form.with_task(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.with_task.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.with_task(class="form-control form-control-lg") }}
-            {% endif %}
+        <div class="row">
+
+          <div class = "col col-md-6" id="accordionZero">
+            <br>
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingZero">
+              <h5 class="mb-0">
+                <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
+                  Putovanje u inostranstvo
+                </button>
+              </h5>
+            </div>
+
+            <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
+              <div class="card-body">
+                {{ form.abroad_contry.label(class="form-control-label") }}
+                  {% if form.abroad_contry.errors %}
+                      {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.abroad_contry.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.abroad_contry(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="col form-box">
+            {{ form.daily_wage.label(class="form-control-label") }}
+
+              {% if form.daily_wage.errors %}
+                  {{ form.daily_wage(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.daily_wage.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.daily_wage(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+          <div class="col form-box col-md-2">
+            {{ form.daily_wage_currency.label(class="form-control-label") }}
+              {% if form.daily_wage_currency.errors %}
+                  {{ form.daily_wage_currency(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.daily_wage_currency.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.daily_wage_currency(class="form-select form-select-lg") }}
+              {% endif %}
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col form-box col-md-6">
+            {{ form.relation.label(class="form-control-label") }}
+              {% if form.relation.errors %}
+                  {{ form.relation(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.relation.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.relation(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+          <div class="col form-box">
+            {{ form.advance_payment.label(class="form-control-label") }}
+              {% if form.advance_payment.errors %}
+                  {{ form.advance_payment(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.advance_payment.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.advance_payment(class="form-control form-control-lg") }}
+              {% endif %}
+          </div>
+
+
+          <div class="col form-box col-md-2">
+            {{ form.advance_payment_currency.label(class="form-control-label") }}
+              {% if form.advance_payment_currency.errors %}
+                  {{ form.advance_payment_currency(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.advance_payment_currency.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.advance_payment_currency(class="form-select form-select-lg") }}
+              {% endif %}
+          </div>
         </div>
 
         <div class="form-group">
           {{ form.company_id.label(class="sr-only form-control-label") }}
-
             {% if form.company_id.errors %}
                 {{ form.company_id(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -47,85 +150,15 @@
             {% endif %}
         </div>
 
-        <div id="accordionZero">
-        <div class="card">
-          <div class="card-header" id="headingZero">
-            <h5 class="mb-0">
-              <button type="button" class="btn" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
-                Putovanje u inostranstvo
-              </button>
-            </h5>
-          </div>
-
-          <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
-            <div class="card-body">
-              {{ form.abroad_contry.label(class="form-control-label") }}
-
-                {% if form.abroad_contry.errors %}
-                    {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.abroad_contry.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.abroad_contry(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-          </div>
-        </div>
-        </div>
-
-        <br>
-        <div class="form-box">
-          {{ form.relation.label(class="form-control-label") }}
-
-            {% if form.relation.errors %}
-                {{ form.relation(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.relation.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.relation(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-box col-md-3">
-          {{ form.start_datetime.label(class="form-control-label") }}
-            {% if form.start_datetime.errors %}
-                {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.start_datetime.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
-            {% endif %}
-        </div>
-        <div class="form-box col-md-3">
-          {{ form.end_datetime.label(class="form-control-label") }}
-            {% if form.end_datetime.errors %}
-                {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.end_datetime.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
-            {% endif %}
-        </div>
 
 
 
         <br>
         <div id="accordion">
-          <div class="card">
-            <div class="card-header" id="headingOne">
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingOne">
               <h5 class="mb-0">
-                <button type="button" class="btn " data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   {{ form.vehicle_id.label(class="form-control-label") }}
                 </button>
               </h5>
@@ -148,10 +181,10 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header" id="headingTwo">
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingTwo">
               <h5 class="mb-0">
-                <button type="button" class="btn collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                   {{ form.together_with.label(class="form-control-label") }}
                 </button>
               </h5>
@@ -173,10 +206,10 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header" id="headingThree">
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingThree">
               <h5 class="mb-0">
-                <button type="button" class="btn collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                   Lično vozilo:
                 </button>
               </h5>
@@ -228,10 +261,10 @@
               </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-header" id="headingFour">
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingFour">
               <h5 class="mb-0">
-                <button type="button" class="btn collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                   {{ form.other.label(class="form-control-label") }}
                 </button>
               </h5>
@@ -255,65 +288,11 @@
           </div>
         </div>
         <br>
-        <div class="form-box">
-          {{ form.advance_payment.label(class="form-control-label") }}
-            {% if form.advance_payment.errors %}
-                {{ form.advance_payment(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.advance_payment.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.advance_payment(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-box">
-          {{ form.advance_payment_currency.label(class="form-control-label") }}
 
-            {% if form.advance_payment_currency.errors %}
-                {{ form.advance_payment_currency(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.advance_payment_currency.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.advance_payment_currency(class="form-select form-select-lg") }}
-            {% endif %}
-        </div>
         <br>
-        <div class="form-box">
-          {{ form.daily_wage.label(class="form-control-label") }}
 
-            {% if form.daily_wage.errors %}
-                {{ form.daily_wage(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.daily_wage.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.daily_wage(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-box">
-          {{ form.daily_wage_currency.label(class="form-control-label") }}
-            {% if form.daily_wage_currency.errors %}
-                {{ form.daily_wage_currency(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.daily_wage_currency.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.daily_wage_currency(class="form-select form-select-lg") }}
-            {% endif %}
-        </div>
-        <br>
         <div class="form-box">
           {{ form.costs_pays.label(class="form-control-label") }}
-
             {% if form.costs_pays.errors %}
                 {{ form.costs_pays(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">

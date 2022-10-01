@@ -60,11 +60,12 @@ def register_tw(korisnik_id, datum):
 
     form = CreateTravelWarrantForm()
     form.reset()
-    form.user_id.choices = user_list
-    form.user_id.data = str(korisnik_id)
+    # form.user_id.choices = user_list
+    # form.user_id.data = str(korisnik_id)
     form.vehicle_id.choices = vehicle_list
-    form.vehicle_id.data = str(podrazumevano_vozilo)
-    form.start_datetime.data = datum
+    if request.method == 'GET':
+        form.vehicle_id.data  = str(podrazumevano_vozilo)
+    # form.start_datetime.data = datum
 
     if form.validate_on_submit():
         if form.together_with.data != None:
@@ -74,7 +75,7 @@ def register_tw(korisnik_id, datum):
                 company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
-                start_datetime=form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
+                start_datetime=datum.replace(hour=0, minute=0, second=0, microsecond=0),
                 end_datetime=form.end_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
                 vehicle_id="",
                 together_with=form.together_with.data,
@@ -90,7 +91,7 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status=1,
-                travel_warrant_number=form.start_datetime.data.strftime('%Y%m%d') + str(-brojac-1))
+                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1))
         elif form.personal_brand.data != "":
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -98,7 +99,7 @@ def register_tw(korisnik_id, datum):
                 company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
-                start_datetime=form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
+                start_datetime=datum.replace(hour=0, minute=0, second=0, microsecond=0),
                 end_datetime=form.end_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
                 vehicle_id="",
                 together_with=0,
@@ -114,7 +115,7 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status=1,
-                travel_warrant_number=form.start_datetime.data.strftime('%Y%m%d') + str(-brojac-1))
+                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1))
         elif form.other.data != "":
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -122,7 +123,7 @@ def register_tw(korisnik_id, datum):
                 company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
-                start_datetime=form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
+                start_datetime=datum.replace(hour=0, minute=0, second=0, microsecond=0),
                 end_datetime=form.end_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
                 vehicle_id="",
                 together_with="",
@@ -138,7 +139,7 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status=1,
-                travel_warrant_number=form.start_datetime.data.strftime('%Y%m%d') + str(-brojac-1))
+                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1))
         else:
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -146,7 +147,7 @@ def register_tw(korisnik_id, datum):
                 company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
-                start_datetime=form.start_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
+                start_datetime=datum.replace(hour=0, minute=0, second=0, microsecond=0),
                 end_datetime=form.end_datetime.data.replace(hour=0, minute=0, second=0, microsecond=0),
                 vehicle_id=form.vehicle_id.data, #ovde napraviti kod da bude podrazumevano vozilo
                 together_with="",
@@ -162,7 +163,7 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status=1,
-                travel_warrant_number=form.start_datetime.data.strftime('%Y%m%d') + str(-brojac-1))
+                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1))
 
         db.session.add(warrant)
         db.session.commit()
@@ -173,7 +174,7 @@ def register_tw(korisnik_id, datum):
         return redirect(url_for('travel_warrants.travel_warrant_list'))
     return render_template('register_tw.html', title='Kreiranje Putnog naloga',
                             legend='Kreiranje putnog naloga, zaposleni: ',
-                            form=form, ime_prezime=ime_prezime)
+                            form=form, ime_prezime=ime_prezime, datum=datum)
 
 
 @travel_warrants.route("/travel_warrant/<int:warrant_id>", methods=['GET', 'POST'])
