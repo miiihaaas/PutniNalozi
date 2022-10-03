@@ -3,7 +3,9 @@
 {% if current_user.authorization != 'c_user' %}
 <form method="POST" action="">
   {{ form.hidden_tag() }}
+
   <div id="accordionZero">
+    <br>
     <div class="accordion" id="accordionZero">
       <div class="accordion-item">
         <div class="accordion-header" id="headingZero">

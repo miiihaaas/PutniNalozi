@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flask import  render_template, url_for, flash, redirect, abort, request
+from flask import  render_template, url_for, flash, redirect, abort, request, send_file
 from putninalozi import db
 # from putninalozi.travel_warrants.forms import TravelWarrantForm
 from putninalozi.models import TravelWarrant, User, Vehicle
@@ -10,10 +10,11 @@ from datetime import datetime
 
 
 travel_warrants = Blueprint('travel_warrants', __name__)
-#
-# def users_list():
-#     users_list = User.query.filter_by(company_id=current_user.user_company.id).all()
-#     return users_list
+
+@travel_warrants.route("/download/<string:file_name>")
+def download_file(file_name):
+    path = "static/pdf_forms/" + file_name
+    return send_file(path, as_attachment=True)
 
 
 @travel_warrants.route("/travel_warrant_list", methods=['GET', 'POST'])
@@ -42,6 +43,7 @@ def register_tw(korisnik_id, datum):
     user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
     print(user_list)
     vehicle_list = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+    datum = datum.replace('%20', ' ') #na sevreu zimeđu datuma i vremena se nalazi '%20' zbog toga ima ovaj replace
 
     print(f'{korisnik_id=}, {datum=}')
     datum = datetime.strptime(datum, '%Y-%m-%d %H:%M:%S') #'2022-09-27 15:02:00'
@@ -91,7 +93,9 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status=1,
-                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1))
+                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
+                file_name="",
+                expenses=0.0)
         elif form.personal_brand.data != "":
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -115,7 +119,9 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status=1,
-                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1))
+                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
+                file_name="",
+                expenses=0.0)
         elif form.other.data != "":
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -139,7 +145,9 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status=1,
-                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1))
+                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
+                file_name="",
+                expenses=0.0)
         else:
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -163,11 +171,15 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status=1,
-                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1))
+                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
+                file_name="",
+                expenses=0.0)
 
         db.session.add(warrant)
         db.session.commit()
-        # file_name = create_pdf_form(warrant)
+        file_name = create_pdf_form(warrant)
+        warrant.file_name = file_name
+        db.session.commit()
         # send_email(warrant, current_user, file_name)
         flash(f'Putni nalog broj: {warrant.travel_warrant_number} je uspešno kreiran!', 'success')
         flash(f'{warrant.travelwarrant_user.name} je dobio mejl sa detaljima putnog naloga', 'success')
@@ -234,6 +246,8 @@ def travel_warrant_profile(warrant_id):
             warrant.km_end = int(form.km_end.data)
             warrant.status = int(form.status.data)
 
+            warrant.expenses = form.expenses.data
+
             db.session.commit()
             flash('Putni nalog je ažuriran.', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
@@ -264,6 +278,8 @@ def travel_warrant_profile(warrant_id):
             form.km_end.data = warrant.km_end
             form.status.choices=[(1, "kreiran"), (2, "završen")]
             form.status.data = str(warrant.status)
+
+            form.expenses.data = warrant.expenses
 
         print(f'EditUser: {form.errors=}')
 
@@ -309,6 +325,8 @@ def travel_warrant_profile(warrant_id):
             warrant.km_end = int(form.km_end.data)
             warrant.status = int(form.status.data)
 
+            warrant.expenses = form.expenses.data
+
             db.session.commit()
             flash('Putni nalog je ažuriran', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
@@ -339,6 +357,8 @@ def travel_warrant_profile(warrant_id):
             form.km_end.data = warrant.km_end
             form.status.choices=[(1, "kreiran"), (2, "završen"), (3, "obračunat")]
             form.status.data = str(warrant.status)
+
+            form.expenses.data = warrant.expenses
 
         print(f'EditAdmin: {form.errors=}')
 

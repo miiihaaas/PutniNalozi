@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, SelectField, DateField, TimeField, DateTimeField, IntegerField, SubmitField
+from wtforms import StringField, BooleanField, FloatField, SelectField, DateField, TimeField, DateTimeField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, Optional, Length, InputRequired
 from putninalozi.models import Company, User, Vehicle
 from flask_login import current_user
@@ -68,6 +68,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
     km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
+    expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
     submit = SubmitField('Ažuriraj putni nalog')
 
@@ -100,6 +101,7 @@ class EditUserTravelWarrantForm(FlaskForm):
     km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
     km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
+    expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
     submit = SubmitField('Ažuriraj putni nalog')
 

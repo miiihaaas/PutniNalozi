@@ -401,12 +401,26 @@
           </div>
         </div>
       </div>
+      <br>
+      <div class="form-box">
+        {{ form.expenses.label(class="form-control-label") }}
+          {% if form.expenses.errors %}
+              {{ form.expenses(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                  {% for error in form.expenses.errors %}
+                      <span>{{ error }}</span>
+                  {% endfor %}
+              </div>
+          {% else %}
+              {{ form.expenses(class="form-control form-control-lg", placeholder="Uneti registraciju ličnog vozila") }}
+          {% endif %}
+      </div>
 
 
 
     </fieldset>
     <div class="form-group">
-      {{ form.submit(class="btn btn-outline-info") }}
+      {{ form.submit(class="btn btn-outline-info") }}  <a class="btn btn-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzimi dokument</a>
     </div>
   </form>
 </div>
