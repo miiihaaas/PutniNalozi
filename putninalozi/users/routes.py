@@ -121,7 +121,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         form.authorization.choices = [('c_user', 'USER'),('c_admin', 'ADMIN')]
         form.authorization.data = user.authorization
 
-        form.gender.choices = [(0, 'srednji'),(1, 'muški'),(2, 'žemski')]
+        form.gender.choices = [(0, 'srednji'),(1, 'muški'),(2, 'ženski')]
         form.gender.data = user.gender
 
         form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]

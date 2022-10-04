@@ -13,6 +13,7 @@ travel_warrants = Blueprint('travel_warrants', __name__)
 
 @travel_warrants.route("/download/<string:file_name>")
 def download_file(file_name):
+    file_name = file_name.replace('%20', ' ')
     path = "static/pdf_forms/" + file_name
     return send_file(path, as_attachment=True)
 

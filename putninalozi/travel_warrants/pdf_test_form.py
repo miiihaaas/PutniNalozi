@@ -122,7 +122,54 @@ pdf.cell(0, 30, f'NALOG ZA SLUZBENO PUTOVANJE: #{warrant_id}', ln=True, align='C
 
 pdf.set_font('times','', 12)
 pdf.multi_cell(0, 5, text_form, ln=True)
+pdf.line(10, 125, 200, 125)
 
+pdf.cell(0, 5, f'Na osnovu prednjeg naloga izvrsio sam sluzbeno putovanje i podnosim sledeci', ln=True, align='L')
+pdf.set_font('times','B', 16)
+pdf.cell(0, 30, f'PUTNI RACUN', ln=True, align='C')
+
+pdf.set_font('times','', 10)
+pdf.cell(56, 4, f'Dnevnice', border=1, ln=False, align='L')
+pdf.cell(20, 4, f'Br cas', border=1, ln=False, align='L')
+pdf.cell(20, 4, f'Br dnev', border=1, ln=False, align='L')
+pdf.cell(20, 4, f'', border=1, ln=False, align='L')
+pdf.cell(35, 4, f'Po dinara', border=1, ln=False, align='L')
+pdf.cell(35, 4, f'Svega dinara', border=1, ln=True, align='L')
+pdf.multi_cell(56, 4, f'''Dan odlaska ______ u ___cas Dan povratka ______ u ___cas''', border=1, ln=False, align='L')
+pdf.set_xy(66, 166)
+pdf.cell(20, 8, f'', border=1, ln=False, align='L')
+pdf.cell(20, 8, f'', border=1, ln=False, align='L')
+pdf.cell(20, 8, f'', border=1, ln=False, align='L')
+pdf.cell(35, 8, f'', border=1, ln=False, align='L')
+pdf.cell(35, 8, f'', border=1, ln=True, align='L')
+pdf.cell(56, 4, f'Prevozni troskovi', border=1, ln=False, align='L')
+pdf.cell(40, 8, f'Vrsta prevoza', border=1, ln=False, align='C')
+pdf.cell(20, 8, f'kl.', border=1, ln=False, align='C')
+pdf.cell(35, 8, f'dinara', border=1, ln=True, align='C')
+pdf.cell(28, -4, f'od', border=1, ln=False, align='C')
+pdf.cell(28, -4, f'do', border=1, ln=True, align='C')
+pdf.cell(28, 4, f'', border=1, ln=True, align='L')
+for i in range(5):
+    pdf.cell(28, 4, f'', border=1, ln=False, align='L')
+    pdf.cell(28, 4, f'', border=1, ln=False, align='L')
+    pdf.cell(40, 4, f'', border=1, ln=False, align='L')
+    pdf.cell(20, 4, f'', border=1, ln=False, align='L')
+    pdf.cell(35, 4, f'', border=1, ln=True, align='L')
+pdf.cell(151, 8, f'Ostalo', border=1, ln=True, align='L')
+for i in range(3):
+    pdf.cell(116, 4, f'', border=1, ln=False, align='L')
+    pdf.cell(35, 4, f'', border=1, ln=True, align='L')
+pdf.cell(151, 4, f'Svega', border=1, ln=True, align='R')
+pdf.cell(151, 4, f'Primljena akontacija', border=1, ln=False, align='R')
+pdf.cell(35, 4, f'', border=1, ln=True, align='C')
+pdf.cell(151, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
+pdf.cell(35, 4, f'', border=1, ln=True, align='C')
+pdf.cell(186, 4, f'Prilog', border=1, ln=True, align='L')
+pdf.multi_cell(186, 4, f'''U ______________________, dana ________________ 20____   ________________________________
+(podnosilac racuna)                 ''', border=1, ln=True, align='R')
+pdf.multi_cell(0, 4, f'', ln=True, align='L')
+pdf.multi_cell(0, 4, f'''Potvrdjujem da je putovanje izvrseno prema ovom nalogu i odobravam isplatu putng racuna od dinara ________________ slovima: ________________________________ na teret ________________.
+U ________________________ dana ______________________ 20____''', ln=True, align='L')
 
 
 path = "d:/Mihas/Programming/Python/Projects/PutniNalozi/putninalozi/static/pdf_forms/"
