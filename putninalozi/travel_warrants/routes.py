@@ -293,6 +293,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.status = form.status.data
 
                 warrant.expenses = form.expenses.data
+                print('zajedno sa - c_admin')
             elif form.personal_brand.data != "":
                 warrant.with_task = form.with_task.data
                 warrant.abroad_contry = form.abroad_contry.data
@@ -313,6 +314,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.status = form.status.data
 
                 warrant.expenses = form.expenses.data
+                print('licno vozilo - c_admin')
             elif form.other.data != "":
                 warrant.with_task = form.with_task.data
                 warrant.abroad_contry = form.abroad_contry.data
@@ -333,6 +335,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.status = form.status.data
 
                 warrant.expenses = form.expenses.data
+                print('drugo - c_admin')
             else:
                 warrant.with_task = form.with_task.data
                 warrant.abroad_contry = form.abroad_contry.data
@@ -353,6 +356,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.status = form.status.data
 
                 warrant.expenses = form.expenses.data
+                print('službeno vozilo - c_admin')
 
 
             # if form.vehicle_id.data == '':
