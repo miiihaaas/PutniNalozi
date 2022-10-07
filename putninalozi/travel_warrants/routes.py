@@ -265,42 +265,94 @@ def travel_warrant_profile(warrant_id):
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
 
         if form.validate_on_submit():
-            warrant.with_task = form.with_task.data
-            warrant.abroad_contry = form.abroad_contry.data
-            warrant.relation = form.relation.data
-
-            warrant.start_datetime = form.start_datetime.data
-            warrant.end_datetime = form.end_datetime.data
+            # warrant.with_task = form.with_task.data
+            # warrant.abroad_contry = form.abroad_contry.data
+            # warrant.relation = form.relation.data
+            #
+            # warrant.start_datetime = form.start_datetime.data
+            # warrant.end_datetime = form.end_datetime.data
 
 
             if form.together_with.data != '':
+                warrant.with_task = form.with_task.data
+                warrant.abroad_contry = form.abroad_contry.data
+                warrant.relation = form.relation.data
+
+                warrant.start_datetime = form.start_datetime.data
+                warrant.end_datetime = form.end_datetime.data
+
                 warrant.vehicle_id=""
                 warrant.together_with=form.together_with.data
                 warrant.personal_type=""
                 warrant.personal_brand=""
                 warrant.personal_registration=""
                 warrant.other=""
+
+                warrant.km_start = int(form.km_start.data)
+                warrant.km_end = int(form.km_end.data)
+                warrant.status = form.status.data
+
+                warrant.expenses = form.expenses.data
             elif form.personal_brand.data != "":
+                warrant.with_task = form.with_task.data
+                warrant.abroad_contry = form.abroad_contry.data
+                warrant.relation = form.relation.data
+
+                warrant.start_datetime = form.start_datetime.data
+                warrant.end_datetime = form.end_datetime.data
+
                 warrant.vehicle_id=""
                 warrant.together_with=""
                 warrant.personal_type=form.personal_type.data
                 warrant.personal_brand=form.personal_brand.data
                 warrant.personal_registration=form.personal_registration.data
                 warrant.other=""
+
+                warrant.km_start = int(form.km_start.data)
+                warrant.km_end = int(form.km_end.data)
+                warrant.status = form.status.data
+
+                warrant.expenses = form.expenses.data
             elif form.other.data != "":
+                warrant.with_task = form.with_task.data
+                warrant.abroad_contry = form.abroad_contry.data
+                warrant.relation = form.relation.data
+
+                warrant.start_datetime = form.start_datetime.data
+                warrant.end_datetime = form.end_datetime.data
+
                 warrant.vehicle_id=""
                 warrant.together_with=""
                 warrant.personal_type=""
                 warrant.personal_brand=""
                 warrant.personal_registration=""
                 warrant.other=form.other.data
+
+                warrant.km_start = int(form.km_start.data)
+                warrant.km_end = int(form.km_end.data)
+                warrant.status = form.status.data
+
+                warrant.expenses = form.expenses.data
             else:
+                warrant.with_task = form.with_task.data
+                warrant.abroad_contry = form.abroad_contry.data
+                warrant.relation = form.relation.data
+
+                warrant.start_datetime = form.start_datetime.data
+                warrant.end_datetime = form.end_datetime.data
+
                 vehicle_id=form.vehicle_id.data,
                 warrant.together_with=""
                 warrant.personal_type=""
                 warrant.personal_brand=""
                 warrant.personal_registration=""
                 warrant.other=""
+
+                warrant.km_start = int(form.km_start.data)
+                warrant.km_end = int(form.km_end.data)
+                warrant.status = form.status.data
+
+                warrant.expenses = form.expenses.data
 
 
             # if form.vehicle_id.data == '':
@@ -316,11 +368,11 @@ def travel_warrant_profile(warrant_id):
             # warrant.personal_registration = form.personal_registration.data
             # warrant.other = form.other.data
 
-            warrant.km_start = int(form.km_start.data)
-            warrant.km_end = int(form.km_end.data)
-            warrant.status = form.status.data
-
-            warrant.expenses = form.expenses.data
+            # warrant.km_start = int(form.km_start.data)
+            # warrant.km_end = int(form.km_end.data)
+            # warrant.status = form.status.data
+            #
+            # warrant.expenses = form.expenses.data
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
