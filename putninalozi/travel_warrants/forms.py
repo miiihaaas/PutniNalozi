@@ -23,8 +23,8 @@ class CreateTravelWarrantForm(FlaskForm):
     end_datetime = DateTimeField('Završno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()], choices=[])
-    together_with = IntegerField('Zajedno sa: ', validators=[Optional()])
-    personal_type = SelectField('Tip vozila: ', choices=[('ATMBL', 'AUTOMOBIL'),('KMB', 'KOMBI'),('KMN', 'KAMION')])
+    together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
+    personal_type = SelectField('Tip vozila: ', choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     personal_brand = StringField('Brend vozila: ')
     personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
@@ -53,8 +53,8 @@ class EditAdminTravelWarrantForm(FlaskForm):
     end_datetime = DateTimeField('Završno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
 
     vehicle_id = SelectField('Službeno Vozilo: ', validators=[Optional()])
-    together_with = IntegerField('Zajedno sa: ', validators=[Optional()])
-    personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('ATMBL', 'AUTOMOBIL'),('KMB', 'KOMBI'),('KMN', 'KAMION')])
+    together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
+    personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     personal_brand = StringField('Brend vozila: ')
     personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=9, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
@@ -86,8 +86,8 @@ class EditUserTravelWarrantForm(FlaskForm):
     end_datetime = DateTimeField('Završno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()])
-    together_with = IntegerField('Zajedno sa: ', validators=[Optional()])
-    personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('ATMBL', 'AUTOMOBIL'),('KMB', 'KOMBI'),('KMN', 'KAMION')])
+    together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
+    personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     personal_brand = StringField('Brend vozila: ')
     personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=9, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')

@@ -110,7 +110,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         user.default_vehicle = form.default_vehicle.data
 
         db.session.commit()
-        flash('Profile was updated', 'success')
+        flash('Profil je ažuriran', 'success')
         return redirect(url_for('users.user_list'))
     elif request.method == 'GET':
         form.name.data = user.name

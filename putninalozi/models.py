@@ -87,7 +87,7 @@ class TravelWarrant(db.Model):
     end_datetime = db.Column(db.DateTime, nullable=True)
 
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=True)
-    together_with = db.Column(db.Integer, nullable=True)
+    together_with = db.Column(db.String(50), nullable=True)
     personal_type = db.Column(db.String(50), nullable=True)
     personal_brand = db.Column(db.String(50), nullable=True)
     personal_registration = db.Column(db.String(12), nullable=True)
@@ -102,7 +102,7 @@ class TravelWarrant(db.Model):
     km_start = db.Column(db.Integer, nullable=True)
     km_end = db.Column(db.Integer, nullable=True)
 
-    status = db.Column(db.Integer, nullable=False)
+    status = db.Column(db.String(15), nullable=False)
     #nastaviti sa dodavanjem potrebnih polja (nakon definisanja), napisati formu (forms.py), dodati funkciju (routes.py) i napraviti html fajl
     file_name = db.Column(db.String(100), nullable=True) #za PDF fajl
     expenses = db.Column(db.Float, nullable=True) # ili možda napraviti posebnu tabelu za troškove??? i povezati sumu za ovu prmenjivu???

@@ -50,7 +50,7 @@ def replace_serbian_characters(string):
     return string
 
 
-def create_pdf_form(warrant):
+def create_pdf_form(warrant, br_casova, br_dnevnica):
     ################################ tutorial links: ################################
     # https://www.youtube.com/watch?v=q70xzDG6nls&ab_channel=ChartExplorers
     # https://www.youtube.com/watch?v=JhQVD7Y1bsA&t=400s&ab_channel=ChartExplorers
@@ -96,11 +96,11 @@ def create_pdf_form(warrant):
 
     text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}
 
-Na službenom putu koristi prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration}{warrant.personal_registration}
+Na službenom putu koristi prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != '' else ""}{warrant.personal_registration}
 
 Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}
 
-Na službenom putu će se zadržati najdalje do {end_datetime},a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana
+Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana
 
 Putni troškovi padaju na teret: {costs_pays}
 
@@ -148,32 +148,34 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}
 
     pdf.set_font('times','', 12)
     pdf.multi_cell(0, 5, text_form, ln=True)
-    pdf.line(10, 125, 200, 125)
+    pdf.line(10, 132, 200, 132)
 
     pdf.cell(0, 5, f'Na osnovu prednjeg naloga izvrsio sam sluzbeno putovanje i podnosim sledeci', ln=True, align='L')
     pdf.set_font('times','B', 16)
     pdf.cell(0, 20, f'PUTNI RACUN', ln=True, align='C')
 
+    pdf.set_fill_color(150, 150, 150)
     pdf.set_font('times','', 10)
-    pdf.cell(56, 4, f'Dnevnice', border=1, ln=False, align='L')
-    pdf.cell(20, 4, f'Br cas', border=1, ln=False, align='L')
-    pdf.cell(20, 4, f'Br dnev', border=1, ln=False, align='L')
-    pdf.cell(20, 4, f'', border=1, ln=False, align='L')
-    pdf.cell(35, 4, f'Po dinara', border=1, ln=False, align='L')
-    pdf.cell(35, 4, f'Svega dinara', border=1, ln=True, align='L')
-    pdf.multi_cell(56, 4, f'''Dan odlaska ______ u ___cas Dan povratka ______ u ___cas''', border=1, ln=False, align='L')
+    pdf.cell(56, 4, f'Dnevnice', border=1, ln=False, fill = True, align='L')
+    pdf.cell(20, 4, f'Br cas', border=1, ln=False, fill = True, align='L')
+    pdf.cell(20, 4, f'Br dnev', border=1, ln=False, fill = True, align='L')
+    pdf.cell(20, 4, f'', border=1, ln=False, fill = True, align='L')
+    pdf.cell(35, 4, f'Po dinara', border=1, ln=False, fill = True, align='L')
+    pdf.cell(35, 4, f'Svega dinara', border=1, ln=True, fill = True, align='L')
+    pdf.multi_cell(56, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
     pdf.set_xy(66, 166)
+    pdf.cell(20, 8, f'{round(br_casova)}', border=1, ln=False, align='L')
+    pdf.cell(20, 8, f'{br_dnevnica}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'', border=1, ln=False, align='L')
-    pdf.cell(20, 8, f'', border=1, ln=False, align='L')
-    pdf.cell(20, 8, f'', border=1, ln=False, align='L')
-    pdf.cell(35, 8, f'', border=1, ln=False, align='L')
-    pdf.cell(35, 8, f'', border=1, ln=True, align='L')
-    pdf.cell(56, 4, f'Prevozni troskovi', border=1, ln=False, align='L')
-    pdf.cell(40, 8, f'Vrsta prevoza', border=1, ln=False, align='C')
-    pdf.cell(20, 8, f'kl.', border=1, ln=False, align='C')
-    pdf.cell(35, 8, f'dinara', border=1, ln=True, align='C')
-    pdf.cell(28, -4, f'od', border=1, ln=False, align='C')
-    pdf.cell(28, -4, f'do', border=1, ln=True, align='C')
+    pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
+    pdf.cell(35, 8, f'{warrant.daily_wage * br_dnevnica}', border=1, ln=True, align='L')
+    pdf.cell(56, 4, f'Prevozni troskovi', border=1, ln=False, fill = True, align='L')
+    pdf.cell(40, 8, f'Vrsta prevoza', border=1, ln=False, fill = True, align='C')
+    pdf.cell(20, 8, f'kl.', border=1, ln=False, fill = True, align='C')
+    pdf.cell(35, 8, f'dinara', border=1, ln=True, fill = True, align='C')
+    pdf.cell(28, -4, f'od', border=1, ln=False, fill = True, align='C')
+    pdf.cell(28, -4, f'do', border=1, ln=True, fill = True, align='C')
     pdf.cell(28, 4, f'', border=1, ln=True, align='L')
     for i in range(5):
         pdf.cell(28, 4, f'', border=1, ln=False, align='L')
@@ -181,7 +183,7 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}
         pdf.cell(40, 4, f'', border=1, ln=False, align='L')
         pdf.cell(20, 4, f'', border=1, ln=False, align='L')
         pdf.cell(35, 4, f'', border=1, ln=True, align='L')
-    pdf.cell(151, 8, f'Ostalo', border=1, ln=True, align='L')
+    pdf.cell(151, 8, f'Ostalo', border=1, ln=True, fill = True, align='L')
     for i in range(3):
         pdf.cell(116, 4, f'', border=1, ln=False, align='L')
         pdf.cell(35, 4, f'', border=1, ln=True, align='L')
@@ -190,12 +192,11 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}
     pdf.cell(35, 4, f'', border=1, ln=True, align='C')
     pdf.cell(151, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
     pdf.cell(35, 4, f'', border=1, ln=True, align='C')
-    pdf.cell(186, 4, f'Prilog', border=1, ln=True, align='L')
-    pdf.multi_cell(186, 4, f'''U ______________________, dana ________________ 20____   ________________________________
-    (podnosilac racuna)                 ''', border=1, ln=True, align='R')
+    pdf.cell(186, 4, f'Prilog', border=1, ln=True, fill = True, align='L')
+    pdf.multi_cell(186, 4, f'''U {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {replace_serbian_characters(warrant.travelwarrant_user.name)} {replace_serbian_characters(warrant.travelwarrant_user.surname)}''', border=1, ln=True, align='C')
     pdf.multi_cell(0, 4, f'', ln=True, align='L')
-    pdf.multi_cell(0, 4, f'''Potvrdjujem da je putovanje izvrseno prema ovom nalogu i odobravam isplatu putng racuna od dinara _____________________ slovima: ________________________________ na teret ________________.
-    U ________________________ dana ______________________ 20____''', ln=True, align='L')
+    pdf.multi_cell(0, 4, f'''Potvrdjujem da je putovanje izvrseno prema ovom nalogu i odobravam isplatu putng racuna od dinara _____________________ slovima: ________________________________ na teret {warrant.costs_pays}.
+U ________________________ dana ______________________ 20____''', ln=True, align='L')
 
 
     path = "putninalozi/static/pdf_forms/"
@@ -222,8 +223,12 @@ Detaljije informacije o putnom nalogu mogu se videti u prilogu ili klikom na lin
 Pozdrav,
 {current_user.name} {current_user.surname}
     '''
-    path = 'D:\Mihas\Programming\Python\Projects\PutniNalozi\putninalozi\static\pdf_forms'
-    file_name = '\\' + file_name
+    # path = 'D:\Mihas\Programming\Python\Projects\PutniNalozi\putninalozi\static\pdf_forms'
+    path = '.\static\pdf_forms\\'
+    file_name =file_name
+    print(path)
+    print(file_name)
+    print(path+filename)
     with app.open_resource(path + file_name) as fp:
         msg.attach(path + file_name, 'application/pdf', fp.read())
 

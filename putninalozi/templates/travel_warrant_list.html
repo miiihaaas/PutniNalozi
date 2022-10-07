@@ -16,31 +16,33 @@
 
         <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
           <div class="card-body">
-            <div class="form-group">
-              {{ form.user_id.label(class="form-control-label") }}
-                {% if form.user_id.errors %}
-                    {{ form.user_id(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.user_id.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.user_id(class="form-select form-select-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-box">
-              {{ form.start_datetime.label(class="form-control-label") }}
-                {% if form.start_datetime.errors %}
-                    {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.start_datetime.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
-                {% endif %}
+            <div class="row">
+              <div class="col form-group">
+                {{ form.user_id.label(class="form-control-label") }}
+                  {% if form.user_id.errors %}
+                      {{ form.user_id(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.user_id.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.user_id(class="form-select form-select-lg") }}
+                  {% endif %}
+              </div>
+              <div class="col form-box">
+                {{ form.start_datetime.label(class="form-control-label") }}
+                  {% if form.start_datetime.errors %}
+                      {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.start_datetime.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
+                  {% endif %}
+              </div>
             </div>
             <br>
             <div class="form-group">
@@ -69,11 +71,11 @@
     <tbody>
       {% for warrant in warrants %}
         <tr>
-          <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
-          <td> {{ warrant.travelwarrant_company.companyname }} </td>
-          <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} </td>
-          <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
-          <td> {{ warrant.status }} </td>
+          <td class="align-middle"> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
+          <td class="align-middle"> {{ warrant.travelwarrant_company.companyname }} </td>
+          <td class="align-middle"> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} </td>
+          <td class="align-middle"> {{ warrant.together_with }} {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
+          <td class="align-middle"> {{ warrant.status }} </td>
         </tr>
       {% endfor %}
     </tbody>
@@ -91,11 +93,11 @@
       {% for warrant in warrants %}
         {% if current_user.user_company.id == warrant.travelwarrant_company.id %}
           <tr>
-            <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
-            <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
-            <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} {{warrant.travelwarrant_vehicle.vehicle_brand}} {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
-            <td> {{ warrant.start_datetime }} </td>
-            <td> {{ warrant.status }} </td>
+            <td class="align-middle"> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
+            <td class="align-middle"> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
+            <td class="align-middle"> {{ warrant.together_with }} {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
+            <td class="align-middle"> {{ warrant.start_datetime.date() }} </td>
+            <td class="align-middle"> {{ warrant.status }} </td>
           </tr>
         {% endif %}
       {% endfor %}
@@ -114,11 +116,11 @@
       {% for warrant in warrants %}
         {% if current_user.id == warrant.travelwarrant_user.id %}
           <tr>
-            <td> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
-            <td> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
-            <td> {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} {{warrant.travelwarrant_vehicle.vehicle_brand}} {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
-            <td> {{ warrant.start_datetime.date() }} </td>
-            <td> {{ warrant.status }} </td>
+            <td class="align-middle"> <a class="mr-2 btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }} </a> </td>
+            <td class="align-middle"> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
+            <td class="align-middle"> {{ warrant.together_with }} {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
+            <td class="align-middle"> {{ warrant.start_datetime.date() }} </td>
+            <td class="align-middle"> {{ warrant.status }} </td>
           </tr>
         {% endif %}
       {% endfor %}
