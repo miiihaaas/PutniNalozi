@@ -3,6 +3,7 @@ from flask import url_for
 from flask_mail import Message
 from putninalozi import app, mail
 import datetime
+from putninalozi.models import TravelWarrant
 
 
 def replace_serbian_characters(string):
@@ -79,7 +80,10 @@ def create_pdf_form(warrant, br_casova, br_dnevnica):
     costs_pays = replace_serbian_characters(warrant.costs_pays)
     start_datetime = warrant.start_datetime.strftime('%d.%m.%Y')
     end_datetime = warrant.end_datetime.strftime('%d.%m.%Y')
-
+    if warrant.together_with != '':
+        regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_registration
+    else:
+        regisrtacija_kolege_koji_vozi = ''
 
     #za footer
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
@@ -94,19 +98,19 @@ def create_pdf_form(warrant, br_casova, br_dnevnica):
     company_mail = warrant.travelwarrant_company.company_mail
     company_site = warrant.travelwarrant_company.company_site
 
-    text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}
+    text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
-Na službenom putu koristi prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != '' else ""}{warrant.personal_registration}
+Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != '' else ""}{warrant.personal_registration}{regisrtacija_kolege_koji_vozi}.
 
-Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}
+Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}.
 
-Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana
+Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.
 
-Putni troškovi padaju na teret: {costs_pays}
+Putni troškovi padaju na teret: {costs_pays}.
 
-{f'Odobravam isplatu akontacije u iznosu od: {warrant.advance_payment} {warrant.advance_payment_currency}' if warrant.advance_payment > 0 else ""}
+{f'Odobravam isplatu akontacije u iznosu od: {warrant.advance_payment} {warrant.advance_payment_currency}' if warrant.advance_payment > 0 else ""}.
 
-Nalogodavac: {warrant.travelwarrant_company.CEO}
+Nalogodavac: {warrant.travelwarrant_company.CEO}.
 '''
 
     text_form = replace_serbian_characters(text_form)
@@ -202,7 +206,7 @@ U ________________________ dana ______________________ 20____''', ln=True, align
     path = "putninalozi/static/pdf_forms/"
     file_name = f'{warrant_number} {company_name}-{name} {surname}.pdf'
     pdf.output(path + file_name)
-    return file_name
+    return file_name, text_form
 
 
 def send_email(warrant, current_user, file_name):

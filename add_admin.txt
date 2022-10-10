@@ -1,4 +1,4 @@
-from putninalozi.models import User, Vehicle, Company, TravelWarrant
+from putninalozi.models import User, Vehicle, Company, TravelWarrant, TravelWarrantExpenses
 from putninalozi import db
 
 ###########################

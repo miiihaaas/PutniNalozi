@@ -103,12 +103,26 @@ class TravelWarrant(db.Model):
     km_end = db.Column(db.Integer, nullable=True)
 
     status = db.Column(db.String(15), nullable=False)
-    #nastaviti sa dodavanjem potrebnih polja (nakon definisanja), napisati formu (forms.py), dodati funkciju (routes.py) i napraviti html fajl
     file_name = db.Column(db.String(100), nullable=True) #za PDF fajl
-    expenses = db.Column(db.Float, nullable=True) # ili možda napraviti posebnu tabelu za troškove??? i povezati sumu za ovu prmenjivu???
+    text_form = db.Column(db.String(1000), nullable=True) #za tekst forme iz pdf fajla
+    # expenses = db.Column(db.Float, nullable=True) # ili možda napraviti posebnu tabelu za troškove??? i povezati sumu za ovu prmenjivu???
+    expenses = db.relationship('TravelWarrantExpenses', backref='trawelwarrantexpenses_travelwarrant', lazy=True)
 
     def __repr__(self):
         return f"Travel Warrant('{self.travel_warrant_id=}', '{self.with_task=}', '{self.user_id=}')"
+
+
+class TravelWarrantExpenses(db.Model):
+    expenses_id = db.Column(db.Integer, primary_key=True)
+    expenses_type = db.Column(db.String(50), nullable = True) # možda false...?
+    expenses_date = db.Column(db.DateTime, nullable=True)
+    description = db.Column(db.String(1000), nullable = True)
+    amount = db.Column(db.Float, nullable=True)
+    amount_currency = db.Column(db.String(5), nullable=False)
+    travelwarrant_id = db.Column(db.Integer, db.ForeignKey('travel_warrant.travel_warrant_id'), nullable=False)
+
+    def __repr__(self):
+        return f"Travel Warrant Expenses('{self.expenses_id=}', '{self.expenses_type=}', '{self.description=}')"
 
 
 

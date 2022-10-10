@@ -26,18 +26,7 @@
 
           <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
             <div class="card-body">
-              <h3>{{ rod[0] }} {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} {{ rod[1] }} na poslove radnog mesta {{ warrant.travelwarrant_user.workplace }} upućuje se na službeni put dana {{warrant.start_datetime.strftime('%d.%m.%Y')}} u {{ warrant.relation }} sa zadatkom: {{ warrant.with_task }}</h3>
-              <br>
-              <h3>Na službenom putu koristi prevozno sredstvo registarske tablice: {{ warrant.travelwarrant_vehicle.vehicle_registration }} {{ warrant.personal_registration }}</h3>
-              <br>
-              <h3>Dnevnica za ovo služebno putovanje pripada u iznosu od: {{ warrant.daily_wage }} {{ warrant.daily_wage_currency }}</h3>
-              <h3>Na službenom putu će se zadržati najdalje do {{ warrant.end_datetime.strftime('%d.%m.%Y') }}, a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana</h3>
-              <br>
-              <h3>Putni troškovi padaju na teret: {{ warrant.costs_pays }}</h3>
-              <br>
-              {% if warrant.advance_payment > 0  %}
-                <h3>Odobravam isplatu akontacije u iznosu od: {{ warrant.advance_payment }} {{ warrant.advance_payment_currency }}</h3>
-              {% endif %}
+              <h3>{{ warrant.text_form }}</h3>
             </div>
           </div>
         </div>
@@ -415,6 +404,31 @@
               {{ form.expenses(class="form-control form-control-lg", placeholder="Uneti registraciju ličnog vozila") }}
           {% endif %}
       </div>
+      <br>
+      <hr>
+      <br>
+      <table id="data" border="1" class="table table-striped">
+          <thead>
+            <tr id="header">
+              <th>Tip troška</th>
+              <th>Datum</th>
+              <th>Opis</th>
+              <th>Iznos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for trosak in troskovi %}
+            <tr>
+              <td class="align-middle"> {{ trosak.expenses_type }} </td>
+              <td class="align-middle"> 2022-10-09 </td>
+              <td class="align-middle"> {{ trosak.description }} </td>
+              <td class="align-middle"> {{ trosak.amount }} {{ trosak.amount_currency }} </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+      <br>
+      <hr>
 
 
 
@@ -424,4 +438,16 @@
     </div>
   </form>
 </div>
-{% endblock content%}
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function () {
+    $('#data').DataTable( {
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/sr-SP.json"
+      }
+    } );
+  } );
+</script>
+{% endblock %}

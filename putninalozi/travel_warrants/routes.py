@@ -1,8 +1,7 @@
 from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect, abort, request, send_file
 from putninalozi import db
-# from putninalozi.travel_warrants.forms import TravelWarrantForm
-from putninalozi.models import TravelWarrant, User, Vehicle
+from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses
 from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
@@ -126,7 +125,8 @@ def register_tw(korisnik_id, datum):
                 status='kreiran',
                 travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
                 file_name="",
-                expenses=0.0)
+                text_form="",
+                expenses=[])
         elif form.personal_brand.data != "":
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -152,7 +152,8 @@ def register_tw(korisnik_id, datum):
                 status='kreiran',
                 travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
                 file_name="",
-                expenses=0.0)
+                text_form="",
+                expenses=[])
         elif form.other.data != "":
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -178,7 +179,8 @@ def register_tw(korisnik_id, datum):
                 status='kreiran',
                 travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
                 file_name="",
-                expenses=0.0)
+                text_form="",
+                expenses=[])
         else:
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -204,7 +206,8 @@ def register_tw(korisnik_id, datum):
                 status='kreiran',
                 travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
                 file_name="",
-                expenses=0.0)
+                text_form="",
+                expenses=[])
 
         db.session.add(warrant)
         db.session.commit()
@@ -216,9 +219,11 @@ def register_tw(korisnik_id, datum):
 
         br_dnevnica = proracaun_broja_dnevnica(br_casova)
 
-        file_name = create_pdf_form(warrant, br_casova, br_dnevnica) #dodaj ovde br_casova, br_dnevnica i iste promenjive dodaj u pdf_form.py def create_pdf_form!!!!!!!!!!!!!!!!!!!!!
+        file_name, text_form = create_pdf_form(warrant, br_casova, br_dnevnica)
         warrant.file_name = file_name
+        warrant.text_form = text_form
         db.session.commit()
+        print(text_form)
 
         print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
@@ -236,12 +241,14 @@ def register_tw(korisnik_id, datum):
 @travel_warrants.route("/travel_warrant/<int:warrant_id>", methods=['GET', 'POST'])
 def travel_warrant_profile(warrant_id):
     rod = []
+    troskovi = TravelWarrantExpenses.query.filter_by(travelwarrant_id = warrant_id).all()
     warrant = TravelWarrant.query.get_or_404(warrant_id)
     if warrant.travelwarrant_user.gender == "1":
         rod=["Radnik", "raspoređen"]
     elif warrant.travelwarrant_user.gender == "2":
         rod=["Radnica", "raspoređena"]
-    #
+    vehicle_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+    print(f'{vehicle_list=}')
     if not current_user.is_authenticated:
         flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
@@ -260,18 +267,12 @@ def travel_warrant_profile(warrant_id):
                                                                                                                     datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         form.together_with.choices = drivers
         # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
-        form.vehicle_id.choices = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+        form.vehicle_id.choices = vehicle_list
+        print(f'{form.vehicle_id.choices=}')
         form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
 
         if form.validate_on_submit():
-            # warrant.with_task = form.with_task.data
-            # warrant.abroad_contry = form.abroad_contry.data
-            # warrant.relation = form.relation.data
-            #
-            # warrant.start_datetime = form.start_datetime.data
-            # warrant.end_datetime = form.end_datetime.data
-
 
             if form.together_with.data != '':
                 warrant.with_task = form.with_task.data
@@ -293,7 +294,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.status = form.status.data
 
                 warrant.expenses = form.expenses.data
-                print('zajedno sa - c_admin')
+                print('zajedno sa - c_user')
             elif form.personal_brand.data != "":
                 warrant.with_task = form.with_task.data
                 warrant.abroad_contry = form.abroad_contry.data
@@ -314,7 +315,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.status = form.status.data
 
                 warrant.expenses = form.expenses.data
-                print('licno vozilo - c_admin')
+                print('licno vozilo - c_user')
             elif form.other.data != "":
                 warrant.with_task = form.with_task.data
                 warrant.abroad_contry = form.abroad_contry.data
@@ -335,7 +336,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.status = form.status.data
 
                 warrant.expenses = form.expenses.data
-                print('drugo - c_admin')
+                print('drugo - c_user')
             else:
                 warrant.with_task = form.with_task.data
                 warrant.abroad_contry = form.abroad_contry.data
@@ -344,7 +345,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
 
-                vehicle_id=form.vehicle_id.data,
+                warrant.vehicle_id=form.vehicle_id.data
                 warrant.together_with=""
                 warrant.personal_type=""
                 warrant.personal_brand=""
@@ -356,27 +357,18 @@ def travel_warrant_profile(warrant_id):
                 warrant.status = form.status.data
 
                 warrant.expenses = form.expenses.data
-                print('službeno vozilo - c_admin')
+                print('službeno vozilo - c_user')
 
+            br_casova = warrant.end_datetime - warrant.start_datetime
+            print(f'razlika u vremenu {br_casova}')
+            br_casova = br_casova.total_seconds() / 3600
+            print(f'razlika u vremenu {br_casova} u satima')
 
-            # if form.vehicle_id.data == '':
-            #     warrant.vehicle_id = ''
-            # else:
-            #     warrant.vehicle_id = int(form.vehicle_id.data)
-            # if form.together_with.data == '':
-            #     warrant.together_with = ''
-            # else:
-            #     warrant.together_with = form.together_with.data
-            # warrant.personal_type = form.personal_type.data
-            # warrant.personal_brand = form.personal_brand.data
-            # warrant.personal_registration = form.personal_registration.data
-            # warrant.other = form.other.data
+            br_dnevnica = proracaun_broja_dnevnica(br_casova)
 
-            # warrant.km_start = int(form.km_start.data)
-            # warrant.km_end = int(form.km_end.data)
-            # warrant.status = form.status.data
-            #
-            # warrant.expenses = form.expenses.data
+            file_name, text_form = create_pdf_form(warrant, br_casova, br_dnevnica)
+            warrant.file_name = file_name # mislim da ovaj red može da se izbriše jer se neće menjati naziv dokumenta
+            warrant.text_form = text_form
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
@@ -405,7 +397,7 @@ def travel_warrant_profile(warrant_id):
 
         print(f'EditUser: {form.errors=}')
 
-        return render_template('travel_warrant_user.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled korisnika)', form=form, rod=rod)
+        return render_template('travel_warrant_user.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled korisnika)', form=form, rod=rod, troskovi=troskovi)
 
     else:
         form = EditAdminTravelWarrantForm()
@@ -418,20 +410,12 @@ def travel_warrant_profile(warrant_id):
         form.together_with.choices = drivers
 
         form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
-        form.vehicle_id.choices = [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+        form.vehicle_id.choices = vehicle_list
+        print(f'{form.vehicle_id.choices=}')
         form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat")]
 
         if form.validate_on_submit():
-            # warrant.user_id = form.user_id.data
-            # warrant.with_task = form.with_task.data
-            # warrant.company_id = int(form.company_id.data)
-            # warrant.abroad_contry = form.abroad_contry.data
-            # warrant.relation = form.relation.data
-            #
-            # warrant.start_datetime = form.start_datetime.data
-            # warrant.end_datetime = form.end_datetime.data
-
             if form.together_with.data != '':
                 warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
@@ -529,7 +513,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
 
-                vehicle_id=form.vehicle_id.data,
+                warrant.vehicle_id=form.vehicle_id.data
                 warrant.together_with=""
                 warrant.personal_type=""
                 warrant.personal_brand=""
@@ -546,34 +530,19 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = form.expenses.data
+                warrant.expenses = []
                 print('službeno vozilo')
 
-
-            ## if form.vehicle_id.data == '':
-            ##     warrant.vehicle_id = 0
-            ## else:
-            ##     warrant.vehicle_id = int(form.vehicle_id.data)
-            ## if form.together_with.data == '':
-            ##     warrant.together_with = 0
-            ## else:
-            ##     warrant.together_with = form.together_with.data
-            ## warrant.personal_type = form.personal_type.data
-            ## warrant.personal_brand = form.personal_brand.data
-            ## warrant.personal_registration = form.personal_registration.data
-            ## warrant.other = form.other.data
-
-            # warrant.advance_payment = int(form.advance_payment.data)
-            # warrant.advance_payment_currency = form.advance_payment_currency.data
-            # warrant.daily_wage = int(form.daily_wage.data)
-            # warrant.daily_wage_currency = form.daily_wage_currency.data
-            # warrant.costs_pays = form.costs_pays.data
+            # br_casova = warrant.end_datetime - warrant.start_datetime
+            # print(f'razlika u vremenu {br_casova}')
+            # br_casova = br_casova.total_seconds() / 3600
+            # print(f'razlika u vremenu {br_casova} u satima')
             #
-            # warrant.km_start = int(form.km_start.data)
-            # warrant.km_end = int(form.km_end.data)
-            # warrant.status = form.status.data
-
-            # warrant.expenses = form.expenses.data
+            # br_dnevnica = proracaun_broja_dnevnica(br_casova)
+            #
+            # file_name, text_form = create_pdf_form(warrant, br_casova, br_dnevnica)
+            # warrant.file_name = file_name # mislim da ovaj red može da se izbriše jer se neće menjati naziv dokumenta
+            # warrant.text_form = text_form
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran', 'success')
@@ -587,7 +556,6 @@ def travel_warrant_profile(warrant_id):
             form.relation.data = warrant.relation
             form.start_datetime.data = warrant.start_datetime
             form.end_datetime.data = warrant.end_datetime
-            form.vehicle_id.choices =[('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
             form.vehicle_id.data = str(warrant.vehicle_id)
             form.together_with.data = warrant.together_with
             form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
@@ -606,8 +574,8 @@ def travel_warrant_profile(warrant_id):
             form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat")]
             form.status.data = str(warrant.status)
 
-            form.expenses.data = warrant.expenses
+            form.expenses.data = "prazna lista za početak"
 
         print(f'EditAdmin: {form.errors=}')
 
-        return render_template('travel_warrant.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', form=form, rod=rod)
+        return render_template('travel_warrant.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', form=form, rod=rod, troskovi=troskovi)
