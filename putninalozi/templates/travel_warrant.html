@@ -391,19 +391,6 @@
         </div>
       </div>
       <br>
-      <div class="form-box">
-        {{ form.expenses.label(class="form-control-label") }}
-          {% if form.expenses.errors %}
-              {{ form.expenses(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.expenses.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.expenses(class="form-control form-control-lg", placeholder="Uneti registraciju ličnog vozila") }}
-          {% endif %}
-      </div>
       <br>
       <hr>
       <br>

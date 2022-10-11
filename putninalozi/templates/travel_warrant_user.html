@@ -326,7 +326,7 @@
 
     </fieldset>
     <div class="form-group">
-      {{ form.submit(class="btn btn-outline-info") }}
+      {{ form.submit(class="btn btn-outline-info") }} <a class="btn btn-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzimi dokument</a>
     </div>
   </form>
 </div>

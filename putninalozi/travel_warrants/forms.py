@@ -68,7 +68,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
     km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
-    expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
+    # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
     submit = SubmitField('Ažuriraj putni nalog')
 

@@ -263,8 +263,8 @@ def travel_warrant_profile(warrant_id):
         drivers = [('', '----------')] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
                                                 for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
                                                                                     TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
-                                                                                                                    datum.replace(hour=0, minute=0, second=0, microsecond=0),
-                                                                                                                    datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
+                                                                                                                    warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
+                                                                                                                    warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         form.together_with.choices = drivers
         # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
         form.vehicle_id.choices = vehicle_list
@@ -293,7 +293,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = form.expenses.data
+                # warrant.expenses = form.expenses.data
                 print('zajedno sa - c_user')
             elif form.personal_brand.data != "":
                 warrant.with_task = form.with_task.data
@@ -314,7 +314,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = form.expenses.data
+                # warrant.expenses = form.expenses.data
                 print('licno vozilo - c_user')
             elif form.other.data != "":
                 warrant.with_task = form.with_task.data
@@ -335,7 +335,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = form.expenses.data
+                # warrant.expenses = form.expenses.data
                 print('drugo - c_user')
             else:
                 warrant.with_task = form.with_task.data
@@ -356,7 +356,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = form.expenses.data
+                # warrant.expenses = form.expenses.data
                 print('službeno vozilo - c_user')
 
             br_casova = warrant.end_datetime - warrant.start_datetime
@@ -393,7 +393,7 @@ def travel_warrant_profile(warrant_id):
             form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
             form.status.data = str(warrant.status)
 
-            form.expenses.data = warrant.expenses
+            # form.expenses.data = warrant.expenses
 
         print(f'EditUser: {form.errors=}')
 
@@ -413,7 +413,7 @@ def travel_warrant_profile(warrant_id):
         form.vehicle_id.choices = vehicle_list
         print(f'{form.vehicle_id.choices=}')
         form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
-        form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat")]
+        form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat"), ("storniran", "storniran")]
 
         if form.validate_on_submit():
             if form.together_with.data != '':
@@ -530,19 +530,8 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = []
+                # warrant.expenses = []
                 print('službeno vozilo')
-
-            # br_casova = warrant.end_datetime - warrant.start_datetime
-            # print(f'razlika u vremenu {br_casova}')
-            # br_casova = br_casova.total_seconds() / 3600
-            # print(f'razlika u vremenu {br_casova} u satima')
-            #
-            # br_dnevnica = proracaun_broja_dnevnica(br_casova)
-            #
-            # file_name, text_form = create_pdf_form(warrant, br_casova, br_dnevnica)
-            # warrant.file_name = file_name # mislim da ovaj red može da se izbriše jer se neće menjati naziv dokumenta
-            # warrant.text_form = text_form
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran', 'success')
@@ -571,10 +560,10 @@ def travel_warrant_profile(warrant_id):
             form.costs_pays.data = warrant.costs_pays
             form.km_start.data = warrant.km_start
             form.km_end.data = warrant.km_end
-            form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat")]
+            form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat") , ("storniran", "storniran")]
             form.status.data = str(warrant.status)
 
-            form.expenses.data = "prazna lista za početak"
+            # form.expenses.data = "prazna lista za početak"
 
         print(f'EditAdmin: {form.errors=}')
 
