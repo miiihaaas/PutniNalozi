@@ -607,15 +607,10 @@ def add_expenses(warrant_id):
                 travelwarrant_id = warrant_id)
         db.session.add(expense)
         db.session.commit()
-<<<<<<< HEAD
         flash(f'U putnom nalogu broj {warrant.travel_warrant_number} je dodat trošak - {expense.expenses_type}', 'success')
         return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))
-=======
-        flash(f'U putnom nalogu broj {warrant.travel_warrant_number} je dodat trošak', 'success')
-        return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))
-        # return redirect(url_for('travel_warrants.travel_warrant_list'))
+
 
     print(troskovi)
     print(warrant)
->>>>>>> 2b3e4346f2375ddfb087f2a98b8bff5b108c7c2e
     return render_template('expenses.html', form=form, legend='Dodavanje troškova:', warrant=warrant, troskovi=troskovi)
