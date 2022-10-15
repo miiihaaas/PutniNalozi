@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, FloatField, SelectField, DateField, TimeField, DateTimeField, IntegerField, SubmitField
+from wtforms import StringField, BooleanField, FloatField, DecimalField, SelectField, DateField, TimeField, DateTimeField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, Optional, Length, InputRequired
 from putninalozi.models import Company, User, Vehicle
 from flask_login import current_user
@@ -56,7 +56,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
     personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     personal_brand = StringField('Brend vozila: ')
-    personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=9, max=12)]) # GM 047-DD
+    personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
 
     advance_payment = IntegerField('Akontacija: ')
@@ -70,6 +70,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
     # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
+    add_expenses = SubmitField('Dofaj trošak')
     submit = SubmitField('Ažuriraj putni nalog')
 
     def reset(self):
@@ -89,7 +90,7 @@ class EditUserTravelWarrantForm(FlaskForm):
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
     personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     personal_brand = StringField('Brend vozila: ')
-    personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=9, max=12)]) # GM 047-DD
+    personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
 
     # advance_payment = IntegerField('Akontacija: ')
@@ -101,9 +102,22 @@ class EditUserTravelWarrantForm(FlaskForm):
     km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
     km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
-    expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
+    # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
+    add_expenses = SubmitField('Dofaj trošak')
     submit = SubmitField('Ažuriraj putni nalog')
+
+    def reset(self):
+        self.__init__()
+
+
+class TravelWarrantExpensesForm(FlaskForm):
+    expenses_type = SelectField('Tip troška', choices=[('Ostale naknade', 'Ostale naknade'), ('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putrarine', 'Putrarine'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
+    expenses_date = DateTimeField('Datum: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
+    description = StringField('Opis troška: ', validators=[DataRequired()])
+    amount = DecimalField('Količna: ', validators=[DataRequired()])
+    amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    submit = SubmitField('Dodaj trošak')
 
     def reset(self):
         self.__init__()

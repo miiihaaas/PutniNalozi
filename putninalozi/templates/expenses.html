@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+  <form class="" action="" method="POST">
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-4">{{legend}} {{ warrant.travel_warrant_number }}</legend>
+      {% if form.errors %}
+      debag line: {{ form.errors }}
+      {% endif %}
+      <div class="row">
+        <div class="col form-group">
+            {{ form.expenses_type.label(class="form-control-label") }}
+            {% if form.expenses_type.errors %}
+                {{ form.expenses_type(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.expenses_type.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.expenses_type(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-group">
+            {{ form.expenses_date.label(class="form-control-label") }}
+            {% if form.expenses_date.errors %}
+                {{ form.expenses_date(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.expenses_date.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.expenses_date(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+          {{ form.description.label(class="form-control-label") }}
+          {% if form.description.errors %}
+              {{ form.description(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                  {% for error in form.description.errors %}
+                      <span>{{ error }}</span>
+                  {% endfor %}
+              </div>
+          {% else %}
+              {{ form.description(class="form-control form-control-lg") }}
+          {% endif %}
+      </div>
+
+      <div class="row">
+        <div class="col form-group">
+            {{ form.amount.label(class="form-control-label") }}
+            {% if form.amount.errors %}
+                {{ form.amount(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.amount.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.amount(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-group">
+            {{ form.amount_currency.label(class="form-control-label") }}
+            {% if form.amount_currency.errors %}
+                {{ form.amount_currency(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.amount_currency.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.amount_currency(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
+      </div>
+    </fieldset>
+    <div class="form-group">
+      {{ form.submit(class="btn btn-outline-info") }}
+    </div>
+  </form>
+</div>
+
+<br>
+<table id="data" border="1" class="table table-striped">
+    <thead>
+      <tr id="header">
+        <th>Tip troška</th>
+        <th>Datum</th>
+        <th>Opis</th>
+        <th>Iznos</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for trosak in troskovi %}
+      <tr>
+        <td class="align-middle"> {{ trosak.expenses_type }} </td>
+        <td class="align-middle"> 2022-10-09 </td>
+        <td class="align-middle"> {{ trosak.description }} </td>
+        <td class="align-middle"> {{ trosak.amount }} {{ trosak.amount_currency }} </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content%}
+
+{% block scripts %}
+<script>
+  $(document).ready(function () {
+    $('#data').DataTable( {
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/sr-SP.json"
+      }
+    } );
+  } );
+</script>
+{% endblock %}

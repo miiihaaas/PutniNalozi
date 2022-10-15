@@ -309,19 +309,34 @@
         </div>
       </div>
       <br>
-      <div class="form-box">
-        {{ form.expenses.label(class="form-control-label") }}
-          {% if form.expenses.errors %}
-              {{ form.expenses(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.expenses.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.expenses(class="form-control form-control-lg", placeholder="Uneti registraciju ličnog vozila") }}
-          {% endif %}
+      <br>
+      <hr>
+      <div class="form-group">
+        <a class="btn btn-info" href="{{ url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id) }}">Dodaj trošak</a>
       </div>
+      <br>
+      <table id="data" border="1" class="table table-striped">
+          <thead>
+            <tr id="header">
+              <th>Tip troška</th>
+              <th>Datum</th>
+              <th>Opis</th>
+              <th>Iznos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for trosak in troskovi %}
+            <tr>
+              <td class="align-middle"> {{ trosak.expenses_type }} </td>
+              <td class="align-middle"> {{ trosak.expenses_date }} </td>
+              <td class="align-middle"> {{ trosak.description }} </td>
+              <td class="align-middle"> {{ trosak.amount }} {{ trosak.amount_currency }} </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+      <br>
+      <hr>
 
 
     </fieldset>
