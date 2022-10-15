@@ -2,8 +2,8 @@ from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect, abort, request, send_file
 from putninalozi import db
 from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses
-from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm
-from putninalozi.travel_warrants.pdf_form import create_pdf_form, send_email
+from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm
+from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_fomr, send_email
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 
@@ -20,11 +20,14 @@ def proracaun_broja_dnevnica(br_casova):
     else:
         br_dnevnica = br_casova / 24
         print(f'proračun: {br_dnevnica=}')
-        if br_dnevnica % 1 <= 0.5:
+        if br_dnevnica % 1 <= (8/24): #zaokruživanje na 0.5 (da li je 0-12h ili 8-12h)
+            #zaokruži na x.0
+            br_dnevnica = br_dnevnica // 1
+            print(f'zaokruživanje na pola dnevnice: {br_dnevnica=}')
+        elif br_dnevnica % 1 <= (12/24): #zaokruživanje na 0.5 (da li je 0-12h ili 8-12h)
             #zaokruži na x.5
             br_dnevnica = br_dnevnica // 1 + 0.5
             print(f'zaokruživanje na pola dnevnice: {br_dnevnica=}')
-
         else:
             #zaokruži na x+1
             br_dnevnica = br_dnevnica // 1 + 1
@@ -358,8 +361,9 @@ def travel_warrant_profile(warrant_id):
 
                 # warrant.expenses = form.expenses.data
                 print('službeno vozilo - c_user')
+##########################################################################################
 
-            br_casova = warrant.end_datetime - warrant.start_datetime
+            br_casova = form.end_datetime.data - form.start_datetime.data
             print(f'razlika u vremenu {br_casova}')
             br_casova = br_casova.total_seconds() / 3600
             print(f'razlika u vremenu {br_casova} u satima')
@@ -367,10 +371,13 @@ def travel_warrant_profile(warrant_id):
             br_dnevnica = proracaun_broja_dnevnica(br_casova)
 
             file_name, text_form = create_pdf_form(warrant, br_casova, br_dnevnica)
-            warrant.file_name = file_name # mislim da ovaj red može da se izbriše jer se neće menjati naziv dokumenta
+            warrant.file_name = file_name
             warrant.text_form = text_form
+            print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
             db.session.commit()
+##########################################################################################
+
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
@@ -443,7 +450,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = form.expenses.data
+                # warrant.expenses = form.expenses.data
                 print('zajedno sa')
             elif form.personal_brand.data != "":
                 warrant.user_id = form.user_id.data
@@ -472,7 +479,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = form.expenses.data
+                # warrant.expenses = form.expenses.data
                 print('lično vozilo')
             elif form.other.data != "":
                 warrant.user_id = form.user_id.data
@@ -501,7 +508,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.km_end = int(form.km_end.data)
                 warrant.status = form.status.data
 
-                warrant.expenses = form.expenses.data
+                # warrant.expenses = form.expenses.data
                 print('drugo')
             else:
                 warrant.user_id = form.user_id.data
@@ -532,6 +539,22 @@ def travel_warrant_profile(warrant_id):
 
                 # warrant.expenses = []
                 print('službeno vozilo')
+
+##########################################################################################
+            br_casova = form.end_datetime.data - form.start_datetime.data
+            print(f'razlika u vremenu {br_casova}')
+            br_casova = br_casova.total_seconds() / 3600
+            print(f'razlika u vremenu {br_casova} u satima')
+
+            br_dnevnica = proracaun_broja_dnevnica(br_casova)
+
+            file_name, text_form = update_pdf_fomr(warrant, br_casova, br_dnevnica)
+            warrant.file_name = file_name
+            warrant.text_form = text_form
+            print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
+
+            db.session.commit()
+##########################################################################################
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran', 'success')
@@ -568,3 +591,26 @@ def travel_warrant_profile(warrant_id):
         print(f'EditAdmin: {form.errors=}')
 
         return render_template('travel_warrant.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', form=form, rod=rod, troskovi=troskovi)
+
+
+@travel_warrants.route("/add_expenses/<int:warrant_id>", methods=['GET', 'POST'])
+def add_expenses(warrant_id):
+    troskovi = TravelWarrantExpenses.query.filter_by(travelwarrant_id = warrant_id).all()
+    warrant = TravelWarrant.query.get_or_404(warrant_id)
+    form = TravelWarrantExpensesForm()
+    if form.validate_on_submit():
+        expense = TravelWarrantExpenses(expenses_type = form.expenses_type.data,
+                expenses_date = form.expenses_date.data,
+                description = form.description.data,
+                amount = form.amount.data,
+                amount_currency = form.amount_currency.data,
+                travelwarrant_id = warrant_id)
+        db.session.add(expense)
+        db.session.commit()
+        flash(f'U putnom nalogu broj {warrant.travel_warrant_number} je dodat trošak', 'success')
+        return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))
+        # return redirect(url_for('travel_warrants.travel_warrant_list'))
+
+    print(troskovi)
+    print(warrant)
+    return render_template('expenses.html', form=form, legend='Dodavanje troškova:', warrant=warrant, troskovi=troskovi)
