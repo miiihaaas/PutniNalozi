@@ -208,7 +208,7 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
     return file_name, text_form
 
 
-def update_pdf_fomr(warrant, br_casova, br_dnevnica):
+def update_pdf_fomr(warrant, br_casova, br_dnevnica, troskovi):
         rod = []
         if warrant.travelwarrant_user.gender == "1":
             rod=["Radnik", "raspoređen", "Kolega"]
@@ -306,33 +306,46 @@ def update_pdf_fomr(warrant, br_casova, br_dnevnica):
 
         pdf.set_fill_color(150, 150, 150)
         pdf.set_font('times','', 10)
-        pdf.cell(56, 4, f'Dnevnice', border=1, ln=False, fill = True, align='L')
+        pdf.cell(60, 4, f'Dnevnice', border=1, ln=False, fill = True, align='L')
         pdf.cell(20, 4, f'Br cas', border=1, ln=False, fill = True, align='L')
         pdf.cell(20, 4, f'Br dnev', border=1, ln=False, fill = True, align='L')
         pdf.cell(20, 4, f'', border=1, ln=False, fill = True, align='L')
         pdf.cell(35, 4, f'Po dinara', border=1, ln=False, fill = True, align='L')
         pdf.cell(35, 4, f'Svega dinara', border=1, ln=True, fill = True, align='L')
-        pdf.multi_cell(56, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+        pdf.multi_cell(60, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
 Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
-        pdf.set_xy(66, 166)
+        pdf.set_xy(70, 166)
         pdf.cell(20, 8, f'{round(br_casova)}', border=1, ln=False, align='L')
         pdf.cell(20, 8, f'{br_dnevnica}', border=1, ln=False, align='L')
         pdf.cell(20, 8, f'', border=1, ln=False, align='L')
         pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
         pdf.cell(35, 8, f'{warrant.daily_wage * br_dnevnica}', border=1, ln=True, align='L')
 
-        pdf.cell(0, 8, f'Nastaviti kod koji ce da stampa unete putne troskove', border=1, ln=True, align='C')
+        pdf.cell(0, 8, f'Troskovi', border=1, ln=True, fill = True, align='C')
 
-        pdf.cell(151, 4, f'Svega', border=1, ln=True, align='R')
-        pdf.cell(151, 4, f'Primljena akontacija', border=1, ln=False, align='R')
-        pdf.cell(35, 4, f'', border=1, ln=True, align='C')
-        pdf.cell(151, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
-        pdf.cell(35, 4, f'', border=1, ln=True, align='C')
-        pdf.cell(186, 4, f'Prilog', border=1, ln=True, fill = True, align='L')
-        pdf.multi_cell(186, 4, f'''U {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {replace_serbian_characters(warrant.travelwarrant_user.name)} {replace_serbian_characters(warrant.travelwarrant_user.surname)}''', border=1, ln=True, align='C')
+        ukupni_trosak=0
+        for trosak in troskovi:
+            ukupni_trosak = ukupni_trosak + trosak.amount
+            print(ukupni_trosak)
+
+            pdf.cell(24,4, f'{trosak.expenses_date.strftime("%d/%m/%Y")}', border=1, ln=False, align='C')
+            pdf.cell(56,4, f'{replace_serbian_characters(trosak.expenses_type)}', border=1, ln=False, align='L')
+            pdf.cell(75,4, f'{replace_serbian_characters(trosak.description)}', border=1, ln=False, align='L')
+            pdf.cell(35,4, f'{trosak.amount} {trosak.amount_currency}', border=1, ln=True, align='R')
+
+        ukupni_trosak = round(ukupni_trosak,2)
+
+        pdf.cell(155, 4, f'Svega', border=1, ln=False, align='R')
+        pdf.cell(35, 4, f'{ukupni_trosak} {trosak.amount_currency}', border=1, ln=True, align='R')
+        pdf.cell(155, 4, f'Primljena akontacija', border=1, ln=False, align='R')
+        pdf.cell(35, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='R')
+        pdf.cell(155, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
+        pdf.cell(35, 4, f'{round((warrant.daily_wage * br_dnevnica - warrant.advance_payment + ukupni_trosak),2)} rsd', border=1, ln=True, align='C')
+        pdf.cell(0, 8, f'Prilog', border=1, ln=True, fill = True, align='C')
+        pdf.multi_cell(0, 8, f'''U mestu {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {replace_serbian_characters(warrant.travelwarrant_user.name)} {replace_serbian_characters(warrant.travelwarrant_user.surname)}''', border=1, ln=True, align='C')
         pdf.multi_cell(0, 4, f'', ln=True, align='L')
-        pdf.multi_cell(0, 4, f'''Potvrdjujem da je putovanje izvrseno prema ovom nalogu i odobravam isplatu putng racuna od dinara _____________________ slovima: ________________________________ na teret {warrant.costs_pays}.
-    U ________________________ dana ______________________ 20____''', ln=True, align='L')
+        pdf.multi_cell(0, 4, f'''Potvrdjujem da je putovanje izvrseno prema ovom nalogu i odobravam isplatu putng racuna od {round((warrant.daily_wage * br_dnevnica - warrant.advance_payment + ukupni_trosak),2)} dinara, slovima: ___________________________________________________ na teret {warrant.costs_pays}.
+U mestu {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {datetime.date.today().strftime("%d/%m/%Y")}.''', ln=True, align='L')
 
         path = "putninalozi/static/pdf_forms/"
         file_name = f'{warrant_number} {company_name}-{name} {surname}.pdf'

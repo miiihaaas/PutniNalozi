@@ -294,7 +294,10 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
-                warrant.status = form.status.data
+                if request.form.get('dugme') == 'Završi':
+                    warrant.status = 'završen'
+                else:
+                    warrant.status = form.status.data
 
                 # warrant.expenses = form.expenses.data
                 print('zajedno sa - c_user')
@@ -315,7 +318,10 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
-                warrant.status = form.status.data
+                if request.form.get('dugme') == 'Završi':
+                    warrant.status = 'završen'
+                else:
+                    warrant.status = form.status.data
 
                 # warrant.expenses = form.expenses.data
                 print('licno vozilo - c_user')
@@ -336,7 +342,10 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
-                warrant.status = form.status.data
+                if request.form.get('dugme') == 'Završi':
+                    warrant.status = 'završen'
+                else:
+                    warrant.status = form.status.data
 
                 # warrant.expenses = form.expenses.data
                 print('drugo - c_user')
@@ -357,7 +366,10 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
-                warrant.status = form.status.data
+                if request.form.get('dugme') == 'Završi':
+                    warrant.status = 'završen'
+                else:
+                    warrant.status = form.status.data
 
                 # warrant.expenses = form.expenses.data
                 print('službeno vozilo - c_user')
@@ -448,7 +460,12 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
-                warrant.status = form.status.data
+                if request.form.get('dugme') == 'Završi':
+                    warrant.status = 'završen'
+                elif request.form.get('dugme') == 'Obračunaj':
+                    warrant.status = 'obračunat'
+                else:
+                    warrant.status = form.status.data
 
                 # warrant.expenses = form.expenses.data
                 print('zajedno sa')
@@ -477,7 +494,12 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
-                warrant.status = form.status.data
+                if request.form.get('dugme') == 'Završi':
+                    warrant.status = 'završen'
+                elif request.form.get('dugme') == 'Obračunaj':
+                    warrant.status = 'obračunat'
+                else:
+                    warrant.status = form.status.data
 
                 # warrant.expenses = form.expenses.data
                 print('lično vozilo')
@@ -506,7 +528,12 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
-                warrant.status = form.status.data
+                if request.form.get('dugme') == 'Završi':
+                    warrant.status = 'završen'
+                elif request.form.get('dugme') == 'Obračunaj':
+                    warrant.status = 'obračunat'
+                else:
+                    warrant.status = form.status.data
 
                 # warrant.expenses = form.expenses.data
                 print('drugo')
@@ -535,7 +562,12 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
-                warrant.status = form.status.data
+                if request.form.get('dugme') == 'Završi':
+                    warrant.status = 'završen'
+                elif request.form.get('dugme') == 'Obračunaj':
+                    warrant.status = 'obračunat'
+                else:
+                    warrant.status = form.status.data
 
                 # warrant.expenses = []
                 print('službeno vozilo')
@@ -548,7 +580,7 @@ def travel_warrant_profile(warrant_id):
 
             br_dnevnica = proracaun_broja_dnevnica(br_casova)
 
-            file_name, text_form = update_pdf_fomr(warrant, br_casova, br_dnevnica)
+            file_name, text_form = update_pdf_fomr(warrant, br_casova, br_dnevnica, troskovi)
             warrant.file_name = file_name
             warrant.text_form = text_form
             print(f'{warrant.end_datetime=},{warrant.start_datetime=}')

@@ -4,7 +4,7 @@
   <form  action="" method="POST">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
-      <legend class="border-bottom mb-4">{{ legend }}</legend>
+      <legend class="border-bottom mb-3">{{ legend }}   <a class="btn btn-info btn-sm mb-2" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzimi dokument</a></legend>
       {% if form.errors %}
       debag line: {{ form.errors }}
       {% endif %}
@@ -75,7 +75,6 @@
         </div>
         <div class="col form-box col-md-3">
           {{ form.start_datetime.label(class="form-control-label") }}
-
             {% if form.start_datetime.errors %}
                 {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -89,7 +88,6 @@
         </div>
         <div class="col form-box col-md-3">
           {{ form.end_datetime.label(class="form-control-label") }}
-
             {% if form.end_datetime.errors %}
                 {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -131,7 +129,6 @@
       </div>
       <div class="col form-box">
         {{ form.relation.label(class="form-control-label") }}
-
           {% if form.relation.errors %}
               {{ form.relation(class="form-control form-control-lg is-invalid") }}
               <div class="invalid-feedback">
@@ -162,7 +159,6 @@
 
         <div class="col form-box">
           {{ form.daily_wage.label(class="form-control-label") }}
-
             {% if form.daily_wage.errors %}
                 {{ form.daily_wage(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -176,7 +172,6 @@
         </div>
         <div class="col form-box col-md-2">
           {{ form.daily_wage_currency.label(class="form-control-label") }}
-
             {% if form.daily_wage_currency.errors %}
                 {{ form.daily_wage_currency(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -205,7 +200,6 @@
         </div>
         <div class="col form-box">
           {{ form.advance_payment.label(class="form-control-label") }}
-
             {% if form.advance_payment.errors %}
                 {{ form.advance_payment(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -219,7 +213,6 @@
         </div>
         <div class="col form-box col-md-2">
           {{ form.advance_payment_currency.label(class="form-control-label") }}
-
             {% if form.advance_payment_currency.errors %}
                 {{ form.advance_payment_currency(class="form-control form-control-lg is-invalid") }}
                 <div class="invalid-feedback">
@@ -259,7 +252,6 @@
               </div>
               <div class="form-box">
                 {{ form.km_start.label(class="form-control-label") }}
-
                   {% if form.km_start.errors %}
                       {{ form.km_start(class="form-control form-control-lg is-invalid") }}
                       <div class="invalid-feedback">
@@ -321,7 +313,6 @@
             <div class="card-body">
               <div class="form-box">
                 {{ form.personal_type.label(class="form-control-label") }}
-
                   {% if form.personal_type.errors %}
                       {{ form.personal_type(class="form-control form-control-lg is-invalid") }}
                       <div class="invalid-feedback">
@@ -394,7 +385,7 @@
       <br>
       <hr>
       <div class="form-group">
-        <a class="btn btn-info" href="{{ url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id) }}">Dodaj trošak</a>
+        <a class="btn btn-outline-danger btn-block" href="{{ url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id) }}">Dodaj trošak</a>
       </div>
       <br>
       <table id="data" border="1" class="table table-striped">
@@ -424,7 +415,13 @@
 
     </fieldset>
     <div class="form-group">
-      {{ form.submit(class="btn btn-outline-info") }}  <a class="btn btn-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzimi dokument</a>
+      {% if warrant.status == 'kreiran' %}
+        <input class="btn btn-primary" type="submit" name="dugme" value="Završi">
+      {% elif warrant.status == 'završen' %}
+        <input class="btn btn-primary" type="submit" name="dugme" value="Obračunaj">
+      {% endif %}
+
+      {{ form.submit(class="btn btn-outline-primary") }}
     </div>
   </form>
 </div>
