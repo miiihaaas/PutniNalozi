@@ -650,19 +650,19 @@ def add_expenses(warrant_id):
 
 @travel_warrants.route("/expenses/<int:warrant_id>/<int:expenses_id>", methods=['GET', 'POST'])
 def expenses_profile(warrant_id, expenses_id): #ovo je funkcija a editovnaje troškova
-    if not current_user.is_authenticated:
-        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
-        return redirect(url_for('users.login'))
-    elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
-        if current_user.id != user.id:
-            abort(403)
-    elif current_user.authorization == 's_admin':
-        pass
-    elif current_user.user_company.id != user.user_company.id:
-        abort(403)
     expense = TravelWarrantExpenses.query.get_or_404(expenses_id)
     troskovi = TravelWarrantExpenses.query.filter_by(travelwarrant_id = warrant_id).all()
     warrant = TravelWarrant.query.get_or_404(warrant_id)
+    if not current_user.is_authenticated:
+        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
+        return redirect(url_for('users.login'))
+    # elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
+    #     if current_user.id != user.id:
+    #         abort(403)
+    # elif current_user.authorization == 's_admin':
+    #     pass
+    elif current_user.user_company.id != warrant.company_id:
+            abort(403)
     form = EditTravelWarrantExpenses()
     form.reset()
     form.expenses_type.choices=[('Ostale naknade', 'Ostale naknade'), ('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')]
