@@ -1,8 +1,8 @@
 from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect, abort, request, send_file
-from putninalozi import db
-from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses
-from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm
+from putninalozi import db, bcrypt
+from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses, Company
+from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm, EditTravelWarrantExpenses
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_fomr, send_email
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
@@ -646,3 +646,61 @@ def add_expenses(warrant_id):
     print(troskovi)
     print(warrant)
     return render_template('expenses.html', form=form, legend='Dodavanje troškova:', warrant=warrant, troskovi=troskovi)
+
+
+@travel_warrants.route("/expenses/<int:warrant_id>/<int:expenses_id>", methods=['GET', 'POST'])
+def expenses_profile(warrant_id, expenses_id): #ovo je funkcija a editovnaje troškova
+    if not current_user.is_authenticated:
+        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
+        return redirect(url_for('users.login'))
+    elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
+        if current_user.id != user.id:
+            abort(403)
+    elif current_user.authorization == 's_admin':
+        pass
+    elif current_user.user_company.id != user.user_company.id:
+        abort(403)
+    expense = TravelWarrantExpenses.query.get_or_404(expenses_id)
+    troskovi = TravelWarrantExpenses.query.filter_by(travelwarrant_id = warrant_id).all()
+    warrant = TravelWarrant.query.get_or_404(warrant_id)
+    form = EditTravelWarrantExpenses()
+    form.reset()
+    form.expenses_type.choices=[('Ostale naknade', 'Ostale naknade'), ('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')]
+    if form.validate_on_submit():
+        expense.expenses_type = form.expenses_type.data
+        expense.expenses_date = form.expenses_date.data
+        expense.description = form.description.data
+        expense.amount = form.amount.data
+        expense.amount_currency = form.amount_currency.data
+        db.session.commit()
+        flash(f'Uspešno je ažuriran trošak: {expense.expenses_type}', 'success')
+        return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))
+    elif request.method == 'GET':
+        form.expenses_type.data = str(expense.expenses_type)
+        form.expenses_date.data = expense.expenses_date
+        form.description.data = expense.description
+        form.amount.data = expense.amount
+        form.amount_currency.data = expense.amount_currency
+    return render_template('expenses.html', form=form, legend='Uređivanje troška:', warrant=warrant, troskovi=troskovi, expense=expense)
+
+
+@travel_warrants.route("/expenses/<int:warrant_id>/<int:expenses_id>/delete", methods=['GET', 'POST'])
+# @login_required
+def delete_expense(warrant_id, expenses_id):
+    expense = TravelWarrantExpenses.query.get_or_404(expenses_id)
+    warrant = TravelWarrant.query.get_or_404(warrant_id)
+    print(expense)
+    print(warrant)
+    if not current_user.is_authenticated:
+        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
+        return redirect(url_for('users.login'))
+    # elif not bcrypt.check_password_hash(current_user.password, request.form.get("input_password")):
+    #     print('Pogrešna lozinka!')
+    #     abort(403)
+    elif current_user.user_company.id != warrant.company_id: #ako putni nalog nije iz kompanije trenutno ulogovanok korisnika
+            abort(403)
+    else:
+        db.session.delete(expense)
+        db.session.commit()
+        flash(f'Trošak {expense.expenses_type} je obrisan', 'success' )
+        return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))

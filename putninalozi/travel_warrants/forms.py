@@ -121,3 +121,15 @@ class TravelWarrantExpensesForm(FlaskForm):
 
     def reset(self):
         self.__init__()
+
+
+class EditTravelWarrantExpenses(FlaskForm):
+    expenses_type = SelectField('Tip troška', choices=[] )
+    expenses_date = DateTimeField('Datum: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
+    description = StringField('Opis troška: ', validators=[DataRequired()])
+    amount = DecimalField('Količna: ', validators=[DataRequired()])
+    amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    submit = SubmitField('Ažuriraj trošak')
+
+    def reset(self):
+        self.__init__()
