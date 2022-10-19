@@ -324,19 +324,21 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
         pdf.cell(0, 8, f'Troskovi', border=1, ln=True, fill = True, align='C')
 
         ukupni_trosak=0
-        for trosak in troskovi:
-            ukupni_trosak = ukupni_trosak + trosak.amount
-            print(ukupni_trosak)
+        if troskovi != []:
+            for trosak in troskovi:
+                ukupni_trosak = ukupni_trosak + trosak.amount
+                print(ukupni_trosak)
 
-            pdf.cell(24,4, f'{trosak.expenses_date.strftime("%d/%m/%Y")}', border=1, ln=False, align='C')
-            pdf.cell(56,4, f'{replace_serbian_characters(trosak.expenses_type)}', border=1, ln=False, align='L')
-            pdf.cell(75,4, f'{replace_serbian_characters(trosak.description)}', border=1, ln=False, align='L')
-            pdf.cell(35,4, f'{trosak.amount} {trosak.amount_currency}', border=1, ln=True, align='R')
+                pdf.cell(24,4, f'{trosak.expenses_date.strftime("%d/%m/%Y")}', border=1, ln=False, align='C')
+                pdf.cell(56,4, f'{replace_serbian_characters(trosak.expenses_type)}', border=1, ln=False, align='L')
+                pdf.cell(75,4, f'{replace_serbian_characters(trosak.description)}', border=1, ln=False, align='L')
+                pdf.cell(35,4, f'{trosak.amount} {trosak.amount_currency}', border=1, ln=True, align='R')
 
         ukupni_trosak = round(ukupni_trosak,2)
 
         pdf.cell(155, 4, f'Svega', border=1, ln=False, align='R')
-        pdf.cell(35, 4, f'{ukupni_trosak} {trosak.amount_currency}', border=1, ln=True, align='R')
+        if troskovi != []:
+            pdf.cell(35, 4, f'{ukupni_trosak} {trosak.amount_currency}', border=1, ln=True, align='R')
         pdf.cell(155, 4, f'Primljena akontacija', border=1, ln=False, align='R')
         pdf.cell(35, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='R')
         pdf.cell(155, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')

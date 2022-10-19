@@ -148,9 +148,10 @@
                   {{ form.company_id(class="sr-only form-select form-select-lg") }}
                 {% endif %}
 
-                
+
             </fieldset>
             <div class="form-group">
+              <a class="btn btn-info" href="{{url_for('users.user_list')}}">back</a>
           {{ form.submit(class="btn btn-outline-info") }}
         </div>
       </form>

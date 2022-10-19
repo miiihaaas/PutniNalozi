@@ -2,7 +2,7 @@ import pandas as pd
 from putninalozi.models import User, Vehicle, Company, TravelWarrant
 from putninalozi import db
 
-x = input('da li žeiš da izezeš User u excel? (y/n)')
+x = input('da li žeiš da izvezeš User u excel? (y/n)')
 if x=='y':
     records = db.session.query(User.id,
                                 User.email,

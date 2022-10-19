@@ -29,7 +29,7 @@ class CreateTravelWarrantForm(FlaskForm):
     personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
 
-    advance_payment = IntegerField('Akontacija: ', validators=[InputRequired('oriban')])
+    advance_payment = IntegerField('Akontacija: ', validators=[Optional('oriban')])
     advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
     daily_wage = IntegerField('Dnevnica: ', validators=[InputRequired()])
     daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])

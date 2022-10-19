@@ -93,7 +93,7 @@ class TravelWarrant(db.Model):
     personal_registration = db.Column(db.String(12), nullable=True)
     other = db.Column(db.String(50), nullable=True) #avion, bus, taksi...
 
-    advance_payment = db.Column(db.Integer, nullable=False)
+    advance_payment = db.Column(db.Integer, nullable=True)
     advance_payment_currency = db.Column(db.String(5), nullable=False)
     daily_wage = db.Column(db.Integer, nullable=False)
     daily_wage_currency = db.Column(db.String(5), nullable=False)

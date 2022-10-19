@@ -131,11 +131,10 @@
 
         </fieldset>
         <div class="form-group">
+          <a class="btn btn-info" href="{{url_for('users.user_list')}}">back</a>
           {{ form.submit(class="btn btn-outline-info") }}
           {% if current_user.authorization == 's_admin' or current_user.authorization == 'c_admin' %}
-            <div>
-              <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Delete</button>
-            </div>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Delete</button>
           {% endif %}
         </div>
   </form>
@@ -145,19 +144,20 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="DeleteModalLabel">Delete User?</h5>
+        <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želiš da trajno ukloniš korisnika {{form.name.data}} {{form.surname.data}}?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <label for="input_password">To delete user you need to confirm your password:</label>
+        <label for="input_password">Da bi uklonio korisnika potrebno je uneti svoju šifru.</label>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <form  action="{{ url_for('users.delete_user', user_id=user.id) }}" method="post">
+          <input class="form-control" type="password" id="input_password" name="input_password" value="" placeholder="potvrdi lozinkom">
+          <br>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <input class="btn btn-danger" type="submit" value="Delete User">
-          <input type="password" id="input_password" name="input_password" value="" placeholder="confirm your password to delete user">
         </form>
       </div>
     </div>

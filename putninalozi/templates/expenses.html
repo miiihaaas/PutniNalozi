@@ -81,6 +81,7 @@
       </div>
     </fieldset>
     <div class="form-group">
+      <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id)}}">back</a>
       {{ form.submit(class="btn btn-outline-info") }}
       {% if legend != 'Dodavanje troškova:' %}
       <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Delete</button>

@@ -75,7 +75,7 @@ def register_tw(korisnik_id, datum):
     print(type(datum))
     print(datum)
 
-    drivers = [('', '----------')] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
+    drivers = [('', '----------')] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname + " - " + tw.travelwarrant_vehicle.vehicle_registration)
                                             for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
                                                                                 TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
                                                                                                                 datum.replace(hour=0, minute=0, second=0, microsecond=0),
@@ -100,6 +100,8 @@ def register_tw(korisnik_id, datum):
     form.together_with.choices = drivers
     if request.method == 'GET':
         form.vehicle_id.data  = str(podrazumevano_vozilo)
+        if form.advance_payment.data == None:
+            form.advance_payment.data = 0
     # form.start_datetime.data = datum
 
     if form.validate_on_submit():
