@@ -100,7 +100,7 @@ def create_pdf_form(warrant, br_casova, br_dnevnica):
 
     text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
-Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != '' else ""}{warrant.personal_registration}{regisrtacija_kolege_koji_vozi}.
+Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}{warrant.personal_registration}{regisrtacija_kolege_koji_vozi}.
 
 Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}.
 

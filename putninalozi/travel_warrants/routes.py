@@ -114,7 +114,7 @@ def register_tw(korisnik_id, datum):
                 relation=form.relation.data,
                 start_datetime=datum,
                 end_datetime=form.end_datetime.data,
-                vehicle_id="",
+                vehicle_id=None,
                 together_with=form.together_with.data,
                 personal_type="",
                 personal_brand="",
@@ -141,7 +141,7 @@ def register_tw(korisnik_id, datum):
                 relation=form.relation.data,
                 start_datetime=datum,
                 end_datetime=form.end_datetime.data,
-                vehicle_id="",
+                vehicle_id=None,
                 together_with="",
                 personal_type=form.personal_type.data,
                 personal_brand=form.personal_brand.data,
@@ -168,7 +168,7 @@ def register_tw(korisnik_id, datum):
                 relation=form.relation.data,
                 start_datetime=datum,
                 end_datetime=form.end_datetime.data,
-                vehicle_id="",
+                vehicle_id=None,
                 together_with="",
                 personal_type="",
                 personal_brand="",
@@ -287,7 +287,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
 
-                warrant.vehicle_id=""
+                warrant.vehicle_id=None
                 warrant.together_with=form.together_with.data
                 warrant.personal_type=""
                 warrant.personal_brand=""
@@ -311,7 +311,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
 
-                warrant.vehicle_id=""
+                warrant.vehicle_id=None
                 warrant.together_with=""
                 warrant.personal_type=form.personal_type.data
                 warrant.personal_brand=form.personal_brand.data
@@ -335,7 +335,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
 
-                warrant.vehicle_id=""
+                warrant.vehicle_id=None
                 warrant.together_with=""
                 warrant.personal_type=""
                 warrant.personal_brand=""
@@ -447,7 +447,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
 
-                warrant.vehicle_id=""
+                warrant.vehicle_id=None
                 warrant.together_with=form.together_with.data
                 warrant.personal_type=""
                 warrant.personal_brand=""
@@ -481,7 +481,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
 
-                warrant.vehicle_id=""
+                warrant.vehicle_id=None
                 warrant.together_with=""
                 warrant.personal_type=form.personal_type.data
                 warrant.personal_brand=form.personal_brand.data
@@ -515,7 +515,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
 
-                warrant.vehicle_id=""
+                warrant.vehicle_id=None
                 warrant.together_with=""
                 warrant.personal_type=""
                 warrant.personal_brand=""

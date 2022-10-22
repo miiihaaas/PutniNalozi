@@ -9,15 +9,10 @@ from flask_mail import Mail
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '0b0f805f651d04f909f539ec57f8a89c'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db' #'mysql://scott:tiger@localhost/mydatabase'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@MariaDB/puntninalozi_app' #iz simketovog mejla sam dobio IP
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@localhost/puntninalozi_app' #localhost na sreveru??
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@putninalozi.online:3306/puntninalozi_app'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@MariaDB/putninalozi_app' #iz simketovog mejla sam dobio IP
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://putninalozi_mihas:mihasmihasmihas@localhost:3306/putninalozi_app' #localhost na sreveru??
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@putninalozi.online:3306/putninalozi_app'
 
-# sqlite:///site.db
-# mysql://putninalozi_mihas:mihasmihasmihas@68.66.248.21/puntninalozi_app #iz simketovog mejla sam dobio IP
-# mysql://putninalozi_mihas:mihasmihasmihas@localhost/puntninalozi_app #localhost na sreveru??
-# mysql://putninalozi_mihas:mihasmihasmihas@putninalozi.online:2083/puntninalozi_app #localhost na sreveru??
-db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
