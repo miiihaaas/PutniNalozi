@@ -246,7 +246,7 @@ def update_pdf_fomr(warrant, br_casova, br_dnevnica, troskovi):
 
         text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
-    Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != '' else ""}{warrant.personal_registration}{regisrtacija_kolege_koji_vozi}.
+    Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}{warrant.personal_registration}{regisrtacija_kolege_koji_vozi}.
 
     Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}.
 
@@ -375,11 +375,11 @@ Pozdrav,
 {current_user.name} {current_user.surname}
     '''
     # path = 'D:\Mihas\Programming\Python\Projects\PutniNalozi\putninalozi\static\pdf_forms'
-    path = '.\static\pdf_forms\\'
+    path = '.\.\static\pdf_forms\\'
     file_name =file_name
     print(path)
     print(file_name)
-    print(path+filename)
+    print(path+file_name)
     with app.open_resource(path + file_name) as fp:
         msg.attach(path + file_name, 'application/pdf', fp.read())
 
