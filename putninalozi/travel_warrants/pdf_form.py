@@ -348,7 +348,7 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
     pdf.cell(0, 8, f'Prilog', border=1, ln=True, fill = True, align='C')
     pdf.multi_cell(0, 8, f'''U mestu {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {replace_serbian_characters(warrant.travelwarrant_user.name)} {replace_serbian_characters(warrant.travelwarrant_user.surname)}''', border=1, ln=True, align='C')
     pdf.multi_cell(0, 4, f'', ln=True, align='L')
-    pdf.multi_cell(0, 4, f'''Potvrdjujem da je putovanje izvrseno prema ovom nalogu i odobravam isplatu putng racuna od {round((warrant.daily_wage * br_dnevnica - warrant.advance_payment + ukupni_trosak),2)} dinara, slovima: ___________________________________________________ na teret {warrant.costs_pays}.
+    pdf.multi_cell(0, 4, f'''Potvrdjujem da je putovanje izvrseno prema ovom nalogu i odobravam isplatu putnog racuna od {round((warrant.daily_wage * br_dnevnica - warrant.advance_payment + ukupni_trosak),2)} dinara, slovima: ___________________________________________________ na teret {warrant.costs_pays}.
 U mestu {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {datetime.date.today().strftime("%d/%m/%Y")}.''', ln=True, align='L')
 
     path = "putninalozi/static/pdf_forms/"

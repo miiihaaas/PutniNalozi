@@ -88,6 +88,12 @@ def register_tw(korisnik_id, datum):
     brojac = len(TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
                                                                                                         datum.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                         datum.replace(hour=23, minute=59, second=59, microsecond=9))).all())
+
+    if brojac + 1 < 10:
+        brojac = '-0' + str(brojac + 1)
+    else:
+        brojac = '-' + str(brojac + 1)
+
     print(f'{korisnik_id=}, {datum=}, {brojac=}')
     podrazumevano_vozilo = User.query.filter_by(id=korisnik_id).first().default_vehicle
     print(f'{podrazumevano_vozilo=}')
@@ -128,7 +134,7 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status='kreiran',
-                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
+                travel_warrant_number=datum.strftime('%Y%m%d') + brojac,
                 file_name="",
                 text_form="",
                 expenses=[])
@@ -155,7 +161,7 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status='kreiran',
-                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
+                travel_warrant_number=datum.strftime('%Y%m%d') + brojac,
                 file_name="",
                 text_form="",
                 expenses=[])
@@ -182,7 +188,7 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status='kreiran',
-                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
+                travel_warrant_number=datum.strftime('%Y%m%d') + brojac,
                 file_name="",
                 text_form="",
                 expenses=[])
@@ -209,7 +215,7 @@ def register_tw(korisnik_id, datum):
                 km_start=1,
                 km_end=1,
                 status='kreiran',
-                travel_warrant_number=datum.strftime('%Y%m%d') + str(-brojac-1),
+                travel_warrant_number=datum.strftime('%Y%m%d') + brojac,
                 file_name="",
                 text_form="",
                 expenses=[])
