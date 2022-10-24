@@ -33,7 +33,7 @@ class CreateTravelWarrantForm(FlaskForm):
     advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
     daily_wage = IntegerField('Dnevnica: ', validators=[InputRequired()])
     daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
-    costs_pays = StringField('Putni troškvoi padaju na teret: ', validators=[DataRequired()])
+    costs_pays = StringField('Putni troškovi padaju na teret: ', validators=[DataRequired()])
     # principal = #nalogodavac
 
     submit = SubmitField('Kreiraj putni nalog')
@@ -63,7 +63,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
     daily_wage = IntegerField('Dnevnica: ')
     daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
-    costs_pays = StringField('Putni troškvoi padaju na teret: ')
+    costs_pays = StringField('Putni troškovi padaju na teret: ')
 
     km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
     km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
@@ -97,7 +97,7 @@ class EditUserTravelWarrantForm(FlaskForm):
     # advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
     # daily_wage = IntegerField('Dnevnica: ')
     # daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
-    # costs_pays = StringField('Putni Troškvoi Padaju Na Teret: ')
+    # costs_pays = StringField('Putni troškovi padaju na teret: ')
 
     km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
     km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
