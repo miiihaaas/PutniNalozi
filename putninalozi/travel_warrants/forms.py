@@ -71,7 +71,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
     add_expenses = SubmitField('Dofaj trošak')
-    submit = SubmitField('Ažuriraj putni nalog')
+    submit = SubmitField('Ažurirajte putni nalog')
 
     def reset(self):
         self.__init__()
@@ -105,7 +105,7 @@ class EditUserTravelWarrantForm(FlaskForm):
     # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
     add_expenses = SubmitField('Dofaj trošak')
-    submit = SubmitField('Ažuriraj putni nalog')
+    submit = SubmitField('Ažurirajte putni nalog')
 
     def reset(self):
         self.__init__()

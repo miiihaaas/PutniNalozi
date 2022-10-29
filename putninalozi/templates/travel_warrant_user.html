@@ -4,7 +4,7 @@
   <form  action="" method="POST">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
-      <legend class="border-bottom mb-4">{{ legend }}>Preuzimi dokument</a></legend>
+      <legend class="border-bottom mb-4">{{ legend }}</legend>
       {% if form.errors %}
       debag line: {{ form.errors }}
       {% endif %}
@@ -341,13 +341,13 @@
 
     </fieldset>
     <div class="form-group">
-      <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">back</a>
+      <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">Nazad</a>
       {% if warrant.status == 'kreiran' %}
         <input class="btn btn-primary" type="submit" name="dugme" value="Završi">
       {% endif %}
 
       {{ form.submit(class="btn btn-outline-primary") }}
-       <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzimi dokument</a>
+       <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzmite dokument</a>
     </div>
   </form>
 </div>

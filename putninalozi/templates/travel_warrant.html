@@ -388,7 +388,7 @@
 
     </fieldset>
     <div class="form-group">
-      <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">back</a>
+      <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">Nazad</a>
       {% if warrant.status == 'kreiran' %}
         <input class="btn btn-primary" type="submit" name="dugme" value="Završi">
       {% elif warrant.status == 'završen' %}
@@ -396,7 +396,7 @@
       {% endif %}
 
       {{ form.submit(class="btn btn-outline-primary") }}
-      <a class="shadow btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzimi dokument</a>
+      <a class="shadow btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzmite dokument</a>
     </div>
   </form>
 </div>

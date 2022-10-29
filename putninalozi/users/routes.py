@@ -92,7 +92,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
             validate_email = User.query.filter_by(email=form.email.data).first()
             if validate_email:
                 flash('Taj mejl je već postoji, izabeite drugači mejl', 'danger')
-                return render_template('user.html', title="Uredite korisnčke podatke", user=user, form=form, legend='Uredite korisnčke podatke')
+                return render_template('user.html', title="Uređivanje korisnčkih podataka", user=user, form=form, legend='Uređivanje korisnčkih podataka')
             else:
                 user.email = form.email.data
 
@@ -121,13 +121,13 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         form.authorization.choices = [('c_user', 'USER'),('c_admin', 'ADMIN')]
         form.authorization.data = user.authorization
 
-        form.gender.choices = [(0, 'srednji'),(1, 'muški'),(2, 'ženski')]
+        form.gender.choices = [(1, 'muški'),(2, 'ženski')]
         form.gender.data = user.gender
 
         form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
         form.company_id.data = str(user.company_id)
         form.default_vehicle.data = str(user.default_vehicle)
-    return render_template('user.html', title="Uredite korisnčke podatke", user=user, form=form, legend='Uredite korisnčke podatke')
+    return render_template('user.html', title="Uređivanje korisnčkih podataka", user=user, form=form, legend='Uređivanje korisnčkih podataka')
 
 
 

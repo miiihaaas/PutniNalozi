@@ -241,9 +241,9 @@ def register_tw(korisnik_id, datum):
 
 
 
-        # send_email(warrant, current_user, file_name)
+        send_email(warrant, current_user, file_name)
         flash(f'Putni nalog broj: {warrant.travel_warrant_number} je uspešno kreiran!', 'success')
-        flash(f'{warrant.travelwarrant_user.name} je dobio mejl sa detaljima putnog naloga.', 'success')
+        flash(f'{warrant.travelwarrant_user.name} je {"dobio" if warrant.travelwarrant_user.gender == 1 else "dobila"} mejl sa detaljima putnog naloga.', 'success')
         return redirect(url_for('travel_warrants.travel_warrant_list'))
     return render_template('register_tw.html', title='Kreiranje putnog naloga',
                             legend='Kreiranje putnog naloga, zaposleni: ',
