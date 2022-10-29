@@ -363,19 +363,18 @@ def send_email(warrant, current_user, file_name):
     elif warrant.travelwarrant_user.gender == "2":
         rod=["Radnica", "raspoređena", "Koleginice"]
 
-    msg = Message(f'Kreiran je putni nalog broj: {warrant.travel_warrant_id}',
-                    sender=current_user.email, #ovo ipak ne radi - šalje sa miiihaaas@gmail.com
+    msg = Message(f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}',
+                    sender='no_replay@putninalozi.online', #ovo ipak ne radi - šalje sa miiihaaas@gmail.com
                     recipients=[warrant.travelwarrant_user.email])
     msg.body = f'''{rod[2]},
-Odobren je putni nalog #{warrant.travel_warrant_id}.
+Odobren je putni nalog {warrant.travel_warrant_number}.
 Detaljije informacije o putnom nalogu mogu se videti u prilogu ili klikom na link:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
 Pozdrav,
 {current_user.name} {current_user.surname}
     '''
-    # path = 'D:\Mihas\Programming\Python\Projects\PutniNalozi\putninalozi\static\pdf_forms'
-    path = '.\.\static\pdf_forms\\'
+    path = 'static/pdf_forms/'
     file_name =file_name
     print(path)
     print(file_name)
