@@ -243,9 +243,9 @@ def register_tw(korisnik_id, datum):
 
         # send_email(warrant, current_user, file_name)
         flash(f'Putni nalog broj: {warrant.travel_warrant_number} je uspešno kreiran!', 'success')
-        flash(f'{warrant.travelwarrant_user.name} je dobio mejl sa detaljima putnog naloga', 'success')
+        flash(f'{warrant.travelwarrant_user.name} je dobio mejl sa detaljima putnog naloga.', 'success')
         return redirect(url_for('travel_warrants.travel_warrant_list'))
-    return render_template('register_tw.html', title='Kreiranje Putnog naloga',
+    return render_template('register_tw.html', title='Kreiranje putnog naloga',
                             legend='Kreiranje putnog naloga, zaposleni: ',
                             form=form, ime_prezime=ime_prezime, datum=datum)
 
@@ -437,7 +437,7 @@ def travel_warrant_profile(warrant_id):
                                                                                                                     warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         form.together_with.choices = drivers
 
-        form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
+        # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         form.vehicle_id.choices = vehicle_list
         print(f'{form.vehicle_id.choices=}')
         form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
@@ -445,9 +445,9 @@ def travel_warrant_profile(warrant_id):
 
         if form.validate_on_submit():
             if form.together_with.data != '':
-                warrant.user_id = form.user_id.data
+                # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
-                warrant.company_id = int(form.company_id.data)
+                # warrant.company_id = int(form.company_id.data)
                 warrant.abroad_contry = form.abroad_contry.data
                 warrant.relation = form.relation.data
 
@@ -479,9 +479,9 @@ def travel_warrant_profile(warrant_id):
                 # warrant.expenses = form.expenses.data
                 print('zajedno sa')
             elif form.personal_brand.data != "":
-                warrant.user_id = form.user_id.data
+                # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
-                warrant.company_id = int(form.company_id.data)
+                # warrant.company_id = int(form.company_id.data)
                 warrant.abroad_contry = form.abroad_contry.data
                 warrant.relation = form.relation.data
 
@@ -513,9 +513,9 @@ def travel_warrant_profile(warrant_id):
                 # warrant.expenses = form.expenses.data
                 print('lično vozilo')
             elif form.other.data != "":
-                warrant.user_id = form.user_id.data
+                # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
-                warrant.company_id = int(form.company_id.data)
+                # warrant.company_id = int(form.company_id.data)
                 warrant.abroad_contry = form.abroad_contry.data
                 warrant.relation = form.relation.data
 
@@ -547,9 +547,9 @@ def travel_warrant_profile(warrant_id):
                 # warrant.expenses = form.expenses.data
                 print('drugo')
             else:
-                warrant.user_id = form.user_id.data
+                # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
-                warrant.company_id = int(form.company_id.data)
+                # warrant.company_id = int(form.company_id.data)
                 warrant.abroad_contry = form.abroad_contry.data
                 warrant.relation = form.relation.data
 
@@ -598,13 +598,13 @@ def travel_warrant_profile(warrant_id):
 ##########################################################################################
 
             db.session.commit()
-            flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran', 'success')
+            flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
-            form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
-            form.user_id.data = warrant.user_id
+            # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
+            # form.user_id.data = warrant.user_id
             form.with_task.data = warrant.with_task
-            form.company_id.data = str(User.query.filter_by(id=form.user_id.data).first().user_company.id)
+            # form.company_id.data = str(User.query.filter_by(id=form.user_id.data).first().user_company.id)
             form.abroad_contry.data = warrant.abroad_contry
             form.relation.data = warrant.relation
             form.start_datetime.data = warrant.start_datetime
@@ -648,7 +648,7 @@ def add_expenses(warrant_id):
                 travelwarrant_id = warrant_id)
         db.session.add(expense)
         db.session.commit()
-        flash(f'U putnom nalogu broj {warrant.travel_warrant_number} je dodat trošak - {expense.expenses_type}', 'success')
+        flash(f'U putnom nalogu broj {warrant.travel_warrant_number} je dodat trošak - {expense.expenses_type}.', 'success')
         return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))
 
 
@@ -682,7 +682,7 @@ def expenses_profile(warrant_id, expenses_id): #ovo je funkcija a editovnaje tro
         expense.amount = form.amount.data
         expense.amount_currency = form.amount_currency.data
         db.session.commit()
-        flash(f'Uspešno je ažuriran trošak: {expense.expenses_type}', 'success')
+        flash(f'Uspešno je ažuriran trošak: {expense.expenses_type}.', 'success')
         return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))
     elif request.method == 'GET':
         form.expenses_type.data = str(expense.expenses_type)
@@ -711,5 +711,5 @@ def delete_expense(warrant_id, expenses_id):
     else:
         db.session.delete(expense)
         db.session.commit()
-        flash(f'Trošak {expense.expenses_type} je obrisan', 'success' )
+        flash(f'Trošak {expense.expenses_type} je obrisan.', 'success' )
         return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))

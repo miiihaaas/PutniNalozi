@@ -17,7 +17,7 @@ class RegistrationVehicleForm(FlaskForm):
 
 
 class UpdateVehicleForm(FlaskForm):
-    vehicle_type = SelectField('Tip vozilo', validators=[DataRequired()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
+    vehicle_type = SelectField('Tip vozila', validators=[DataRequired()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     vehicle_brand = StringField('Marka vozila', validators=[DataRequired(), Length(min=2, max=20)])
     vehicle_registration = StringField('Registracija vozila', validators=[DataRequired(), Length(min=7, max=12)]) # GM 047-DD
     company_id = SelectField('Kompanija', validators=[DataRequired()], choices=[(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()])

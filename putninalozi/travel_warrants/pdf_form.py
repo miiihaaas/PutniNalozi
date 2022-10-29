@@ -50,19 +50,17 @@ def replace_serbian_characters(string):
         pass
     return string
 
-
+################################ tutorial links: ################################
+# https://www.youtube.com/watch?v=q70xzDG6nls&ab_channel=ChartExplorers
+# https://www.youtube.com/watch?v=JhQVD7Y1bsA&t=400s&ab_channel=ChartExplorers
+# https://www.youtube.com/watch?v=FcrW-ESdY-A&t=1s&ab_channel=ChartExplorers
+# https://www.youtube.com/watch?v=K917aOsfnDc&ab_channel=ChartExplorers
+#################################################################################
+# https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
+# https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
+# https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
+# https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
 def create_pdf_form(warrant, br_casova, br_dnevnica):
-    ################################ tutorial links: ################################
-    # https://www.youtube.com/watch?v=q70xzDG6nls&ab_channel=ChartExplorers
-    # https://www.youtube.com/watch?v=JhQVD7Y1bsA&t=400s&ab_channel=ChartExplorers
-    # https://www.youtube.com/watch?v=FcrW-ESdY-A&t=1s&ab_channel=ChartExplorers
-    # https://www.youtube.com/watch?v=K917aOsfnDc&ab_channel=ChartExplorers
-    #################################################################################
-    # https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
-    # https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
-    # https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
-    # https://pyfpdf.readthedocs.io/en/latest/Tutorial/index.html
-
     rod = []
     if warrant.travelwarrant_user.gender == "1":
         rod=["Radnik", "raspoređen", "Kolega"]
@@ -104,11 +102,11 @@ Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevoz
 
 Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}.
 
-Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.
+Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolaska na posao, podneće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.
 
 Putni troškovi padaju na teret: {costs_pays}.
 
-{f'Odobravam isplatu akontacije u iznosu od: {warrant.advance_payment} {warrant.advance_payment_currency}' if warrant.advance_payment > 0 else ""}.
+{f'Odobravam isplatu akontacije u iznosu od: {warrant.advance_payment} {warrant.advance_payment_currency}.' if warrant.advance_payment > 0 else ""}
 
 Nalogodavac: {warrant.travelwarrant_company.CEO}.
 '''
@@ -197,7 +195,7 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
     pdf.cell(151, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
     pdf.cell(35, 4, f'', border=1, ln=True, align='C')
     pdf.cell(186, 4, f'Prilog', border=1, ln=True, fill = True, align='L')
-    pdf.multi_cell(186, 4, f'''U {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {replace_serbian_characters(warrant.travelwarrant_user.name)} {replace_serbian_characters(warrant.travelwarrant_user.surname)}''', border=1, ln=True, align='C')
+    pdf.multi_cell(186, 4, f'''U mestu {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {replace_serbian_characters(warrant.travelwarrant_user.name)} {replace_serbian_characters(warrant.travelwarrant_user.surname)}''', border=1, ln=True, align='C')
     pdf.multi_cell(0, 4, f'', ln=True, align='L')
 
 
@@ -250,7 +248,7 @@ Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevoz
 
 Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}.
 
-Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.
+Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolaska na posao, podneće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.
 
 Putni troškovi padaju na teret: {costs_pays}.
 

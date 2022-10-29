@@ -44,7 +44,7 @@
         <div class="accordion-item">
           <div class="accordion-header" id="headingAbrod">
               <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseAbrod" aria-expanded="false" aria-controls="collapseAbrod">
-                Putovanje U Inostranstvo
+                Putovanje u inostranstvo
               </button>
           </div>
           <div id="collapseAbrod" class="collapse" aria-labelledby="headingAbrod" data-parent="#accordionAbrod">
@@ -347,8 +347,20 @@
       {% endif %}
 
       {{ form.submit(class="btn btn-outline-primary") }}
-       <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
+       <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzimi dokument</a>
     </div>
   </form>
 </div>
 {% endblock content%}
+
+{% block scripts %}
+<script>
+  $(document).ready(function () {
+    $('#data').DataTable( {
+      language: {
+        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/sr-SP.json"
+      }
+    } );
+  } );
+</script>
+{% endblock %}

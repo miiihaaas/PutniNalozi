@@ -10,7 +10,7 @@ load_dotenv()
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '0b0f805f651d04f909f539ec57f8a89c'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
 #'sqlite:///site.db' #'mysql://scott:tiger@localhost/mydatabase'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@MariaDB/putninalozi_app' #iz simketovog mejla sam dobio IP
@@ -22,9 +22,10 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com' # 'mail.putninalozi.online'
+app.config['MAIL_PORT'] = 587 # 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = os.getenv('EMAIL_USER') # https://www.youtube.com/watch?v=IolxqkL7cD8&ab_channel=CoreySchafer
 app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASS') # https://www.youtube.com/watch?v=IolxqkL7cD8&ab_channel=CoreySchafer -- za 2 step verification: https://support.google.com/accounts/answer/185833
 mail = Mail(app)

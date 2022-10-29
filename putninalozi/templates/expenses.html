@@ -89,15 +89,15 @@
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="DeleteModalLabel">Izbriši trošak</h5>
+              <h5 class="modal-title" id="DeleteModalLabel">Izbrišite trošak</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-footer">
               <form action="{{ url_for('travel_warrants.delete_expense', warrant_id=warrant.travel_warrant_id, expenses_id=expense.expenses_id) }}" method="post">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
-                <a class="btn btn-danger" href="{{ url_for('travel_warrants.delete_expense', warrant_id=warrant.travel_warrant_id, expenses_id=expense.expenses_id) }}"> Izbriši trošak </a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
+                <a class="btn btn-danger" href="{{ url_for('travel_warrants.delete_expense', warrant_id=warrant.travel_warrant_id, expenses_id=expense.expenses_id) }}"> Izbrišite trošak </a>
               </form>
             </div>
           </div>

@@ -31,34 +31,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col form-group">
-            {{ form.user_id.label(class="form-control-label") }}
-            {% if form.user_id.errors %}
-                {{ form.user_id(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.user_id.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.user_id(class="form-select form-select-lg") }}
-            {% endif %}
-        </div>
-        <div class="col form-box">
-          {{ form.company_id.label(class="form-control-label") }}
-            {% if form.company_id.errors %}
-                {{ form.company_id(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.company_id.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.company_id(class="form-select form-select-lg") }}
-            {% endif %}
-        </div>
-      </div>
+
       <div class="row">
         <div class="col form-box col-md-6">
           {{ form.with_task.label(class="form-control-label") }}
@@ -106,7 +79,7 @@
       <div class="accordion-item">
         <div class="accordion-header" id="headingAbrod">
             <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseAbrod" aria-expanded="false" aria-controls="collapseAbrod">
-              Putovanje U Inostranstvo
+              Putovanje u inostranstvo
             </button>
         </div>
         <div id="collapseAbrod" class="collapse" aria-labelledby="headingAbrod" data-parent="#accordionAbrod">
@@ -419,7 +392,7 @@
       {% if warrant.status == 'kreiran' %}
         <input class="btn btn-primary" type="submit" name="dugme" value="Završi">
       {% elif warrant.status == 'završen' %}
-        <input class="btn btn-primary" type="submit" name="dugme" value="Obračunaj">
+        <input class="btn btn-primary" type="submit" name="dugme" value="Obračunajte">
       {% endif %}
 
       {{ form.submit(class="btn btn-outline-primary") }}

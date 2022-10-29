@@ -144,20 +144,20 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želiš da trajno ukloniš korisnika {{form.name.data}} {{form.surname.data}}?</h5>
+        <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želiite da trajno izbišete profil korisnika {{form.name.data}} {{form.surname.data}}?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <label for="input_password">Da bi uklonio korisnika potrebno je uneti svoju šifru.</label>
+        <label for="input_password">Da bi izbrisali korisnika potrebno je uneti svoju šifru.</label>
       </div>
       <div class="modal-footer">
         <form  action="{{ url_for('users.delete_user', user_id=user.id) }}" method="post">
           <input class="form-control" type="password" id="input_password" name="input_password" value="" placeholder="potvrdi lozinkom">
           <br>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <input class="btn btn-danger" type="submit" value="Delete User">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
+          <input class="btn btn-danger" type="submit" value="Izbrišite profil korisnika">
         </form>
       </div>
     </div>

@@ -44,9 +44,9 @@ class CreateTravelWarrantForm(FlaskForm):
 
 
 class EditAdminTravelWarrantForm(FlaskForm):
-    user_id = SelectField('Zaposleni:', coerce=int, choices=[(u.id, u.name + " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #[(u.id, u.name+" " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #umesto users: db.session.query(User.id,User.name,User.surname).all()
+    # user_id = SelectField('Zaposleni:', coerce=int, choices=[(u.id, u.name + " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #[(u.id, u.name+" " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #umesto users: db.session.query(User.id,User.name,User.surname).all()
     with_task = StringField('Sa zadatkom: ', validators=[])
-    company_id = SelectField('Company ID', validators=[], choices=[(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).all()])
+    # company_id = SelectField('Company ID', validators=[], choices=[(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).all()])
     abroad_contry = StringField('Država: ')
     relation = StringField('Relacija: ')
     start_datetime = DateTimeField('Polazno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
@@ -115,9 +115,9 @@ class TravelWarrantExpensesForm(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[('Ostale naknade', 'Ostale naknade'), ('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
     expenses_date = DateTimeField('Datum: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     description = StringField('Opis troška: ', validators=[DataRequired()])
-    amount = DecimalField('Količna: ', validators=[DataRequired()])
+    amount = DecimalField('Iznos: ', validators=[DataRequired()])
     amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
-    submit = SubmitField('Dodaj trošak')
+    submit = SubmitField('Dodajte trošak')
 
     def reset(self):
         self.__init__()
@@ -127,9 +127,9 @@ class EditTravelWarrantExpenses(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[] )
     expenses_date = DateTimeField('Datum: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     description = StringField('Opis troška: ', validators=[DataRequired()])
-    amount = DecimalField('Količna: ', validators=[DataRequired()])
+    amount = DecimalField('Iznos: ', validators=[DataRequired()])
     amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
-    submit = SubmitField('Ažuriraj trošak')
+    submit = SubmitField('Ažurirajte trošak')
 
     def reset(self):
         self.__init__()

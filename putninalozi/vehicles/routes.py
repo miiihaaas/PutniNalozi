@@ -11,7 +11,7 @@ vehicles = Blueprint('vehicles', __name__)
 @vehicles.route("/vehicle_list")
 def vehicle_list():
     if not current_user.is_authenticated:
-        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
+        flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
         abort(403)
@@ -40,7 +40,7 @@ def register_v():
                                 company_id=Company.query.filter_by(companyname=form.company_id.data).first().id)
             db.session.add(vehicle)
             db.session.commit()
-        flash(f'Vozilo registracije: {form.vehicle_registration.data} je uspešno registrovano!', 'success')
+        flash(f'Vozilo registracije: {form.vehicle_registration.data} je uspešno registrovano.', 'success')
         return redirect(url_for('vehicles.vehicle_list'))
     return render_template('register_v.html', title='Registracija novog vozila', form=form, legend='Registracija novog vozila')
 
@@ -51,7 +51,7 @@ def register_v():
 def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
     vehicle = Vehicle.query.get_or_404(vehicle_id)
     if not current_user.is_authenticated:
-        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
+        flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
         abort(403)
@@ -72,7 +72,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
             vehicle.company_id = form.company_id.data
 
         db.session.commit()
-        flash('Profil vozila je ažuriran', 'success')
+        flash('Profil vozila je ažuriran.', 'success')
         return redirect(url_for('vehicles.vehicle_list')) #vidi da li je bolje na neko drugo mesto da ga prebaci
     elif request.method == 'GET':
 
@@ -100,10 +100,10 @@ def delete_vehicle(vehicle_id):
                 abort(403)
             db.session.delete(vehicle)
             db.session.commit()
-            flash(f'Vozilo {vehicle.vehicle_brand} je obrisano', 'success' )
+            flash(f'Vozilo {vehicle.vehicle_brand} je obrisano.', 'success' )
             return redirect(url_for('vehicles.vehicle_list'))
         else:
             db.session.delete(vehicle)
             db.session.commit()
-            flash(f'Vozilo: {vehicle.vehicle_brand} je obrisano', 'success' )
+            flash(f'Vozilo: {vehicle.vehicle_brand} je obrisano.', 'success' )
             return redirect(url_for('vehicles.vehicle_list'))

@@ -8,7 +8,7 @@ class RegistrationCompanyForm(FlaskForm):
     companyname = StringField('Ime kompanije ', validators=[DataRequired(), Length(min=2, max=20)])
     company_address = StringField('Adresa', validators=[DataRequired(), Length(min=5, max=20)])
     company_address_number = StringField('Broj', validators=[DataRequired(), Length(min=1, max=5)])
-    company_zip_code = StringField('ZIP', validators=[DataRequired(), Length(min=5, max=5)])
+    company_zip_code = StringField('Poštanski broj', validators=[DataRequired(), Length(min=5, max=5)])
     company_city = StringField('Mesto', validators=[DataRequired(), Length(min=2, max=20)])
     company_state = StringField('Država', validators=[DataRequired(), Length(min=2, max=20)])
     company_pib = StringField('PIB', validators=[DataRequired(), Length(min=5, max=9)]) #koji me min max broj cifara - da li su samo cifre - dali je fiksan broj cifara?
@@ -30,7 +30,7 @@ class EditCompanyForm(FlaskForm):
     companyname = StringField('Ime kompanije', validators=[DataRequired(), Length(min=2, max=20)])
     company_address = StringField('Adresa', validators=[DataRequired(), Length(min=5, max=20)])
     company_address_number = StringField('Broj', validators=[DataRequired(), Length(min=1, max=5)])
-    company_zip_code = StringField('ZIP', validators=[DataRequired(), Length(min=5, max=5)])
+    company_zip_code = StringField('Poštanski broj', validators=[DataRequired(), Length(min=5, max=5)])
     company_city = StringField('Mesto', validators=[DataRequired(), Length(min=2, max=20)])
     company_state = StringField('Država', validators=[DataRequired(), Length(min=2, max=20)])
     company_pib = StringField('PIB', validators=[DataRequired(), Length(min=5, max=9)]) #koji me min max broj cifara - da li su samo cifre - dali je fiksan broj cifara?
