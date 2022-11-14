@@ -362,20 +362,43 @@ def send_email(warrant, current_user, file_name):
         rod=["Radnik", "raspoređen", "Kolega"]
     elif warrant.travelwarrant_user.gender == "2":
         rod=["Radnica", "raspoređena", "Koleginice"]
-
-    msg = Message(f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}',
-                    sender='no_replay@putninalozi.online', #ovo ipak ne radi - šalje sa miiihaaas@gmail.com
-                    recipients=[warrant.travelwarrant_user.email])
-    msg.body = f'''{rod[2]},
+    #dodaj if blok za različita slanja
+    # ako je kreiran nalog: korisniku i nalogodavcu
+    if warrant.status == 'kreiran':
+        subject = f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}'
+        recipients = [warrant.travelwarrant_user.email] #dodaj kod za nalogodavca!!!
+        text_body = f'''{rod[2]},
 Odobren je putni nalog {warrant.travel_warrant_number}.
 Detaljije informacije o putnom nalogu mogu se videti u prilogu ili klikom na link:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
 Pozdrav,
 {current_user.name} {current_user.surname}
-    '''
+        '''
+    # ako je završen nalog: adminu
+    elif warrant.status == 'završen':
+        subject = f'Završen je putni nalog broj: {warrant.travel_warrant_number}'
+        recipients = [] #dodaj kod za admina kompanije za dati putni nalog!!!
+        text_body = f'''Poštovani,
+Završen je putni nalog {warrant.travel_warrant_number}. Klikom na donji link možete obračunati putni nalog:
+{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
+
+Pozdrav.'''
+    # ako je obračunat nalog: blagajniku i korisniku
+    elif warrant.status == 'obračunat':
+        subject = f'Obračunat je putni nalog broj: {warrant.travel_warrant_number}'
+        recipients = [warrant.travelwarrant_user.email] #dodaj kod za blagajnika
+        text_body = f'''Poštovani,
+Obračunat je putni nalog {warrant.travel_warrant_number}. Možete izvršiti uplatu dnevnica prema podacima iz priloga.
+
+Pozdrav.'''
+    # ako je storniran nalog: da li treba nekoga da obaveštava?
+    msg = Message(subject,
+                    sender='no_replay@putninalozi.online',
+                    recipients=recipients)
+    msg.body = text_body
     path = 'static/pdf_forms/'
-    file_name =file_name
+    file_name = file_name
     print(path)
     print(file_name)
     print(path+file_name)

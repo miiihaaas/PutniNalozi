@@ -22,6 +22,7 @@ def vehicle_list():
 @vehicles.route("/register_v", methods=['GET', 'POST'])
 def register_v():
     if current_user.is_authenticated and (current_user.authorization != 'c_admin' and current_user.authorization != 's_admin'):
+        flash('Nemate autorizaciju da registrujete nova vozila.' 'warning')
         return redirect(url_for('main.home'))
     form = RegistrationVehicleForm()
     form.reset()
@@ -54,9 +55,11 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
+        flash('Nemate autorizaciju da uređujete podatke vozila.' 'warning')
         abort(403)
     elif current_user.authorization == 'c_admin':
         if current_user.user_company.id != vehicle.vehicle_company.id:
+            flash('Nemate autorizaciju da uređujete podatke vozila drugih kompanija.' 'warning')
             abort(403)
     print(Company.query.filter_by(id=vehicle.company_id).first().id)
     form = UpdateVehicleForm()
@@ -93,7 +96,7 @@ def delete_vehicle(vehicle_id):
         print('nije dobar password')
         abort(403)
     else:
-        if current_user.authorization == 'c_user':
+        if current_user.authorization != 'c_admin' and current_user.authorization != 's_admin':
             abort(403)
         elif current_user.authorization == 'c_admin':
             if current_user.user_company.id != vehicle.vehicle_company.id:

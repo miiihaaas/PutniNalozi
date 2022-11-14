@@ -61,6 +61,32 @@
                     {{ form.abroad_contry(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+            <div class="col form-box">
+              {{ form.contry_leaving.label(class="form-control-label") }}
+                {% if form.contry_leaving.errors %}
+                    {{ form.contry_leaving(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.contry_leaving.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.contry_leaving(class="form-control form-control-lg", type="datetime-local") }}
+                {% endif %}
+            </div>
+            <div class="col form-box">
+              {{ form.contry_return.label(class="form-control-label") }}
+                {% if form.contry_return.errors %}
+                    {{ form.contry_return(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.contry_return.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.contry_return(class="form-control form-control-lg", type="datetime-local") }}
+                {% endif %}
+            </div>
           </div>
         </div>
         </div>

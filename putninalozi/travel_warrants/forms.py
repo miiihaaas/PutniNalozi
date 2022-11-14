@@ -29,10 +29,12 @@ class CreateTravelWarrantForm(FlaskForm):
     personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
 
-    advance_payment = IntegerField('Akontacija: ', validators=[Optional('oriban')])
+    advance_payment = DecimalField('Akontacija: ', validators=[Optional('oriban')])
     advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
-    daily_wage = IntegerField('Dnevnica: ', validators=[InputRequired()])
+    daily_wage = DecimalField('Iznos dnevnice u državi: ')
     daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    daily_wage_abroad = DecimalField('Iznos dnevnice u inostranstvu: ')
+    daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('e', 'EUR'), ('usd', 'USD')])
     costs_pays = StringField('Putni troškovi padaju na teret: ', validators=[DataRequired()])
     # principal = #nalogodavac
 
@@ -51,6 +53,8 @@ class EditAdminTravelWarrantForm(FlaskForm):
     relation = StringField('Relacija: ')
     start_datetime = DateTimeField('Polazno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     end_datetime = DateTimeField('Završno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
+    contry_leaving = DateTimeField('Vrema napuštanja države: ', format='%Y-%m-%dT%H:%M', validators=[Optional()])
+    contry_return = DateTimeField('Vreme vraćanja u državu: ', format='%Y-%m-%dT%H:%M', validators=[Optional()])
 
     vehicle_id = SelectField('Službeno Vozilo: ', validators=[Optional()])
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
@@ -59,10 +63,12 @@ class EditAdminTravelWarrantForm(FlaskForm):
     personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
 
-    advance_payment = IntegerField('Akontacija: ')
+    advance_payment = DecimalField('Akontacija: ')
     advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
-    daily_wage = IntegerField('Dnevnica: ')
+    daily_wage = DecimalField('Iznos dnevnice u državi: ')
     daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    daily_wage_abroad = DecimalField('Iznos dnevnice u inostranstvu: ')
+    daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('e', 'EUR'), ('usd', 'USD')])
     costs_pays = StringField('Putni troškovi padaju na teret: ')
 
     km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
@@ -85,6 +91,8 @@ class EditUserTravelWarrantForm(FlaskForm):
     relation = StringField('Relacija: ')
     start_datetime = DateTimeField('Polazno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     end_datetime = DateTimeField('Završno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
+    contry_leaving = DateTimeField('Vrema napuštanja države: ', format='%Y-%m-%dT%H:%M', validators=[Optional()])
+    contry_return = DateTimeField('Vreme vraćanja u državu: ', format='%Y-%m-%dT%H:%M', validators=[Optional()])
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()])
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])

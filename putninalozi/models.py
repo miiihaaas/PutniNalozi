@@ -10,23 +10,24 @@ def load_user(user_id):
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    companyname = db.Column(db.String(20), unique=True, nullable=False)
-    company_address = db.Column(db.String(20), unique=False, nullable=False)
+    companyname = db.Column(db.String(50), unique=True, nullable=False)
+    company_address = db.Column(db.String(50), unique=False, nullable=False)
     company_address_number = db.Column(db.String(5), nullable=False)
     company_zip_code = db.Column(db.Integer, nullable=False)
-    company_city = db.Column(db.String(20), unique=False, nullable=False)
+    company_city = db.Column(db.String(50), unique=False, nullable=False)
     company_state = db.Column(db.String(20), unique=False, nullable=False)
     company_pib = db.Column(db.Integer, nullable=False)
     company_mb = db.Column(db.Integer, nullable=False)
-    company_site = db.Column(db.String(20), unique=True, nullable=False) #vidi imali neki model tipa db.Link()
+    company_site = db.Column(db.String(50), unique=True, nullable=False) #vidi imali neki model tipa db.Link()
     company_mail = db.Column(db.String(120), unique=True, nullable=False)
-    company_phone = db.Column(db.Integer, nullable=False)
+    company_phone = db.Column(db.String(20), nullable=False)
     company_logo = db.Column(db.String(60), nullable=False)
     cashier_email = db.Column(db.String(120), unique=True, nullable=False) #mejl blagajnika koji će se koristiti kada se zatvrori nalog da pošalje pdf sa preračunatim računima i potrebnoj uplati
     CEO = db.Column(db.String(120), nullable=False) #ime i prezime direkora (osobe) koji odobrava putovanje, akontaciju ...
     users = db.relationship('User', backref='user_company', lazy=True)
     vehicles = db.relationship('Vehicle', backref='vehicle_company', lazy=True)
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_company', lazy=True)
+    settings = db.relationship('Settings', backref='settings_company', lazy=True)
 
     def __repr__(self):
         return self.companyname
@@ -44,7 +45,10 @@ class User(db.Model, UserMixin):
     authorization = db.Column(db.String(10), nullable = False) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     default_vehicle = db.Column(db.Integer) #kod radnika koji imaju svoj auto, da bude podrazumevana vrednost id tog vozila
-    travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_user', lazy=True)
+    travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_user', lazy='dynamic', foreign_keys='TravelWarrant.user_id')
+    # principals = db.relationship('TravelWarrant', backref='principalt_user', lazy='dynamic', foreign_keys='TravelWarrant.principal_id')
+    # principals = db.relationship('TravelWarrant', backref='travelwarrant_user', lazy=True)
+    # https://www.reddit.com/r/flask/comments/2o4ejl/af_flask_sqlalchemy_two_foreign_keys_referencing/
 
     def get_reset_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
@@ -85,6 +89,9 @@ class TravelWarrant(db.Model):
     relation = db.Column(db.String(150), nullable=False)
     start_datetime = db.Column(db.DateTime, nullable=True)
     end_datetime = db.Column(db.DateTime, nullable=True)
+    contry_leaving = db.Column(db.DateTime, nullable=True) ####
+    contry_return = db.Column(db.DateTime, nullable=True) ###
+
 
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=True)
     together_with = db.Column(db.String(50), nullable=True)
@@ -93,11 +100,16 @@ class TravelWarrant(db.Model):
     personal_registration = db.Column(db.String(12), nullable=True)
     other = db.Column(db.String(50), nullable=True) #avion, bus, taksi...
 
-    advance_payment = db.Column(db.Integer, nullable=True)
+    advance_payment = db.Column(db.Float, nullable=True)
     advance_payment_currency = db.Column(db.String(5), nullable=False)
-    daily_wage = db.Column(db.Integer, nullable=False)
+    daily_wage = db.Column(db.Float, nullable=False)
     daily_wage_currency = db.Column(db.String(5), nullable=False)
+    daily_wage_abroad = db.Column(db.Float, nullable=False) ###
+    daily_wage_abroad_currency = db.Column(db.String(5), nullable=False) ###
     costs_pays = db.Column(db.String(50), nullable=False)
+    # principal_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # principal = db.relationship('User', foreign_keys='[TravelWarrant.principal_id]')
+    # user = db.relationship('User', foreign_keys='[TravelWarrant.user_id]')
 
     km_start = db.Column(db.Integer, nullable=True)
     km_end = db.Column(db.Integer, nullable=True)
@@ -105,7 +117,6 @@ class TravelWarrant(db.Model):
     status = db.Column(db.String(15), nullable=False)
     file_name = db.Column(db.String(100), nullable=True) #za PDF fajl
     text_form = db.Column(db.String(1000), nullable=True) #za tekst forme iz pdf fajla
-    # expenses = db.Column(db.Float, nullable=True) # ili možda napraviti posebnu tabelu za troškove??? i povezati sumu za ovu prmenjivu???
     expenses = db.relationship('TravelWarrantExpenses', backref='trawelwarrantexpenses_travelwarrant', lazy=True)
 
     def __repr__(self):
@@ -124,6 +135,12 @@ class TravelWarrantExpenses(db.Model):
     def __repr__(self):
         return f"Travel Warrant Expenses('{self.expenses_id=}', '{self.expenses_type=}', '{self.description=}')"
 
+
+class Settings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    daily_wage_domestic = db.Column(db.Float, nullable=False)
+    daily_wage_abroad = db.Column(db.Float, nullable=False)
 
 
 db.create_all()

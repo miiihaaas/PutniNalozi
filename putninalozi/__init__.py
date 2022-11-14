@@ -1,10 +1,11 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_mail import Mail
-from dotenv import load_dotenv
+from flask_migrate import Migrate
 
 load_dotenv()
 
@@ -12,12 +13,15 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['FLASK_APP'] = 'run.py'
 #'sqlite:///site.db' #'mysql://scott:tiger@localhost/mydatabase'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@MariaDB/putninalozi_app' #iz simketovog mejla sam dobio IP
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://putninalozi_mihas:mihasmihasmihas@localhost:3306/putninalozi_app' #ovo zapravo radi na serveru
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@putninalozi.online:3306/putninalozi_app'
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'

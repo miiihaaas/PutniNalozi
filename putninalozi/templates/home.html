@@ -10,6 +10,10 @@
   <tbody>
     {% if current_user.authorization != 'c_user' %}
     <tr>
+      <td> <a class="btn btn-info" href="{{ url_for('main.settings', company_id=current_user.user_company.id) }}">Podešavanja</a> </td>
+      <td>Podešavanja - razna</td>
+    </tr>
+    <tr>
       <td> <a class="btn btn-info" href="{{ url_for('companys.company_list') }}">Kompanija</a> </td>
       <td>Unos i promena podataka o kompaniji</td>
     </tr>
@@ -28,7 +32,7 @@
     {% else %}
     <tr>
       <td> <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni nalozi</a> </td>
-      <td>Kreiranje i administriranje putnih naloga</td>
+      <td>Administriranje putnih naloga</td>
     </tr>
     {% endif %}
   </tbody>

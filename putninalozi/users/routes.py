@@ -17,7 +17,7 @@ def user_list():
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     users = User.query.all()
-    return render_template('user_list.html', title='Users', users=users)
+    return render_template('user_list.html', title='Korisnici', users=users)
 
 
 @users.route("/register_u", methods=['GET', 'POST'])
@@ -56,7 +56,7 @@ def register_u():
                         default_vehicle=form.default_vehicle.data)
         db.session.add(user)
         db.session.commit()
-        flash(f'Napravljen je nalog: {form.name.data} {form.surname.data}.', 'success')
+        flash(f'Napravljen je korisnički nalog: {form.name.data} {form.surname.data}.', 'success')
         return redirect(url_for('users.user_list'))
     return render_template('register_u.html', title='Registracija novog korisnika', form=form, legend='Registracija novog korisnika')
 
@@ -80,7 +80,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
 
     form = UpdateUserForm()
     form.reset()
-    form.default_vehicle.choices = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+    form.default_vehicle.choices = [(0, "----------")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
     if form.validate_on_submit():
         user.name = form.name.data
         user.surname = form.surname.data
@@ -118,7 +118,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         form.workplace.data = user.workplace
         form.email.data = user.email
 
-        form.authorization.choices = [('c_user', 'USER'),('c_admin', 'ADMIN')]
+        form.authorization.choices = [('c_user', 'USER'),('c_principial', 'NALOGODAVAC'),('c_cashier', 'BLAGAJNIK'),('c_admin', 'ADMIN')]
         form.authorization.data = user.authorization
 
         form.gender.choices = [(1, 'muški'),(2, 'ženski')]
@@ -144,14 +144,14 @@ def login():
             flash(f'Dobro došli {user.name}!', 'success')
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
-            flash(f'Email ili lozinka nisu odgovarajući.', 'danger')
+            flash(f'Mejl ili lozinka nisu odgovarajući.', 'danger')
     return render_template('login.html', title='Prijavljivanje', form=form, legend='Prijavljivanje')
 
 
 @users.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('main.home'))
+    return redirect(url_for('main.about'))
 
 
 @users.route("/user/<int:user_id>/delete", methods=['POST'])
@@ -165,7 +165,7 @@ def delete_user(user_id):
         print('Pogrešna lozinka!')
         abort(403)
     else:
-        if current_user.authorization == 'c_user':
+        if current_user.authorization != 'c_admin' and  current_user.authorization != 's_admin':
             abort(403)
         elif current_user.authorization == 'c_admin':
             if current_user.user_company.id != user.user_company.id:
@@ -183,8 +183,8 @@ def delete_user(user_id):
 
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('Zahtev Za Resetovanje Lozinke', sender='no_replay@putninalozi.online', recipients=[user.email])
-    msg.body = f''' Da bi ste resetovali lozinku, kliknite na sledeći link:
+    msg = Message('Zahtev za resetovanje lozinke', sender='no_replay@putninalozi.online', recipients=[user.email])
+    msg.body = f'''Da biste resetovali lozinku, kliknite na sledeći link:
 {url_for('users.reset_token', token=token, _external=True)}
 
 Ako Vi niste napavili ovaj zahtev, molim Vas ignorišite ovaj mejl i neće biti napravljene nikakve izmene na Vašem nalogu.
@@ -221,4 +221,4 @@ def reset_token(token):
             flash(f'Vaša lozinka je ažurirana!', 'success')
             return redirect(url_for('users.login'))
 
-        return render_template('reset_token.html', title='Reset Password', form=form)
+        return render_template('reset_token.html', title='Resetovanje lozinke', form=form)

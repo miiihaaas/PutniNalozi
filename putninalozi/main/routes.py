@@ -1,5 +1,8 @@
 from flask import Blueprint
-from flask import  render_template, flash, redirect, url_for
+from flask import  render_template, flash, redirect, url_for, request
+from putninalozi import db
+from putninalozi.models import Settings
+from putninalozi.main.forms import SettingsForm
 from flask_login import current_user
 
 main = Blueprint('main', __name__)
@@ -11,9 +14,29 @@ def home():
     if not current_user.is_authenticated:
         flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    return render_template('home.html', title='Home')
+    return render_template('home.html', title='Početna')
 
 
 @main.route("/about")
 def about():
-    return render_template('about.html', title='About')
+    return render_template('about.html', title='O softveru')
+
+
+@main.route("/settings/<int:company_id>", methods=['GET', 'POST'])
+def settings(company_id):
+    if current_user.user_company.id != company_id:
+        flash(f'Nemate ovlašćenje da podešavate parametre drugih kompanija.', 'danger')
+        return redirect(url_for('main.home'))
+    global_settings = Settings.query.filter_by(company_id=company_id).first()
+    form = SettingsForm()
+    if form.validate_on_submit():
+        global_settings.daily_wage_domestic = form.daily_wage_domestic.data
+        global_settings.daily_wage_abroad = form.daily_wage_abroad.data
+        db.session.commit()
+        flash(f'Ažurirana su podešavanja.', 'success')
+        return redirect(url_for('main.home'))
+    elif request.method == 'GET':
+        form.daily_wage_domestic.data = global_settings.daily_wage_domestic
+        form.daily_wage_abroad.data = global_settings.daily_wage_abroad
+
+    return render_template('settings.html', title='Podešavanja', legend='Podešavanja', global_settings=global_settings, form=form)

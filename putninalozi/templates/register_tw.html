@@ -60,6 +60,32 @@
                       {{ form.abroad_contry(class="form-control form-control-lg") }}
                   {% endif %}
               </div>
+              <div class="card-body">
+                {{ form.daily_wage_abroad.label(class="form-control-label") }}
+                  {% if form.daily_wage_abroad.errors %}
+                      {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.daily_wage_abroad.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.daily_wage_abroad(class="form-control form-control-lg") }}
+                  {% endif %}
+              </div>
+              <div class="card-body">
+                {{ form.daily_wage_abroad_currency.label(class="form-control-label") }}
+                  {% if form.daily_wage_abroad_currency.errors %}
+                      {{ form.daily_wage_abroad_currency(class="form-control form-control-lg is-invalid") }}
+                      <div class="invalid-feedback">
+                          {% for error in form.daily_wage_abroad_currency.errors %}
+                              <span>{{ error }}</span>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      {{ form.daily_wage_abroad_currency(class="form-select form-select-lg") }}
+                  {% endif %}
+              </div>
             </div>
           </div>
           </div>

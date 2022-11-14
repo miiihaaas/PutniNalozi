@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="content-section">
+  <form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+      <legend class="border-bottom mb-3">{{ legend }}</legend>
+      <div class="row">
+        <div class="col form-box col-md-6">
+          {{ form.daily_wage_domestic.label(class="form-control-label") }}
+            {% if form.daily_wage_domestic.errors %}
+                {{ form.daily_wage_domestic(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.daily_wage_domestic.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.daily_wage_domestic(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="col form-box col-md-6">
+          {{ form.daily_wage_abroad.label(class="form-control-label") }}
+            {% if form.daily_wage_abroad.errors %}
+                {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.daily_wage_abroad.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.daily_wage_abroad(class="form-control form-control-lg") }}
+            {% endif %}
+        </div>
+        <div class="">
+          <br>
+          {{ form.submit(class="btn btn-outline-primary") }}
+        </div>
+
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+{% endblock content%}
