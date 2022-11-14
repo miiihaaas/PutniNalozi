@@ -173,8 +173,8 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
     pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
     pdf.cell(35, 8, f'{float(warrant.daily_wage) * br_dnevnica} {warrant.daily_wage_currency}', border=1, ln=True, align='L')
 
-    pdf.multi_cell(56, 4, f'''Izlazak iz drzave: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
+    pdf.multi_cell(56, 4, f'''Izlazak iz drzave: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M") if warrant.contry_leaving != None else 'Izlazak iz drzave: -'}
+Povratak u drzavu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else 'Povratak u drzavu: -'}''', border=1, ln=False, align='L')
     pdf.set_xy(66, 174)
     pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
@@ -329,8 +329,8 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
     pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
     pdf.cell(35, 8, f'{float(warrant.daily_wage) * br_dnevnica} {warrant.daily_wage_currency}', border=1, ln=True, align='L')
 
-    pdf.multi_cell(60, 4, f'''Izlazak iz drzave: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
+    pdf.multi_cell(60, 4, f'''Izlazak iz drzave: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M") if warrant.contry_leaving != None else '-'}
+Povratak u drzavu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else '-'}''', border=1, ln=False, align='L')
     pdf.set_xy(70, 174)
     pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
@@ -341,8 +341,8 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
 
     pdf.cell(0, 8, f'Troskovi', border=1, ln=True, fill = True, align='C')
 
-    ukupni_trosak = 0
-    ukupni_trosak_ino = 0
+    ukupni_trosak = 0.0
+    ukupni_trosak_ino = 0.0
 
     if troskovi != []:
         for trosak in troskovi:
@@ -388,8 +388,8 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
     saldo_ino = round((float(warrant.daily_wage_abroad) * br_dnevnica_ino - (warrant.advance_payment if warrant.advance_payment_currency != "rsd" else 0) + ukupni_trosak_ino),2)
 
     pdf.cell(155, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
-    pdf.cell(18, 4, f'{saldo} rsd', border=1, ln=False, align='C')
-    pdf.cell(17, 4, f"{saldo_ino} {ino_currency}", border=1, ln=True, align='C')
+    pdf.cell(18, 4, f'{saldo} rsd', border=1, ln=False, align='R')
+    pdf.cell(17, 4, f"{saldo_ino} {ino_currency}", border=1, ln=True, align='R')
 
 
     pdf.cell(0, 8, f'Prilog', border=1, ln=True, fill = True, align='C')
