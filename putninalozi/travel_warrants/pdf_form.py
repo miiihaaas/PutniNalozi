@@ -175,7 +175,7 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
 
     pdf.multi_cell(56, 4, f'''Izlazak iz drzave: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
 Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
-    pdf.set_xy(66, 206)
+    pdf.set_xy(66, 174)
     pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'', border=1, ln=False, align='L')
@@ -331,7 +331,7 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
 
     pdf.multi_cell(60, 4, f'''Izlazak iz drzave: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
 Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
-    pdf.set_xy(70, 206)
+    pdf.set_xy(70, 174)
     pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'', border=1, ln=False, align='L')
@@ -374,9 +374,16 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
     else:
         pdf.cell(35, 4, f'', border=1, ln=True, align='R')
     pdf.cell(155, 4, f'Primljena akontacija', border=1, ln=False, align='R')
-    pdf.cell(35, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='R')
+    if warrant.advance_payment_currency == 'rsd':
+        pdf.cell(18, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='R')
+        pdf.cell(17, 4, f'-', border=1, ln=True, align='C')
+    else:
+        pdf.cell(18, 4, f'-', border=1, ln=True, align='R')
+        pdf.cell(17, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='C')
+
+
     pdf.cell(155, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
-    pdf.cell(18, 4, f'{round((warrant.daily_wage * br_dnevnica - (warrant.advance_payment if warrant.advance_payment_currency == "rsd" else 0) + ukupni_trosak),2)} rsd', border=1, ln=True, align='C')
+    pdf.cell(18, 4, f'{round((warrant.daily_wage * br_dnevnica - (warrant.advance_payment if warrant.advance_payment_currency == "rsd" else 0) + ukupni_trosak),2)} rsd', border=1, ln=False, align='C')
     pdf.cell(17, 4, f'{round((warrant.daily_wage * br_dnevnica_ino - (warrant.advance_payment if warrant.advance_payment_currency != "rsd" else 0) + ukupni_trosak_ino),2)} {ino_currency}', border=1, ln=True, align='C')
 
 
