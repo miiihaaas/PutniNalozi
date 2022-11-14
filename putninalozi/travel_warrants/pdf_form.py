@@ -173,8 +173,8 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
     pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
     pdf.cell(35, 8, f'{warrant.daily_wage * br_dnevnica} {warrant.daily_wage_currency}', border=1, ln=True, align='L')
 
-    pdf.multi_cell(56, 4, f'''Izlazak iz države: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Povratak u državu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
+    pdf.multi_cell(56, 4, f'''Izlazak iz drzave: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
     pdf.set_xy(66, 206)
     pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
@@ -329,8 +329,8 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
     pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
     pdf.cell(35, 8, f'{warrant.daily_wage * br_dnevnica} {warrant.daily_wage_currency}', border=1, ln=True, align='L')
 
-    pdf.multi_cell(60, 4, f'''Izlazak iz države: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Povratak u državu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
+    pdf.multi_cell(60, 4, f'''Izlazak iz drzave: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
     pdf.set_xy(70, 206)
     pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
