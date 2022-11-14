@@ -3,7 +3,7 @@ from flask import  render_template, url_for, flash, redirect, abort, request, se
 from putninalozi import db, bcrypt
 from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses, Company, Settings
 from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm, EditTravelWarrantExpenses
-from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_fomr, send_email
+from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime
 
@@ -246,9 +246,15 @@ def register_tw(korisnik_id, datum):
         br_casova = br_casova.total_seconds() / 3600
         print(f'razlika u vremenu {br_casova} u satima')
 
-        br_dnevnica = proracaun_broja_dnevnica(br_casova)
+        br_casova_ino = warrant.contry_return - warrant.contry_leaving
+        br_casova_ino = br_casova_ino.total_seconds() / 3600
 
-        file_name, text_form = create_pdf_form(warrant, br_casova, br_dnevnica)
+        br_casova = br_casova - br_casova_ino
+
+        br_dnevnica = proracaun_broja_dnevnica(br_casova)
+        br_dnevnica_ino = proracaun_broja_dnevnica(br_casova_ino)
+
+        file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
         warrant.file_name = file_name
         warrant.text_form = text_form
         db.session.commit()
@@ -419,9 +425,15 @@ def travel_warrant_profile(warrant_id):
                 br_casova = br_casova.total_seconds() / 3600
                 print(f'razlika u vremenu {br_casova} u satima')
 
-                br_dnevnica = proracaun_broja_dnevnica(br_casova)
+                br_casova_ino = warrant.contry_return - warrant.contry_leaving
+                br_casova_ino = br_casova_ino.total_seconds() / 3600
 
-                file_name, text_form = create_pdf_form(warrant, br_casova, br_dnevnica)
+                br_casova = br_casova - br_casova_ino
+
+                br_dnevnica = proracaun_broja_dnevnica(br_casova)
+                br_dnevnica_ino = proracaun_broja_dnevnica(br_casova_ino)
+
+                file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
                 warrant.file_name = file_name
                 warrant.text_form = text_form
                 print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
@@ -635,9 +647,15 @@ def travel_warrant_profile(warrant_id):
             br_casova = br_casova.total_seconds() / 3600
             print(f'razlika u vremenu {br_casova} u satima')
 
-            br_dnevnica = proracaun_broja_dnevnica(br_casova)
+            br_casova_ino = warrant.contry_return - warrant.contry_leaving
+            br_casova_ino = br_casova_ino.total_seconds() / 3600
 
-            file_name, text_form = update_pdf_fomr(warrant, br_casova, br_dnevnica, troskovi)
+            br_casova = br_casova - br_casova_ino
+
+            br_dnevnica = proracaun_broja_dnevnica(br_casova)
+            br_dnevnica_ino = proracaun_broja_dnevnica(br_casova_ino)
+
+            file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
             warrant.file_name = file_name
             warrant.text_form = text_form
             print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
