@@ -216,7 +216,7 @@ Povratak u državu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', borde
     return file_name, text_form
 
 
-def update_pdf_form(warrant, br_casova, br_dnevnica, troskovi):
+def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi):
     rod = []
     if warrant.travelwarrant_user.gender == "1":
         rod=["Radnik", "raspoređen", "Kolega"]
@@ -327,7 +327,17 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, l
     pdf.cell(20, 8, f'{br_dnevnica}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'', border=1, ln=False, align='L')
     pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
-    pdf.cell(35, 8, f'{warrant.daily_wage * br_dnevnica}', border=1, ln=True, align='L')
+    pdf.cell(35, 8, f'{warrant.daily_wage * br_dnevnica} {warrant.daily_wage_currency}', border=1, ln=True, align='L')
+
+    pdf.multi_cell(60, 4, f'''Izlazak iz države: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+Povratak u državu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
+    pdf.set_xy(70, 206)
+    pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
+    pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
+    pdf.cell(20, 8, f'', border=1, ln=False, align='L')
+    pdf.cell(35, 8, f'{warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}', border=1, ln=False, align='L')
+    pdf.cell(35, 8, f'{warrant.daily_wage_abroad * br_dnevnica_ino} {warrant.daily_wage_abroad_currency}', border=1, ln=True, align='L')
+
 
     pdf.cell(0, 8, f'Troskovi', border=1, ln=True, fill = True, align='C')
 
