@@ -387,7 +387,7 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
 
     pdf.cell(155, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
     pdf.cell(18, 4, f'{saldo} rsd', border=1, ln=False, align='C')
-    pdf.cell(17, 4, f'{saldo_ino),2)} {ino_currency}', border=1, ln=True, align='C')
+    pdf.cell(17, 4, f'{saldo_ino} {ino_currency}', border=1, ln=True, align='C')
 
 
     pdf.cell(0, 8, f'Prilog', border=1, ln=True, fill = True, align='C')
