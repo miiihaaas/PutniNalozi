@@ -370,12 +370,12 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
     pdf.cell(155, 4, f'Svega', border=1, ln=False, align='R')
     if troskovi != []:
         pdf.cell(18, 4, f'{ukupni_trosak} rsd', border=1, ln=False, align='R')
-        pdf.cell(17, 4, f'{ukupni_trosak} {ino_currency}', border=1, ln=True, align='R')
+        pdf.cell(17, 4, f'{ukupni_trosak_ino} {ino_currency}', border=1, ln=True, align='R')
     else:
         pdf.cell(35, 4, f'', border=1, ln=True, align='R')
     pdf.cell(155, 4, f'Primljena akontacija', border=1, ln=False, align='R')
     if warrant.advance_payment_currency == 'rsd':
-        pdf.cell(18, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='R')
+        pdf.cell(18, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=False, align='R')
         pdf.cell(17, 4, f'-', border=1, ln=True, align='C')
     else:
         pdf.cell(18, 4, f'-', border=1, ln=True, align='R')
