@@ -247,8 +247,11 @@ def register_tw(korisnik_id, datum):
         br_casova = br_casova.total_seconds() / 3600
         print(f'razlika u vremenu {br_casova} u satima')
 
-        br_casova_ino = warrant.contry_return - warrant.contry_leaving
-        br_casova_ino = br_casova_ino.total_seconds() / 3600
+        if warrant.contry_return != None or warrant.contry_leaving != None:
+            br_casova_ino = warrant.contry_return - warrant.contry_leaving
+            br_casova_ino = br_casova_ino.total_seconds() / 3600
+        else:
+            br_casova_ino = 0.0
 
         br_casova = br_casova - br_casova_ino
 
@@ -256,7 +259,7 @@ def register_tw(korisnik_id, datum):
         br_dnevnica_ino = proracaun_broja_dnevnica(br_casova_ino)
         print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
-        file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
+        file_name, text_form = create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino)
         warrant.file_name = file_name
         warrant.text_form = text_form
         db.session.commit()
@@ -650,8 +653,11 @@ def travel_warrant_profile(warrant_id):
             br_casova = br_casova.total_seconds() / 3600
             print(f'razlika u vremenu {br_casova} u satima')
 
-            br_casova_ino = warrant.contry_return - warrant.contry_leaving
-            br_casova_ino = br_casova_ino.total_seconds() / 3600
+            if warrant.contry_return != None or warrant.contry_leaving != None:
+                br_casova_ino = warrant.contry_return - warrant.contry_leaving
+                br_casova_ino = br_casova_ino.total_seconds() / 3600
+            else:
+                br_casova_ino = 0.0
 
             br_casova = br_casova - br_casova_ino
 

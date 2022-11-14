@@ -162,8 +162,8 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}.
     pdf.cell(20, 4, f'Br cas', border=1, ln=False, fill = True, align='L')
     pdf.cell(20, 4, f'Br dnev', border=1, ln=False, fill = True, align='L')
     pdf.cell(20, 4, f'', border=1, ln=False, fill = True, align='L')
-    pdf.cell(35, 4, f'Po dinara', border=1, ln=False, fill = True, align='L')
-    pdf.cell(35, 4, f'Svega dinara', border=1, ln=True, fill = True, align='L')
+    pdf.cell(35, 4, f'Po', border=1, ln=False, fill = True, align='L')
+    pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
     pdf.multi_cell(56, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
 Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
     pdf.set_xy(66, 166)
@@ -184,7 +184,7 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
 
     pdf.cell(56, 4, f'Prevozni troskovi', border=1, ln=False, fill = True, align='L')
     pdf.cell(40, 8, f'Vrsta prevoza', border=1, ln=False, fill = True, align='C')
-    pdf.cell(20, 8, f'kl.', border=1, ln=False, fill = True, align='C')
+    pdf.cell(20, 8, f'km.', border=1, ln=False, fill = True, align='C')
     pdf.cell(35, 8, f'dinara', border=1, ln=True, fill = True, align='C')
     pdf.cell(28, -4, f'od', border=1, ln=False, fill = True, align='C')
     pdf.cell(28, -4, f'do', border=1, ln=True, fill = True, align='C')
@@ -318,8 +318,8 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}.
     pdf.cell(20, 4, f'Br cas', border=1, ln=False, fill = True, align='L')
     pdf.cell(20, 4, f'Br dnev', border=1, ln=False, fill = True, align='L')
     pdf.cell(20, 4, f'', border=1, ln=False, fill = True, align='L')
-    pdf.cell(35, 4, f'Po dinara', border=1, ln=False, fill = True, align='L')
-    pdf.cell(35, 4, f'Svega dinara', border=1, ln=True, fill = True, align='L')
+    pdf.cell(35, 4, f'Po', border=1, ln=False, fill = True, align='L')
+    pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
     pdf.multi_cell(60, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
 Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
     pdf.set_xy(70, 166)
@@ -343,8 +343,10 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
 
     ukupni_trosak = 0
     ukupni_trosak_ino = 0
+
     if troskovi != []:
         for trosak in troskovi:
+            ino_currency = 'e'
             if trosak.amount_currency == 'rsd':
                 ukupni_trosak = ukupni_trosak + trosak.amount
                 print(ukupni_trosak)
@@ -378,8 +380,8 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
         pdf.cell(18, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=False, align='R')
         pdf.cell(17, 4, f'-', border=1, ln=True, align='C')
     else:
-        pdf.cell(18, 4, f'-', border=1, ln=False, align='R')
-        pdf.cell(17, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='C')
+        pdf.cell(18, 4, f'-', border=1, ln=False, align='C')
+        pdf.cell(17, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='R')
 
 
     saldo = round((float(warrant.daily_wage) * br_dnevnica - (warrant.advance_payment if warrant.advance_payment_currency == "rsd" else 0) + ukupni_trosak),2)
@@ -387,7 +389,7 @@ Povratak u drzavu: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border
 
     pdf.cell(155, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
     pdf.cell(18, 4, f'{saldo} rsd', border=1, ln=False, align='C')
-    pdf.cell(17, 4, f'{saldo_ino} {ino_currency}', border=1, ln=True, align='C')
+    pdf.cell(17, 4, f"{saldo_ino} {ino_currency}", border=1, ln=True, align='C')
 
 
     pdf.cell(0, 8, f'Prilog', border=1, ln=True, fill = True, align='C')
