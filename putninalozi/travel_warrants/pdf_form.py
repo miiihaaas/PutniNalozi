@@ -343,10 +343,10 @@ Povratak u drzavu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant
 
     ukupni_trosak = 0.0
     ukupni_trosak_ino = 0.0
-
+    ino_currency = 'e'
     if troskovi != []:
         for trosak in troskovi:
-            ino_currency = 'e'
+
             if trosak.amount_currency == 'rsd':
                 ukupni_trosak = ukupni_trosak + trosak.amount
                 print(ukupni_trosak)
