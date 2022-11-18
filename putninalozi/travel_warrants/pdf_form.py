@@ -149,8 +149,8 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}.
     pdf.cell(0, 30, f'NALOG ZA SLUZBENO PUTOVANJE: {warrant_number}', ln=True, align='C')
 
     pdf.set_font('times','', 12)
-    pdf.multi_cell(0, 5, text_form, ln=True)
-    pdf.line(10, 132, 200, 132)
+    pdf.multi_cell(0, 5, text_form, ln=True, border='B')
+    # pdf.line(10, 132, 200, 132)
 
     pdf.cell(0, 5, f'Na osnovu prednjeg naloga izvrsio sam sluzbeno putovanje i podnosim sledeci', ln=True, align='L')
     pdf.set_font('times','B', 16)
@@ -165,18 +165,18 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}.
     pdf.cell(35, 4, f'Po', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
     pdf.multi_cell(56, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
-    pdf.set_xy(66, 166)
-    pdf.cell(20, 8, f'{round(br_casova)}', border=1, ln=False, align='L')
-    pdf.cell(20, 8, f'{br_dnevnica}', border=1, ln=False, align='L')
-    pdf.cell(20, 8, f'', border=1, ln=False, align='L')
-    pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
-    pdf.cell(35, 8, f'{float(warrant.daily_wage) * br_dnevnica} {warrant.daily_wage_currency}', border=1, ln=True, align='L')
+Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
+    # pdf.set_xy(70, 166)
+    pdf.cell(20, 8, f'{round(br_casova)}', border=1, new_y='LAST', align='L')
+    pdf.cell(20, 8, f'{br_dnevnica}', border=1, new_y='LAST', align='L')
+    pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
+    pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
+    pdf.cell(35, 8, f'{float(warrant.daily_wage) * br_dnevnica} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
 
-    pdf.multi_cell(56, 4, f'''Izlazak iz drzave: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M") if warrant.contry_leaving != None else 'Izlazak iz drzave: -'}
-Povratak u drzavu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else 'Povratak u drzavu: -'}''', border=1, ln=False, align='L')
-    pdf.set_xy(66, 174)
-    pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
+    pdf.multi_cell(56, 4, f'''Izlazak iz drzave: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M") if warrant.contry_leaving != None else '-'}
+Povratak u drzavu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else '-'}''', border=1, new_y='TOP', align='L')
+    # pdf.set_xy(70, 174)
+    pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, new_y='LAST', align='L')
     pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'', border=1, ln=False, align='L')
     pdf.cell(35, 8, f'{warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}', border=1, ln=False, align='L')
@@ -305,8 +305,8 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}.
     pdf.cell(0, 30, f'NALOG ZA SLUZBENO PUTOVANJE: {warrant_number}', ln=True, align='C')
 
     pdf.set_font('times','', 12)
-    pdf.multi_cell(0, 5, text_form, ln=True)
-    pdf.line(10, 132, 200, 132)
+    pdf.multi_cell(0, 5, text_form, ln=True, border='B')
+    # pdf.line(10, 132, 200, 132)
 
     pdf.cell(0, 5, f'Na osnovu prednjeg naloga izvrsio sam sluzbeno putovanje i podnosim sledeci', ln=True, align='L')
     pdf.set_font('times','B', 16)
@@ -321,18 +321,18 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}.
     pdf.cell(35, 4, f'Po', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
     pdf.multi_cell(60, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, ln=False, align='L')
-    pdf.set_xy(70, 166)
-    pdf.cell(20, 8, f'{round(br_casova)}', border=1, ln=False, align='L')
-    pdf.cell(20, 8, f'{br_dnevnica}', border=1, ln=False, align='L')
-    pdf.cell(20, 8, f'', border=1, ln=False, align='L')
-    pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, ln=False, align='L')
-    pdf.cell(35, 8, f'{float(warrant.daily_wage) * br_dnevnica} {warrant.daily_wage_currency}', border=1, ln=True, align='L')
+Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
+    # pdf.set_xy(70, 166)
+    pdf.cell(20, 8, f'{round(br_casova)}', border=1, new_y='LAST', align='L')
+    pdf.cell(20, 8, f'{br_dnevnica}', border=1, new_y='LAST', align='L')
+    pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
+    pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
+    pdf.cell(35, 8, f'{float(warrant.daily_wage) * br_dnevnica} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
 
     pdf.multi_cell(60, 4, f'''Izlazak iz drzave: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M") if warrant.contry_leaving != None else '-'}
-Povratak u drzavu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else '-'}''', border=1, ln=False, align='L')
-    pdf.set_xy(70, 174)
-    pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, ln=False, align='L')
+Povratak u drzavu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else '-'}''', border=1, new_y='TOP', align='L')
+    # pdf.set_xy(70, 174)
+    pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, new_y='LAST', align='L')
     pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
     pdf.cell(20, 8, f'', border=1, ln=False, align='L')
     pdf.cell(35, 8, f'{warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}', border=1, ln=False, align='L')
@@ -396,7 +396,10 @@ Povratak u drzavu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant
     pdf.multi_cell(0, 8, f'''U mestu {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {replace_serbian_characters(warrant.travelwarrant_user.name)} {replace_serbian_characters(warrant.travelwarrant_user.surname)}''', border=1, ln=True, align='C')
     pdf.multi_cell(0, 4, f'', ln=True, align='L')
     pdf.multi_cell(0, 4, f'''Potvrdjujem da je putovanje izvrseno prema ovom nalogu i odobravam isplatu putnog racuna od {saldo} dinara, slovima: ___________________________________________________ {f'; {saldo_ino} {ino_currency}, slovima: ___________________________________________________' if saldo_ino != 0 else ""} na teret {warrant.costs_pays}.
-U mestu {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {datetime.date.today().strftime("%d/%m/%Y")}.''', ln=True, align='L')
+U mestu {replace_serbian_characters(warrant.travelwarrant_company.company_city)}, dana {warrant.end_datetime.strftime("%d/%m/%Y")}.''', ln=True, align='L')
+    pdf.multi_cell(0, 4, f'''
+
+Blagajnik: _____________________________________          Podnosilac racna: _____________________________________''', ln=True, align='C')
 
     path = "putninalozi/static/pdf_forms/"
     file_name = f'{warrant_number} {company_name}-{name} {surname}.pdf'
