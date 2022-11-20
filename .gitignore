@@ -4,7 +4,14 @@
 
 # Manual added
 putninalozi/site.db
+putninalozi/__pycache__/
+putninalozi/companys/__pycache__/
+putninalozi/main/__pycache__/
+putninalozi/travel_warrants/__pycache__/
+putninalozi/users/__pycache__/
+putninalozi/vehicles/__pycache__/
 __pycache__/
+venv/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
