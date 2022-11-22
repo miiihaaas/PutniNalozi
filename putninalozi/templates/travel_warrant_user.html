@@ -37,73 +37,67 @@
         </div>
       </div>
       <br>
+      <div class="form-check form-switch" onload="myFunction()">
+        {{ form.abroad(class="form-check-input", onclick="myFunction()", id="abroad_id") }} 
+        {{ form.abroad.label(class="form-check-label") }}
+        <!-- test: {{form.abroad.data}} -->
+      </div>
+      <div class="col form-box">
+        {{ form.relation.label(class="form-control-label") }} 
+        {% if form.relation.errors %} 
+        {{ form.relation(class="form-control form-control-lg is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.relation.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+        {% else %} 
+          {{ form.relation(class="form-control form-control-lg") }}
+        {% endif %}
+      </div>
       <div class="row">
-
-        <div class="col" id="accordionAbrod">
-            <br>
-        <div class="accordion-item">
-          <div class="accordion-header" id="headingAbrod">
-              <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseAbrod" aria-expanded="false" aria-controls="collapseAbrod">
-                Putovanje u inostranstvo
-              </button>
-          </div>
-          <div id="collapseAbrod" class="collapse" aria-labelledby="headingAbrod" data-parent="#accordionAbrod">
-            <div class="card-body">
-              {{ form.abroad_contry.label(class="form-control-label") }}
-                {% if form.abroad_contry.errors %}
-                    {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.abroad_contry.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.abroad_contry(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="col form-box">
-              {{ form.contry_leaving.label(class="form-control-label") }}
-                {% if form.contry_leaving.errors %}
-                    {{ form.contry_leaving(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.contry_leaving.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.contry_leaving(class="form-control form-control-lg", type="datetime-local") }}
-                {% endif %}
-            </div>
-            <div class="col form-box">
-              {{ form.contry_return.label(class="form-control-label") }}
-                {% if form.contry_return.errors %}
-                    {{ form.contry_return(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.contry_return.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.contry_return(class="form-control form-control-lg", type="datetime-local") }}
-                {% endif %}
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="col form-box">
-          {{ form.relation.label(class="form-control-label") }}
-
-            {% if form.relation.errors %}
-                {{ form.relation(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.relation.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
+        <div id="collapseAbrod" class="collapse" aria-labelledby="headingAbrod" data-parent="#accordionAbrod">
+          <div class="card-body">
+            {{ form.abroad_contry.label(class="form-control-label") }}
+            {% if form.abroad_contry.errors %}
+              {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.abroad_contry.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
             {% else %}
-                {{ form.relation(class="form-control form-control-lg") }}
+                {{ form.abroad_contry(class="form-control form-control-lg") }}
             {% endif %}
+          </div>
+          <div class="col form-box">
+            {{ form.contry_leaving.label(class="form-control-label") }}
+            {% if form.contry_leaving.errors %}
+              {{ form.contry_leaving(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.contry_leaving.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.contry_leaving(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+          </div>
+          <div class="col form-box">
+            {{ form.contry_return.label(class="form-control-label") }}
+            {% if form.contry_return.errors %}
+              {{ form.contry_return(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.contry_return.errors %}
+                  <span>{{ error }}</span>
+                {% endfor %}
+              </div>
+            {% else %}
+              {{ form.contry_return(class="form-control form-control-lg", type="datetime-local") }}
+            {% endif %}
+          </div>
         </div>
+      </div>
       </div>
       <br>
       <div class="row">
@@ -388,5 +382,27 @@
       }
     } );
   } );
+  var booleanValue = '{{form.abroad.data}}';
+  // window.alert(booleanValue);
+  if (booleanValue === 'True') {
+    booleanValue = false;
+  } else if (booleanValue === 'False') {
+    booleanValue = true;
+  };
+  window.onload = function() {
+    myFunction();
+  };
+
+  // window.alert(booleanValue);
+  function myFunction() {
+    booleanValue = !booleanValue;
+    // window.alert(booleanValue);
+    var x = document.getElementById("collapseAbrod");
+    if (booleanValue === true) {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  }
 </script>
 {% endblock %}

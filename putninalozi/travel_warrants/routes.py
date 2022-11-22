@@ -127,6 +127,7 @@ def register_tw(korisnik_id, datum):
                 user_id=korisnik_id,
                 with_task=form.with_task.data,
                 company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
+                abroad=form.abroad.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
                 start_datetime=datum,
@@ -156,6 +157,7 @@ def register_tw(korisnik_id, datum):
                 user_id=korisnik_id,
                 with_task=form.with_task.data,
                 company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
+                abroad=form.abroad.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
                 start_datetime=datum,
@@ -185,6 +187,7 @@ def register_tw(korisnik_id, datum):
                 user_id=korisnik_id,
                 with_task=form.with_task.data,
                 company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
+                abroad=form.abroad.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
                 start_datetime=datum,
@@ -214,6 +217,7 @@ def register_tw(korisnik_id, datum):
                 user_id=korisnik_id,
                 with_task=form.with_task.data,
                 company_id=User.query.filter_by(id=korisnik_id).first().user_company.id,  #form.company_id.data,
+                abroad=form.abroad.data,
                 abroad_contry=form.abroad_contry.data.upper(),
                 relation=form.relation.data,
                 start_datetime=datum,
@@ -321,6 +325,7 @@ def travel_warrant_profile(warrant_id):
 
                 if form.together_with.data != '':
                     warrant.with_task = form.with_task.data
+                    warrant.abroad = form.abroad.data
                     warrant.abroad_contry = form.abroad_contry.data
                     warrant.relation = form.relation.data
 
@@ -347,6 +352,7 @@ def travel_warrant_profile(warrant_id):
                     print('zajedno sa - c_user')
                 elif form.personal_brand.data != "":
                     warrant.with_task = form.with_task.data
+                    warrant.abroad = form.abroad.data
                     warrant.abroad_contry = form.abroad_contry.data
                     warrant.relation = form.relation.data
 
@@ -373,6 +379,7 @@ def travel_warrant_profile(warrant_id):
                     print('licno vozilo - c_user')
                 elif form.other.data != "":
                     warrant.with_task = form.with_task.data
+                    warrant.abroad = form.abroad.data
                     warrant.abroad_contry = form.abroad_contry.data
                     warrant.relation = form.relation.data
 
@@ -399,6 +406,7 @@ def travel_warrant_profile(warrant_id):
                     print('drugo - c_user')
                 else:
                     warrant.with_task = form.with_task.data
+                    warrant.abroad = form.abroad.data
                     warrant.abroad_contry = form.abroad_contry.data
                     warrant.relation = form.relation.data
 
@@ -451,6 +459,7 @@ def travel_warrant_profile(warrant_id):
                 return redirect(url_for('travel_warrants.travel_warrant_list'))
             elif request.method == 'GET':
                 form.with_task.data = warrant.with_task
+                form.abroad.data = warrant.abroad
                 form.abroad_contry.data = warrant.abroad_contry
                 form.relation.data = warrant.relation
                 form.start_datetime.data = warrant.start_datetime
@@ -498,6 +507,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
                 # warrant.company_id = int(form.company_id.data)
+                warrant.abroad = form.abroad.data
                 warrant.abroad_contry = form.abroad_contry.data
                 warrant.relation = form.relation.data
 
@@ -536,6 +546,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
                 # warrant.company_id = int(form.company_id.data)
+                warrant.abroad = form.abroad.data
                 warrant.abroad_contry = form.abroad_contry.data
                 warrant.relation = form.relation.data
 
@@ -574,6 +585,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
                 # warrant.company_id = int(form.company_id.data)
+                warrant.abroad = form.abroad.data
                 warrant.abroad_contry = form.abroad_contry.data
                 warrant.relation = form.relation.data
 
@@ -612,6 +624,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
                 # warrant.company_id = int(form.company_id.data)
+                warrant.abroad = form.abroad.data
                 warrant.abroad_contry = form.abroad_contry.data
                 warrant.relation = form.relation.data
 
@@ -681,6 +694,7 @@ def travel_warrant_profile(warrant_id):
             # form.user_id.data = warrant.user_id
             form.with_task.data = warrant.with_task
             # form.company_id.data = str(User.query.filter_by(id=form.user_id.data).first().user_company.id)
+            form.abroad.data = warrant.abroad
             form.abroad_contry.data = warrant.abroad_contry
             form.relation.data = warrant.relation
             form.start_datetime.data = warrant.start_datetime

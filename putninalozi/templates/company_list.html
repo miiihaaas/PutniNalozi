@@ -1,9 +1,10 @@
-{% extends "layout.html" %}
-{% block content %}
-{% if current_user.authorization == 's_admin' %}
-  <a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}">Kreiraj Novu Kompaniju</a>
+{% extends "layout.html" %} {% block content %} {% if current_user.authorization
+== 's_admin' %}
+<a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}"
+  >Kreiraj Novu Kompaniju</a
+>
 {% endif %}
-<hr>
+<hr />
 <table id="data" border="1" class="table table-striped">
   <thead>
     <tr>
@@ -16,38 +17,54 @@
     </tr>
   </thead>
   <tbody>
-  {% if current_user.authorization == 's_admin' %}
-    {% for company in companys %}
-      <tr>
-        <td><a class="mr-2 btn btn-info" href="{{ url_for('companys.company_profile', company_id=company.id) }}" title="Uređivanje Kompanije">{{ company.companyname }}</a></td>
-        <td>{{ company.company_address }} {{ company.company_address_number }}</td>
-        <td>{{ company.company_city }}, {{ company.company_state }}</td>
-        <td>{{ company.company_site }} / {{ company.company_mail }} / {{ company.company_phone }}</td>
-      </tr>
-    {% endfor %}
-  {% else %}
-    {% for company in companys %}
-      {% if company.companyname == current_user.user_company.companyname %}
-        <tr>
-          <td><a class="mr-2 btn btn-info" href="{{ url_for('companys.company_profile', company_id=company.id) }}" title="Uredđivanje Kompanije">{{ company.companyname }}</a></td>
-          <td>{{ company.company_address }} {{ company.company_address_number }}</td>
-          <td>{{ company.company_city }}, {{ company.company_state }}</td>
-        </tr>
-      {% endif %}
-    {% endfor %}
+    {% if current_user.authorization == 's_admin' %} {% for company in companys
+    %}
+    <tr>
+      <td>
+        <a
+          class="mr-2 btn btn-info"
+          href="{{ url_for('companys.company_profile', company_id=company.id) }}"
+          title="Uređivanje Kompanije"
+          >{{ company.companyname }}</a
+        >
+      </td>
+      <td>
+        {{ company.company_address }} {{ company.company_address_number }}
+      </td>
+      <td>{{ company.company_city }}, {{ company.company_state }}</td>
+      <td>
+        {{ company.company_site }} / {{ company.company_mail }} / {{
+        company.company_phone }}
+      </td>
+    </tr>
+    {% endfor %} {% else %} {% for company in companys %} {% if
+    company.companyname == current_user.user_company.companyname %}
+    <tr>
+      <td>
+        <a
+          class="mr-2 btn btn-info"
+          href="{{ url_for('companys.company_profile', company_id=company.id) }}"
+          title="Uredđivanje Kompanije"
+          >{{ company.companyname }}</a
+        >
+      </td>
+      <td>
+        {{ company.company_address }} {{ company.company_address_number }}
+      </td>
+      <td>{{ company.company_city }}, {{ company.company_state }}</td>
+    </tr>
+    {% endif %} {% endfor %}
   </tbody>
   {% endif %}
 </table>
-{% endblock content%}
-
-{% block scripts %}
+{% endblock content%} {% block scripts %}
 <script>
   $(document).ready(function () {
-    $('#data').DataTable( {
+    $("#data").DataTable({
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/sr-SP.json"
-      }
-    } );
-  } );
+        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/sr-SP.json",
+      },
+    });
+  });
 </script>
 {% endblock %}

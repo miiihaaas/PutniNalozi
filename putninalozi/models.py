@@ -85,12 +85,13 @@ class TravelWarrant(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     with_task = db.Column(db.String(50), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+    abroad = db.Column(db.Boolean(), default=False, nullable=True)
     abroad_contry = db.Column(db.String(50), nullable=True)
     relation = db.Column(db.String(150), nullable=False)
     start_datetime = db.Column(db.DateTime, nullable=True)
     end_datetime = db.Column(db.DateTime, nullable=True)
-    contry_leaving = db.Column(db.DateTime, nullable=True) ####
-    contry_return = db.Column(db.DateTime, nullable=True) ###
+    contry_leaving = db.Column(db.DateTime, nullable=True)
+    contry_return = db.Column(db.DateTime, nullable=True)
 
 
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=True)
@@ -104,8 +105,8 @@ class TravelWarrant(db.Model):
     advance_payment_currency = db.Column(db.String(5), nullable=False)
     daily_wage = db.Column(db.Float, nullable=False)
     daily_wage_currency = db.Column(db.String(5), nullable=False)
-    daily_wage_abroad = db.Column(db.Float, nullable=False) ###
-    daily_wage_abroad_currency = db.Column(db.String(5), nullable=False) ###
+    daily_wage_abroad = db.Column(db.Float, nullable=False)
+    daily_wage_abroad_currency = db.Column(db.String(5), nullable=False)
     costs_pays = db.Column(db.String(50), nullable=False)
     # principal_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     # principal = db.relationship('User', foreign_keys='[TravelWarrant.principal_id]')

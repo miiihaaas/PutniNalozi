@@ -1,153 +1,229 @@
-{% extends "layout.html" %}
-{% block content %}
+{% extends "layout.html" %} {% block content %}
 <form method="POST" action="">
   {{ form.hidden_tag() }}
   <fieldset class="form-group">
-    <legend class="border-bottom mb-3">{{ legend }}</legend>
+    <legend class="border-bottom mb-3">
+      &#128663; &#128665; &#128666; {{ legend }} &#128663; &#128665; &#128666;
+    </legend>
   </fieldset>
   {% if current_user.authorization != 'c_user' %}
-    <div id="accordionZero">
-      <div class="accordion" id="accordionZero">
-        <div class="accordion-item">
-          <div class="accordion-header" id="headingZero">
-            <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
-              <h1>Kreiranje novog putnog naloga</h1>
-            </button>
-          </div>
+  <div id="accordionZero">
+    <div class="accordion" id="accordionZero">
+      <div class="accordion-item">
+        <div class="accordion-header" id="headingZero">
+          <button
+            type="button"
+            class="accordion-button"
+            data-toggle="collapse"
+            data-target="#collapseZero"
+            aria-expanded="false"
+            aria-controls="collapseZero"
+          >
+            <h1>Kreiranje novog putnog naloga</h1>
+          </button>
+        </div>
 
-          <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
-            <div class="card-body">
-              <div class="row">
-                <div class="col form-group">
-                  {{ form.user_id.label(class="form-control-label") }}
-                  {% if form.user_id.errors %}
-                  {{ form.user_id(class="form-control form-control-lg is-invalid") }}
-                  <div class="invalid-feedback">
-                    {% for error in form.user_id.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  {{ form.user_id(class="form-select form-select-lg") }}
-                  {% endif %}
+        <div
+          id="collapseZero"
+          class="collapse"
+          aria-labelledby="headingZero"
+          data-parent="#accordionZero"
+        >
+          <div class="card-body">
+            <div class="row">
+              <div class="col form-group">
+                {{ form.user_id.label(class="form-control-label") }} {% if
+                form.user_id.errors %} {{ form.user_id(class="form-control
+                form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                  {% for error in form.user_id.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
                 </div>
-                <div class="col form-box">
-                  {{ form.start_datetime.label(class="form-control-label") }}
-                  {% if form.start_datetime.errors %}
-                  {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
-                  <div class="invalid-feedback">
-                    {% for error in form.start_datetime.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                  </div>
-                  {% else %}
-                  {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
-                  {% endif %}
+                {% else %} {{ form.user_id(class="form-select form-select-lg")
+                }} {% endif %}
+              </div>
+              <div class="col form-box">
+                {{ form.start_datetime.label(class="form-control-label") }} {%
+                if form.start_datetime.errors %} {{
+                form.start_datetime(class="form-control form-control-lg
+                is-invalid") }}
+                <div class="invalid-feedback">
+                  {% for error in form.start_datetime.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
                 </div>
+                {% else %} {{ form.start_datetime(class="form-control
+                form-control-lg", type="datetime-local") }} {% endif %}
               </div>
-              <br>
-              <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
-              </div>
+            </div>
+            <br />
+            <div class="form-group">
+              {{ form.submit(class="btn btn-outline-info") }}
             </div>
           </div>
         </div>
       </div>
     </div>
-    <hr>
+  </div>
+  <hr />
+  {% endif %}
+  <table id="data" border="1" class="table table-striped">
+    {% if current_user.authorization == 's_admin' %}
+    <thead>
+      <tr id="header">
+        <th>Br.</th>
+        <th>Kompanija</th>
+        <th>Zaposleni</th>
+        <th>Vozilo</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for warrant in warrants %}
+      <tr>
+        <td class="align-middle">
+          <div class="btn-group">
+            <a
+              class="btn btn-info"
+              href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}"
+              role="button"
+              title="Uredi Putni Nalog"
+            >
+              {{ warrant.travel_warrant_number }}</a
+            ><a
+              class="btn btn-outline-info"
+              href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
+              >&#x21E9;</a
+            >
+          </div>
+        </td>
+        <td class="align-middle">
+          {{ warrant.travelwarrant_company.companyname }}
+        </td>
+        <td class="align-middle">
+          {{ warrant.travelwarrant_user.name }} {{
+          warrant.travelwarrant_user.surname }}
+        </td>
+        <td class="align-middle">
+          {% if warrant.together_with %} Putuje sa: <br />
+          {{warrant.together_with}} {% endif %} {{ warrant.other }} {{
+          warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type
+          }} <br />
+          {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
+          {{warrant.travelwarrant_vehicle.vehicle_registration}}
+        </td>
+        <td class="align-middle">{{ warrant.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    {% elif current_user.authorization == 'c_admin' %}
+    <thead>
+      <tr id="header">
+        <th>Br.</th>
+        <th>Zaposleni</th>
+        <th>Vozilo</th>
+        <th>Datum</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for warrant in warrants %} {% if current_user.user_company.id ==
+      warrant.travelwarrant_company.id %}
+      <tr>
+        <td class="align-middle">
+          <div class="btn-group">
+            <a
+              class="btn btn-info"
+              href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}"
+              role="button"
+              title="Uredi Putni Nalog"
+            >
+              {{ warrant.travel_warrant_number }}</a
+            ><a
+              class="btn btn-outline-info"
+              href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
+              >&#x21E9;</a
+            >
+          </div>
+        </td>
+        <td class="align-middle">
+          {{ warrant.travelwarrant_user.name }} {{
+          warrant.travelwarrant_user.surname}}
+        </td>
+        <td class="align-middle">
+          {% if warrant.together_with %} Putuje sa: <br />
+          {{warrant.together_with}} {% endif %} {{ warrant.other }} {{
+          warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type
+          }} <br />
+          {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
+          {{warrant.travelwarrant_vehicle.vehicle_registration}}
+        </td>
+        <td class="align-middle">{{ warrant.start_datetime.date() }}</td>
+        <td class="align-middle">{{ warrant.status }}</td>
+      </tr>
+      {% endif %} {% endfor %}
+    </tbody>
+    {% else %}
+    <thead>
+      <tr id="header">
+        <th>Br.</th>
+        <th>Zaposleni</th>
+        <th>Vozilo</th>
+        <th>Datum</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for warrant in warrants %} {% if current_user.id ==
+      warrant.travelwarrant_user.id %}
+      <tr>
+        <td class="align-middle">
+          <div class="btn-group">
+            <a
+              class="btn btn-info"
+              href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}"
+              role="button"
+              title="Uredi Putni Nalog"
+            >
+              {{ warrant.travel_warrant_number }}</a
+            ><a
+              class="btn btn-outline-info"
+              href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
+              >&#x21E9;</a
+            >
+          </div>
+        </td>
+        <td class="align-middle">
+          {{ warrant.travelwarrant_user.name }} {{
+          warrant.travelwarrant_user.surname}}
+        </td>
+        <td class="align-middle">
+          {% if warrant.together_with %} Putuje sa: <br />
+          {{warrant.together_with}} {% endif %} {{ warrant.other }} {{
+          warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type
+          }} <br />
+          {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
+          {{warrant.travelwarrant_vehicle.vehicle_registration}}
+        </td>
+        <td class="align-middle">{{ warrant.start_datetime.date() }}</td>
+        <td class="align-middle">{{ warrant.status }}</td>
+      </tr>
+      {% endif %} {% endfor %}
+    </tbody>
     {% endif %}
-    <table id="data" border="1" class="table table-striped">
-      {% if current_user.authorization == 's_admin' %}
-      <thead>
-        <tr id="header">
-          <th>Br.</th>
-          <th>Kompanija</th>
-          <th>Zaposleni</th>
-          <th>Vozilo</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for warrant in warrants %}
-        <tr>
-          <td class="align-middle"> <div class="btn-group">
-            <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }}</a><a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">&#x21E9;</a>
-          </div> </td>
-          <td class="align-middle"> {{ warrant.travelwarrant_company.companyname }} </td>
-          <td class="align-middle"> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} </td>
-          <td class="align-middle"> {% if warrant.together_with %} Putuje sa: <br> {{warrant.together_with}} {% endif %} {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
-          <td class="align-middle"> {{ warrant.status }} </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-      {% elif current_user.authorization == 'c_admin' %}
-      <thead>
-        <tr id="header">
-          <th>Br.</th>
-          <th>Zaposleni</th>
-          <th>Vozilo</th>
-          <th>Datum</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for warrant in warrants %}
-        {% if current_user.user_company.id == warrant.travelwarrant_company.id %}
-        <tr>
-          <td class="align-middle"> <div class="btn-group">
-            <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }}</a><a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">&#x21E9;</a>
-          </div></td>
-          <td class="align-middle"> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
-          <td class="align-middle"> {% if warrant.together_with %} Putuje sa: <br> {{warrant.together_with}} {% endif %} {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
-          <td class="align-middle"> {{ warrant.start_datetime.date() }} </td>
-          <td class="align-middle"> {{ warrant.status }} </td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-      </tbody>
-      {% else %}
-      <thead>
-        <tr id="header">
-          <th>Br.</th>
-          <th>Zaposleni</th>
-          <th>Vozilo</th>
-          <th>Datum</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for warrant in warrants %}
-        {% if current_user.id == warrant.travelwarrant_user.id %}
-        <tr>
-          <td class="align-middle"> <div class="btn-group">
-            <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}" role="button" title="Uredi Putni Nalog"> {{ warrant.travel_warrant_number }}</a><a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">&#x21E9;</a>
-          </div> </td>
-          <td class="align-middle"> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}} </td>
-          <td class="align-middle"> {% if warrant.together_with %} Putuje sa: <br> {{warrant.together_with}} {% endif %} {{ warrant.other }} {{ warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type }} <br> {{warrant.travelwarrant_vehicle.vehicle_brand}} <br> {{warrant.travelwarrant_vehicle.vehicle_registration}} </td>
-          <td class="align-middle"> {{ warrant.start_datetime.date() }} </td>
-          <td class="align-middle"> {{ warrant.status }} </td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-      </tbody>
-      {% endif %}
-    </table>
-  </form>
+  </table>
+</form>
 
-
-
-
-{% endblock content%}
-
-{% block scripts %}
+{% endblock content%} {% block scripts %}
 <script>
   $(document).ready(function () {
-    $('#data').DataTable( {
-      order: [[0, 'desc']],
+    $("#data").DataTable({
+      order: [[0, "desc"]],
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/sr-SP.json"
-      }
-    } );
-  } );
+        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/sr-SP.json",
+      },
+    });
+  });
 </script>
 {% endblock %}

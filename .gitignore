@@ -3,6 +3,7 @@
 
 
 # Manual added
+#TODO: komanda za brisanje fajlova sa gita: git rm -r --cached .\your\file\destination\file.extension
 putninalozi/site.db
 putninalozi/__pycache__/
 putninalozi/companys/__pycache__/

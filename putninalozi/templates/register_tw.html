@@ -33,62 +33,70 @@
               {% endif %}
           </div>
         </div>
+        
+        <div class="form-check form-switch">
+          {{ form.abroad(class="form-check-input", onclick="myFunction()", id="abroad_id") }} 
+          {{ form.abroad.label(class="form-check-label") }}
+        </div>
+        <div class="col form-box">
+          {{ form.relation.label(class="form-control-label") }} 
+          {% if form.relation.errors %} 
+          {{ form.relation(class="form-control form-control-lg is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.relation.errors %}
+            <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+          {% else %} 
+          {{ form.relation(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
         <div class="row">
-
-          <div class = "col col-md-6" id="accordionZero">
-            <br>
-          <div class="accordion-item">
-            <div class="accordion-header" id="headingZero">
-              <h5 class="mb-0">
-                <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
-                  Putovanje u inostranstvo
-                </button>
-              </h5>
+          <div 
+          id="collapseZero" 
+          class="collapse" 
+          aria-labelledby="headingZero">
+            <div class="card-body">
+              {{ form.abroad_contry.label(class="form-control-label") }}
+              {% if form.abroad_contry.errors %}
+                {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                  {% for error in form.abroad_contry.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                {{ form.abroad_contry(class="form-control form-control-lg") }}
+              {% endif %}
             </div>
-
-            <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
-              <div class="card-body">
-                {{ form.abroad_contry.label(class="form-control-label") }}
-                  {% if form.abroad_contry.errors %}
-                      {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.abroad_contry.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.abroad_contry(class="form-control form-control-lg") }}
-                  {% endif %}
-              </div>
-              <div class="card-body">
-                {{ form.daily_wage_abroad.label(class="form-control-label") }}
-                  {% if form.daily_wage_abroad.errors %}
-                      {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.daily_wage_abroad.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.daily_wage_abroad(class="form-control form-control-lg") }}
-                  {% endif %}
-              </div>
-              <div class="card-body">
-                {{ form.daily_wage_abroad_currency.label(class="form-control-label") }}
-                  {% if form.daily_wage_abroad_currency.errors %}
-                      {{ form.daily_wage_abroad_currency(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.daily_wage_abroad_currency.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.daily_wage_abroad_currency(class="form-select form-select-lg") }}
-                  {% endif %}
-              </div>
+            <div class="card-body">
+              {{ form.daily_wage_abroad.label(class="form-control-label") }}
+              {% if form.daily_wage_abroad.errors %}
+                {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                  {% for error in form.daily_wage_abroad.errors %}
+                    <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+              {% else %}
+                {{ form.daily_wage_abroad(class="form-control form-control-lg") }}
+              {% endif %}
+            </div>
+            <div class="card-body">
+              {{ form.daily_wage_abroad_currency.label(class="form-control-label") }}
+                {% if form.daily_wage_abroad_currency.errors %}
+                    {{ form.daily_wage_abroad_currency(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.daily_wage_abroad_currency.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.daily_wage_abroad_currency(class="form-select form-select-lg") }}
+                {% endif %}
             </div>
           </div>
-          </div>
+
           <div class="col form-box">
             {{ form.daily_wage.label(class="form-control-label") }}
 
@@ -119,19 +127,6 @@
         </div>
         <br>
         <div class="row">
-          <div class="col form-box col-md-6">
-            {{ form.relation.label(class="form-control-label") }}
-              {% if form.relation.errors %}
-                  {{ form.relation(class="form-control form-control-lg is-invalid") }}
-                  <div class="invalid-feedback">
-                      {% for error in form.relation.errors %}
-                          <span>{{ error }}</span>
-                      {% endfor %}
-                  </div>
-              {% else %}
-                  {{ form.relation(class="form-control form-control-lg") }}
-              {% endif %}
-          </div>
           <div class="col form-box">
             {{ form.advance_payment.label(class="form-control-label") }}
               {% if form.advance_payment.errors %}
@@ -338,3 +333,30 @@
   </form>
 </div>
 {% endblock content%}
+
+{% block scripts %}
+<script>
+  var booleanValue = '{{form.abroad.data}}';
+  // window.alert(booleanValue);
+  if (booleanValue === 'True') {
+    booleanValue = false;
+  } else if (booleanValue === 'False') {
+    booleanValue = true;
+  };
+  window.onload = function() {
+    myFunction();
+  };
+
+  // window.alert(booleanValue);
+  function myFunction() {
+    booleanValue = !booleanValue;
+    // window.alert(booleanValue);
+    var x = document.getElementById("collapseZero");
+    if (booleanValue === true) {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  }
+</script>
+{% endblock %}
