@@ -437,9 +437,11 @@ def travel_warrant_profile(warrant_id):
                 print(f'razlika u vremenu {br_casova}')
                 br_casova = br_casova.total_seconds() / 3600
                 print(f'razlika u vremenu {br_casova} u satima')
-
-                br_casova_ino = warrant.contry_return - warrant.contry_leaving
-                br_casova_ino = br_casova_ino.total_seconds() / 3600
+                if warrant.abroad:
+                    br_casova_ino = warrant.contry_return - warrant.contry_leaving
+                    br_casova_ino = br_casova_ino.total_seconds() / 3600
+                else:
+                    br_casova_ino = 0
 
                 br_casova = br_casova - br_casova_ino
 
