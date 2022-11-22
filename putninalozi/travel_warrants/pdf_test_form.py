@@ -79,7 +79,7 @@ Na službenom putu koristi prevozno sredstvo registarske tablice: GM031TC
 
 Dnevnica za ovo služebno putovanje pripada u iznosu od: 1000 rsd
 
-Na službenom putu će se zadržati najdalje do {end_datetime},a u roku od 48h po povratku sa službenog puta i dolask na posao, podnešće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana
+Na službenom putu će se zadržati najdalje do {end_datetime},a u roku od 48h po povratku sa službenog puta i dolask na posao, podneće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana
 
 Putni troškovi padaju na teret: {costs_pays}
 

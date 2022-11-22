@@ -4,7 +4,6 @@
 #     # print(f'broj cifara je {len(a)}')
 
 def number_to_text(a):
-#? ne znam da li treba preko klase da se izveze u pdf_forms
     jedinice = ["", "jedan", "dva", "tri", "četiri", "pet", "šest", "sedam", "osam", "devet"]
     druga_dekada = ["", "deset", "jedanaest", "dvanaest", "trinaest", "četrdeset", "petnaest", "šesnaest", "sedamnaest", "osamnaest", "devetnaest"]
     desetice = ["", "deset", "dvadeset", "trideset", "četrdeset", "pedeset", "šezdeset", "sedamdeset", "osamdeset", "devedeset"]
@@ -84,9 +83,4 @@ def number_to_text(a):
         slovima = under_100000(a)
         print(f'iz if bloka <100 000: {slovima}')
     return slovima
-# while True:
-#     a=int(input('unesi neki broj: '))
-#     print(a)
-#     text = number_to_text(a)
-#     print(f'iz while loop: {text}')
 

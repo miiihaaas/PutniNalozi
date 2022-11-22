@@ -41,4 +41,4 @@ class EditCompanyForm(FlaskForm):
     company_logo = FileField('Promeni logo', validators=[FileAllowed(['jpg', 'png'])]) #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
     cashier_email = StringField('Blagajnik', validators=[DataRequired(), Email()])
     CEO = StringField('Nalogodavac', validators=[DataRequired(), Length(min=5, max=50)])
-    submit = SubmitField('Ažuriraj')
+    submit = SubmitField('Ažurirajte podatke')
