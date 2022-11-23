@@ -96,10 +96,10 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
             else:
                 user.email = form.email.data
 
-        if current_user.authorization != 's_admin':
-            user.authorization = user.authorization
-        else:
-            user.authorization = form.authorization.data
+        # if current_user.authorization != 's_admin':
+        #     user.authorization = user.authorization
+        # else:
+        user.authorization = form.authorization.data
 
         user.gender = form.gender.data
 

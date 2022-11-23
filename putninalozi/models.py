@@ -15,7 +15,7 @@ class Company(db.Model):
     company_address_number = db.Column(db.String(5), nullable=False)
     company_zip_code = db.Column(db.Integer, nullable=False)
     company_city = db.Column(db.String(50), unique=False, nullable=False)
-    company_state = db.Column(db.String(20), unique=False, nullable=False)
+    company_state = db.Column(db.String(50), unique=False, nullable=False)
     company_pib = db.Column(db.Integer, nullable=False)
     company_mb = db.Column(db.Integer, nullable=False)
     company_site = db.Column(db.String(50), unique=True, nullable=False) #vidi imali neki model tipa db.Link()
