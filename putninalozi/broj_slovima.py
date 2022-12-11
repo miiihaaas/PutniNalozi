@@ -52,10 +52,13 @@ def number_to_text(a):
         return slovima
     
     def under_100000(number):
-        last_3_digit = int(str(number)[0])
         f2d = int(str(number)[:2]) #! prve dve cifre
+        _2d = int(str(number)[1:2]) #! druga cifra
         print(f'prve dve cifre su: {f2d}')
-        slovima = under_100(f2d) + 'hiljada'
+        if _2d in [2, 3, 4]:
+            slovima = under_100(f2d) + 'hiljade' #? ovo važi za hiljade od 5 do 10 - treba if kod koji će da piše "hiljade" za 2-4
+        else:
+            slovima = under_100(f2d) + 'hiljada' #? ovo važi za hiljade od 5 do 10 - treba if kod koji će da piše "hiljade" za 2-4
         print(slovima)
         l3d = number - f2d * 1000 #! poslednje tri cifre
         slovima_l3d = under_1000(l3d)

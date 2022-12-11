@@ -7,6 +7,51 @@ import datetime
 from putninalozi.models import TravelWarrant
 
 
+def replace_serbian_characters(string):
+    # breakpoint()
+    try:
+        string = string.replace("č", "c")
+    except:
+        pass
+    try:
+        string = string.replace("ć", "c")
+    except:
+        pass
+    try:
+        string = string.replace("đ", "dj")
+    except:
+        pass
+    try:
+        string = string.replace("ž", "z")
+    except:
+        pass
+    try:
+        string = string.replace("š", "s")
+    except:
+        pass
+    try:
+        string = string.replace("Č", "C")
+    except:
+        pass
+    try:
+        string = string.replace("Ć", "C")
+    except:
+        pass
+    try:
+        string = string.replace("Đ", "Dj")
+    except:
+        pass
+    try:
+        string = string.replace("Ž", "Z")
+    except:
+        pass
+    try:
+        string = string.replace("Š", "S")
+    except:
+        pass
+    return string
+
+
 def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino):
     rod = []
     if warrant.travelwarrant_user.gender == "1":
@@ -159,7 +204,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
 
 
     path = "putninalozi/static/pdf_forms/"
-    file_name = f'{warrant_number} {company_name}-{name} {surname}.pdf'
+    file_name = replace_serbian_characters(f'{warrant_number} {company_name}-{name} {surname}.pdf')    
     pdf.output(path + file_name)
     return file_name, text_form
 
@@ -359,7 +404,7 @@ U mestu {warrant.travelwarrant_company.company_city}, dana {warrant.end_datetime
 Blagajnik: _____________________________________          Podnosilac računa: _____________________________________''', ln=True, align='C')
 
     path = "putninalozi/static/pdf_forms/"
-    file_name = f'{warrant_number} {company_name}-{name} {surname}.pdf'
+    file_name = replace_serbian_characters(f'{warrant_number} {company_name}-{name} {surname}.pdf')
     pdf.output(path + file_name)
     return file_name, text_form
 
