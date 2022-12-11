@@ -87,11 +87,15 @@ def register_tw(korisnik_id, datum):
 
         ime_prezime = User.query.filter_by(id=korisnik_id).first().name + " " + User.query.filter_by(id=korisnik_id).first().surname
         print(ime_prezime)
-
+        #todo promeniti logiku kreiranja brojača: da izlista sve naloge tog dana, pa da izabere najveći broj brojača i na to da +1
         brojac = len(TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
                                                                                                             datum.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                             datum.replace(hour=23, minute=59, second=59, microsecond=9))).all())
-
+        #todo preimenuj max_brojac u brojac kada se usvoji nova nomenklatura, izbrisati stari kod iznad
+        max_brojac = max([int(b.travel_warrant_number[-2:]) for b in TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
+                                                                                                            datum.replace(hour=0, minute=0, second=0, microsecond=0),
+                                                                                                            datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()])
+        # return f'{max_brojac=}'
         if brojac + 1 < 10:
             brojac = '-0' + str(brojac + 1)
         else:
