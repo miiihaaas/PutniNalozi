@@ -10,7 +10,7 @@ from datetime import datetime
 
 travel_warrants = Blueprint('travel_warrants', __name__)
 
-def proracaun_broja_dnevnica(br_casova):
+def proracun_broja_dnevnica(br_casova):
     if br_casova < 8:
         br_dnevnica = 0.0
         print(f'ispod 8h: {br_dnevnica=}')
@@ -263,8 +263,8 @@ def register_tw(korisnik_id, datum):
 
         br_casova = br_casova - br_casova_ino
 
-        br_dnevnica = proracaun_broja_dnevnica(br_casova)
-        br_dnevnica_ino = proracaun_broja_dnevnica(br_casova_ino)
+        br_dnevnica = proracun_broja_dnevnica(br_casova)
+        br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
         print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
         file_name, text_form = create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino)
@@ -449,8 +449,8 @@ def travel_warrant_profile(warrant_id):
 
                 br_casova = br_casova - br_casova_ino
 
-                br_dnevnica = proracaun_broja_dnevnica(br_casova)
-                br_dnevnica_ino = proracaun_broja_dnevnica(br_casova_ino)
+                br_dnevnica = proracun_broja_dnevnica(br_casova)
+                br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
                 print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
                 file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
@@ -680,8 +680,8 @@ def travel_warrant_profile(warrant_id):
 
             br_casova = br_casova - br_casova_ino
 
-            br_dnevnica = proracaun_broja_dnevnica(br_casova)
-            br_dnevnica_ino = proracaun_broja_dnevnica(br_casova_ino)
+            br_dnevnica = proracun_broja_dnevnica(br_casova)
+            br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
             print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
             file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
