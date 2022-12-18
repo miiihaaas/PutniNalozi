@@ -131,7 +131,7 @@ class TravelWarrantExpenses(db.Model):
     description = db.Column(db.String(1000), nullable = True)
     amount = db.Column(db.Float, nullable=True)
     amount_currency = db.Column(db.String(5), nullable=False)
-    travelwarrant_id = db.Column(db.Integer, db.ForeignKey('travel_warrant.travel_warrant_id'), nullable=False)
+    travelwarrant_id = db.Column(db.Integer, db.ForeignKey('travel_warrant.travel_warrant_id'), nullable=True)
 
     def __repr__(self):
         return f"Travel Warrant Expenses('{self.expenses_id=}', '{self.expenses_type=}', '{self.description=}')"

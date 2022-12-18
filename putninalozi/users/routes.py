@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect, request, abort
 from putninalozi import db, bcrypt, mail
 from putninalozi.users.forms import RegistrationUserForm, LoginForm, UpdateUserForm, RequestResetForm, ResetPasswordForm
-from putninalozi.models import Company, User, Vehicle
+from putninalozi.models import Company, User, Vehicle, TravelWarrant
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_mail import Message
 from wtforms.validators import ValidationError
@@ -158,27 +158,47 @@ def logout():
 @login_required
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
+    list_of_users_warrants = TravelWarrant.query.filter_by(user_id=user_id).all()
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif not bcrypt.check_password_hash(current_user.password, request.form.get("input_password")):
         print('Pogrešna lozinka!')
-        abort(403)
+        flash('Pogrešna lozinka!', 'danger')
+        return render_template('403.html')
     else:
         if current_user.authorization != 'c_admin' and  current_user.authorization != 's_admin':
-            abort(403)
+            flash('Nemate ovlašćenje da brišete profile korisnika!', 'danger')
+            return render_template('403.html')
         elif current_user.authorization == 'c_admin':
             if current_user.user_company.id != user.user_company.id:
-                abort(403)
-            db.session.delete(user)
-            db.session.commit()
-            flash(f'Korisnički profil {user.name} {user.surname} je obrisan.', 'success' )
-            return redirect(url_for('users.user_list'))
+                flash('Nemate ovlašćenje da brišete profile korisnika drugih kompanija!', 'danger')
+                return render_template('403.html')
+            if len(list_of_users_warrants):
+                print(f'ima {len(list_of_users_warrants)} prutnih naloga, treba tagovati profil')
+                user.authorization = 'c_deleted'
+                db.session.commit()
+                flash(f'Korisnički profil {user.name} {user.surname} je obrisan. Putni nalozi korisnika su ostali u bazi podataka.', 'success' )
+                return redirect(url_for('users.user_list'))
+            else:
+                print('nema putnih naloga, može da se obriše profil')
+                db.session.delete(user)
+                db.session.commit()
+                flash(f'Korisnički profil {user.name} {user.surname} je obrisan.', 'success' )
+                return redirect(url_for('users.user_list'))
         else:
-            db.session.delete(user)
-            db.session.commit()
-            flash(f'Korisnički profil {user.name} {user.surname} je obrisan.', 'success' )
-            return redirect(url_for('users.user_list'))
+            if len(list_of_users_warrants):
+                print(f'ima {len(list_of_users_warrants)} prutnih naloga, treba tagovati profil')
+                user.authorization = 'c_deleted'
+                db.session.commit()
+                flash(f'Korisnički profil {user.name} {user.surname} je obrisan. Putni nalozi korisnika su ostali u bazi podataka.', 'success' )
+                return redirect(url_for('users.user_list'))
+            else:
+                print('nema putnih naloga, može da se obriše profil')
+                db.session.delete(user)
+                db.session.commit()
+                flash(f'Korisnički profil {user.name} {user.surname} je obrisan.', 'success' )
+                return redirect(url_for('users.user_list'))
 
 
 def send_reset_email(user):

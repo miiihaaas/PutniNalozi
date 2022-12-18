@@ -516,14 +516,46 @@
         name="dugme"
         value="Obračunajte"
       />
-      {% endif %} {{ form.submit(class="btn btn-outline-primary") }}
+      {% endif %} 
+      {{ form.submit(class="btn btn-outline-primary") }}
       <a
         class="shadow btn btn-outline-info"
         href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
-        >Preuzmite dokument</a
-      >
+        >Preuzmite dokument</a>
+      {% if current_user.authorization == 's_admin' or current_user.authorization == 'c_admin' %}
+      <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Obrišite putni nalog</button>
+      {% endif %}
     </div>
   </form>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+      <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želiite da trajno izbišete putninalog {{warrant.travel_warrant_number}}?</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+      </div>
+      <div class="modal-body">
+      <label for="input_password">Zaposleni: {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }}
+        <br>Sa zadatkom: {{ warrant.with_task }}
+        <br>Relacija: {{ warrant.relation }}
+        <br>
+        <br> Da bi izbrisali putni nalog potrebno je uneti svoju šifru.
+      </label>
+      </div>
+      <div class="modal-footer">
+      <form  action="{{ url_for('travel_warrants.delete_travel_warrant', warrant_id=warrant.travel_warrant_id) }}" method="post">
+          <input class="form-control" type="password" id="input_password" name="input_password" value="" placeholder="potvrdi lozinkom">
+          <br>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
+          <input class="btn btn-danger" type="submit" value="Izbrišite putni nlaog">
+      </form>
+      </div>
+  </div>
+  </div>
 </div>
 {% endblock content %} 
 

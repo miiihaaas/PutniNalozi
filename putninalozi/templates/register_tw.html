@@ -108,7 +108,7 @@
                       {% endfor %}
                   </div>
               {% else %}
-                  {{ form.daily_wage(class="form-control form-control-lg") }}
+                  {{ form.daily_wage(class="form-control form-control-lg", id="daily_wage") }}
               {% endif %}
           </div>
           <div class="col form-box col-md-2">
@@ -328,7 +328,7 @@
       </fieldset>
       <div class="form-group">
         <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">Nazad</a>
-        {{ form.submit(class="btn btn-outline-info") }}
+        {{ form.submit(class="btn btn-outline-info", onclick="prekoNeoporezivog()") }}
       </div>
   </form>
 </div>
@@ -356,6 +356,16 @@
       x.style.display = "block";
     } else {
       x.style.display = "none";
+    }
+  }
+
+  function prekoNeoporezivog() {
+    var neoporeziv_iznos = '{{ form.daily_wage.data }}';
+    var dnevnica = document.getElementById("daily_wage").value;
+    // alert(dnevnica);
+    // alert(neoporeziv_iznos);
+    if (dnevnica > neoporeziv_iznos) {
+      alert('Obaveštavamo Vas da je iznos dnevnice veći od neoporezivog iznosa!');
     }
   }
 </script>

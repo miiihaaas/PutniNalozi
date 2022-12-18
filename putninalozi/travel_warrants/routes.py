@@ -47,16 +47,13 @@ def travel_warrant_list():
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-
     warrants = TravelWarrant.query.all()
     form = PreCreateTravelWarrantForm()
-    form.user_id.choices = [(0, '----------')] + [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
+    form.user_id.choices = [(0, '----------')] + [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).filter(User.authorization != 'c_deleted').order_by('name').all()]
     if form.validate_on_submit():
         korisnik_id = form.user_id.data
         datum = form.start_datetime.data
         return redirect(url_for('travel_warrants.register_tw',korisnik_id=korisnik_id, datum=datum))
-
-
     return render_template('travel_warrant_list.html', title='Putni nalozi', warrants=warrants, form=form, legend='Putni nalozi')
 
 
@@ -87,12 +84,12 @@ def register_tw(korisnik_id, datum):
 
         ime_prezime = User.query.filter_by(id=korisnik_id).first().name + " " + User.query.filter_by(id=korisnik_id).first().surname
         print(ime_prezime)
-        #todo promeniti logiku kreiranja brojača: da izlista sve naloge tog dana, pa da izabere najveći broj brojača i na to da +1
-        brojac = len(TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
-                                                                                                            datum.replace(hour=0, minute=0, second=0, microsecond=0),
-                                                                                                            datum.replace(hour=23, minute=59, second=59, microsecond=9))).all())
+        # #todo promeniti logiku kreiranja brojača: da izlista sve naloge tog dana, pa da izabere najveći broj brojača i na to da +1
+        # brojac = len(TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
+        #                                                                                                     datum.replace(hour=0, minute=0, second=0, microsecond=0),
+        #                                                                                                     datum.replace(hour=23, minute=59, second=59, microsecond=9))).all())
         #todo preimenuj max_brojac u brojac kada se usvoji nova nomenklatura, izbrisati stari kod iznad
-        max_brojac = max([0] + [int(b.travel_warrant_number[-2:]) for b in TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
+        brojac = max([0] + [int(b.travel_warrant_number[-2:]) for b in TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
                                                                                                             datum.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                             datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()])
         # return f'{max_brojac=}'
@@ -216,6 +213,9 @@ def register_tw(korisnik_id, datum):
                 file_name="",
                 text_form="",
                 expenses=[])
+        elif form.vehicle_id.data == "":
+            flash('Morate da odaberete jedan od načina prevoza klikom na dugme "Nazad".', 'danger')
+            return render_template('403.html')
         else:
             warrant = TravelWarrant(
                 user_id=korisnik_id,
@@ -408,6 +408,9 @@ def travel_warrant_profile(warrant_id):
 
                     # warrant.expenses = form.expenses.data
                     print('drugo - c_user')
+                elif form.vehicle_id.data == "":
+                    flash('Morate da odaberete jedan od načina prevoza klikom na dugme "Nazad".', 'danger')
+                    return render_template('403.html')
                 else:
                     warrant.with_task = form.with_task.data
                     warrant.abroad = form.abroad.data
@@ -626,6 +629,9 @@ def travel_warrant_profile(warrant_id):
 
                 # warrant.expenses = form.expenses.data
                 print('drugo')
+            elif form.vehicle_id.data == "":
+                flash('Morate da odaberete jedan od načina prevoza klikom na dugme "Nazad".', 'danger')
+                return render_template('403.html')
             else:
                 # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
@@ -804,9 +810,39 @@ def delete_expense(warrant_id, expenses_id):
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.user_company.id != warrant.company_id: #ako putni nalog nije iz kompanije trenutno ulogovanok korisnika
-            abort(403)
+        flash('Nemate ovlašćenje da brišete troškove putnih naloga drugih kompanija', 'danger')
+        return render_template('403.html')
     else:
         db.session.delete(expense)
         db.session.commit()
         flash(f'Trošak {expense.expenses_type} je obrisan.', 'success' )
         return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))
+
+
+@travel_warrants.route('/travel_warrant/<int:warrant_id>/delete', methods=['GET', 'POST'])
+def delete_travel_warrant(warrant_id):
+    warrant = TravelWarrant.query.get_or_404(warrant_id)
+    if not current_user.is_authenticated:
+        flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
+        return redirect(url_for('users.login'))
+    elif not bcrypt.check_password_hash(current_user.password, request.form.get("input_password")):
+        print('Pogrešna lozinka!')
+        flash('Pogrešna lozinka!', 'danger')
+        return render_template('403.html')
+    else:
+        if current_user.authorization != 'c_admin' and  current_user.authorization != 's_admin':
+            flash('Nemate ovlašćenje da brišete putne naloge!', 'danger')
+            return render_template('403.html')
+        elif current_user.authorization == 'c_admin':
+            if current_user.user_company.id != warrant.company_id: #ako putni nalog nije iz kompanije trenutno ulogovanok korisnika
+                flash('Nemate ovlašćenje da brišete putne naloge drugih kompanija', 'danger')
+                return render_template('403.html')
+            db.session.delete(warrant)
+            db.session.commit()
+            flash(f'Putni nalog: {warrant.travel_warrant_number} je obrisan.', 'success' )
+            return redirect(url_for('travel_warrants.travel_warrant_list'))
+        else:
+            db.session.delete(warrant)
+            db.session.commit()
+            flash(f'Putni nalog: {warrant.travel_warrant_number} je obrisan.', 'success' )
+            return redirect(url_for('travel_warrants.travel_warrant_list'))

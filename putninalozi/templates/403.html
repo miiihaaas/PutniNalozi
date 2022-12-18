@@ -1,0 +1,5 @@
+{% extends "layout.html" %}
+{% block content %}
+<a class="btn btn-info" href="{{ url_for('main.home') }}">Početna</a>
+<button class="btn btn-info" onclick="history.back()">Nazad</button>
+{% endblock content%}

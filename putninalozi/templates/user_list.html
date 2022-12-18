@@ -36,10 +36,12 @@
     <tbody>
       {% for user in users %}
         {% if user.user_company.id == current_user.user_company.id %}
-          <tr>
-            <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> </td>
-            <td>{{ user.email }}</td>
-          </tr>
+          {% if user.authorization != 'c_deleted' %}
+            <tr>
+              <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> </td>
+              <td>{{ user.email }}</td>
+            </tr>
+          {% endif %}
         {% endif %}
       {% endfor %}
     </tbody>

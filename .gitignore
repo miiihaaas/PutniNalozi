@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,windows
 
 
-# Manual added
+# Manualy added
 #TODO: komanda za brisanje fajlova sa gita: git rm -r --cached .\your\file\destination\file.extension
 putninalozi/site.db
 putninalozi/__pycache__/
