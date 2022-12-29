@@ -12,7 +12,7 @@ main = Blueprint('main', __name__)
 @main.route("/home")
 def home():
     if not current_user.is_authenticated:
-        flash('Da bi ste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
+        flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     return render_template('home.html', title='Početna')
 

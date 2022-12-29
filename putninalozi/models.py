@@ -118,7 +118,7 @@ class TravelWarrant(db.Model):
     status = db.Column(db.String(15), nullable=False)
     file_name = db.Column(db.String(100), nullable=True) #za PDF fajl
     text_form = db.Column(db.String(1000), nullable=True) #za tekst forme iz pdf fajla
-    expenses = db.relationship('TravelWarrantExpenses', backref='trawelwarrantexpenses_travelwarrant', lazy=True)
+    expenses = db.relationship('TravelWarrantExpenses', backref='trawelwarrantexpenses_travelwarrant', lazy=True, cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"Travel Warrant('{self.travel_warrant_id=}', '{self.with_task=}', '{self.user_id=}')"

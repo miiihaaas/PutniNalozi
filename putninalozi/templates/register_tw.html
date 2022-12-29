@@ -361,7 +361,7 @@
 
   function prekoNeoporezivog() {
     var neoporeziv_iznos = '{{ form.daily_wage.data }}';
-    var dnevnica = document.getElementById("daily_wage").value;
+    var dnevnica = +document.getElementById("daily_wage").value;
     // alert(dnevnica);
     // alert(neoporeziv_iznos);
     if (dnevnica > neoporeziv_iznos) {
