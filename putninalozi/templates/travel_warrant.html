@@ -454,6 +454,19 @@
         </div>
       </div>
       <br />
+      <div class="form-box">
+        {{ form.principal_id.label(class="form-control-label") }}
+          {% if form.principal_id.errors %}
+              {{ form.principal_id(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                  {% for error in form.principal_id.errors %}
+                      <span>{{ error }}</span>
+                  {% endfor %}
+              </div>
+          {% else %}
+              {{ form.principal_id(class="form-select form-select-lg") }}
+          {% endif %}
+      </div>
       <br />
       <hr />
       <div class="form-group">

@@ -37,7 +37,7 @@ class CreateTravelWarrantForm(FlaskForm):
     daily_wage_abroad = DecimalField('Iznos dnevnice u inostranstvu: ')
     daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('e', 'EUR'), ('usd', 'USD')])
     costs_pays = StringField('Putni troškovi padaju na teret: ', validators=[DataRequired()])
-    # principal = #nalogodavac
+    principal_id = SelectField('Nalogodavac:', validators=[Optional()], choices=[])
 
     submit = SubmitField('Kreiraj putni nalog')
     #nastaviti
@@ -72,6 +72,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     daily_wage_abroad = DecimalField('Iznos dnevnice u inostranstvu: ')
     daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('e', 'EUR'), ('usd', 'USD')])
     costs_pays = StringField('Putni troškovi padaju na teret: ')
+    principal_id = SelectField('Nalogodavac:', validators=[Optional()], choices=[])
 
     km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
     km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])

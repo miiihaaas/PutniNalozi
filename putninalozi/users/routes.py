@@ -118,7 +118,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         form.workplace.data = user.workplace
         form.email.data = user.email
 
-        form.authorization.choices = [('c_user', 'USER'),('c_principial', 'NALOGODAVAC'),('c_cashier', 'BLAGAJNIK'),('c_admin', 'ADMIN')]
+        form.authorization.choices = [('c_user', 'USER'),('c_principal', 'NALOGODAVAC'),('c_cashier', 'BLAGAJNIK'),('c_admin', 'ADMIN')]
         form.authorization.data = user.authorization
 
         form.gender.choices = [(1, 'muški'),(2, 'ženski')]

@@ -55,9 +55,9 @@ def replace_serbian_characters(string):
 def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino):
     rod = []
     if warrant.travelwarrant_user.gender == "1":
-        rod=["Radnik", "raspoređen", "Kolega", 'izvršio']
+        rod=["Radnik", "raspoređen", "Kolega", 'izvršio', "Osnivač"]
     elif warrant.travelwarrant_user.gender == "2":
-        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila']
+        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila', "Osnivač"]
 
     warrant_id = warrant.travel_warrant_id
     warrant_number = warrant.travel_warrant_number
@@ -100,7 +100,7 @@ Putni troškovi padaju na teret: {costs_pays}.
 
 {f'Odobravam isplatu akontacije u iznosu od: {warrant.advance_payment} {warrant.advance_payment_currency}.' if warrant.advance_payment > 0 else ""}
 
-Nalogodavac: {warrant.travelwarrant_company.CEO}.
+Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
 '''
 
 
@@ -139,6 +139,23 @@ Nalogodavac: {warrant.travelwarrant_company.CEO}.
 
     pdf = PDF()
     pdf.alias_nb_pages()
+    #todo (2.0) pdf.add_page()
+    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
+    #todo (2.0) pdf.set_font('DejaVuSansCondensed','B', 16)
+    #todo (2.0) pdf.cell(0, 10, f'ODLUKA' , ln=True, align='C')
+    #todo (2.0) pdf.cell(0, 10, f'o upućivanju na službeni put' , ln=True, align='C')
+    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
+    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
+    #todo (2.0) pdf.set_font('DejaVuSansCondensed','', 12)
+    #todo (2.0) pdf.multi_cell(0, 4, f'''Upućuje se na službeni put u {warrant.relation} {warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}. Upućeni će krenuti na put dana {warrant.start_datetime.strftime("%d/%m/%Y")} sa ciljem {warrant.with_task}. Upućeni će posao obaviti bez naknade.''', border=0, ln=True, align='L')
+    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
+    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
+    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
+    #todo (2.0) pdf.cell(0, 8, f'U {company_city}, {warrant.start_datetime.strftime("%d/%m/%Y")}' , ln=True, align='L')
+    #todo (2.0) pdf.cell(0, 8, f'Ovlašćeno lice' , ln=True, align='L')
+    #todo (2.0) pdf.cell(0, 6, f'_________________________' , ln=True, align='L')
+    #todo (2.0) pdf.cell(0, 4, f'{warrant.principal_user.name} {warrant.principal_user.surname}' , ln=True, align='L')
+    
     pdf.add_page()
     pdf.set_font('DejaVuSansCondensed','B', 16)
     pdf.cell(0, 30, f'NALOG ZA SLUŽBENO PUTOVANJE: {warrant_number}', ln=True, align='C')
@@ -257,7 +274,7 @@ Putni troškovi padaju na teret: {costs_pays}.
 
 {f'Odobravam isplatu akontacije u iznosu od: {warrant.advance_payment} {warrant.advance_payment_currency}.' if warrant.advance_payment > 0 else ""}
 
-Nalogodavac: {warrant.travelwarrant_company.CEO}.
+Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
 '''
 
 
@@ -420,7 +437,7 @@ def send_email(warrant, current_user, file_name):
     # ako je kreiran nalog: korisniku i nalogodavcu
     if warrant.status == 'kreiran':
         subject = f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}'
-        recipients = [warrant.travelwarrant_user.email] #dodaj kod za nalogodavca!!!
+        recipients = [warrant.travelwarrant_user.email, warrant.principal_user.email] #dodaj kod za nalogodavca!!!
         text_body = f'''{rod[2]},
 Odobren je putni nalog {warrant.travel_warrant_number}.
 Detaljije informacije o putnom nalogu mogu se videti u prilogu ili klikom na link:

@@ -81,7 +81,9 @@ def register_tw(korisnik_id, datum):
                                                                                                                     datum.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                                     datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         print(drivers)
-
+        
+        principal_list = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_principal').all()]
+        
         ime_prezime = User.query.filter_by(id=korisnik_id).first().name + " " + User.query.filter_by(id=korisnik_id).first().surname
         print(ime_prezime)
         # #todo promeniti logiku kreiranja brojača: da izlista sve naloge tog dana, pa da izabere najveći broj brojača i na to da +1
@@ -110,6 +112,7 @@ def register_tw(korisnik_id, datum):
         # form.user_id.data = str(korisnik_id)
         form.vehicle_id.choices = vehicle_list
         form.together_with.choices = drivers
+        form.principal_id.choices = principal_list
         if request.method == 'GET':
             form.vehicle_id.data  = str(podrazumevano_vozilo)
             form.costs_pays.data = 'poslodavca'
@@ -146,6 +149,7 @@ def register_tw(korisnik_id, datum):
                 daily_wage_abroad=form.daily_wage_abroad.data,
                 daily_wage_abroad_currency=form.daily_wage_abroad_currency.data,
                 costs_pays=form.costs_pays.data,
+                principal_id = form.principal_id.data,
                 km_start=1,
                 km_end=1,
                 status='kreiran',
@@ -176,6 +180,7 @@ def register_tw(korisnik_id, datum):
                 daily_wage_abroad=form.daily_wage_abroad.data,
                 daily_wage_abroad_currency=form.daily_wage_abroad_currency.data,
                 costs_pays=form.costs_pays.data,
+                principal_id = form.principal_id.data,
                 km_start=1,
                 km_end=1,
                 status='kreiran',
@@ -206,6 +211,7 @@ def register_tw(korisnik_id, datum):
                 daily_wage_abroad=form.daily_wage_abroad.data,
                 daily_wage_abroad_currency=form.daily_wage_abroad_currency.data,
                 costs_pays=form.costs_pays.data,
+                principal_id = form.principal_id.data,
                 km_start=1,
                 km_end=1,
                 status='kreiran',
@@ -239,6 +245,7 @@ def register_tw(korisnik_id, datum):
                 daily_wage_abroad=form.daily_wage_abroad.data,
                 daily_wage_abroad_currency=form.daily_wage_abroad_currency.data,
                 costs_pays=form.costs_pays.data,
+                principal_id = form.principal_id.data,
                 km_start=1,
                 km_end=1,
                 status='kreiran',
@@ -280,7 +287,8 @@ def register_tw(korisnik_id, datum):
 
         send_email(warrant, current_user, file_name)
         flash(f'Putni nalog broj: {warrant.travel_warrant_number} je uspešno kreiran!', 'success')
-        flash(f'{warrant.travelwarrant_user.name} je {"dobio" if warrant.travelwarrant_user.gender == 1 else "dobila"} mejl sa detaljima putnog naloga.', 'success')
+        # todo - je dobila / je dobio
+        flash(f'{warrant.travelwarrant_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa detaljima putnog naloga.', 'success')
         return redirect(url_for('travel_warrants.travel_warrant_list'))
 
     return render_template('register_tw.html', title='Kreiranje putnog naloga',
@@ -510,6 +518,7 @@ def travel_warrant_profile(warrant_id):
         print(f'{form.vehicle_id.choices=}')
         form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat"), ("storniran", "storniran")]
+        form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_principal').all()]
 
         if form.validate_on_submit():
             if form.together_with.data != '':
@@ -539,6 +548,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.daily_wage_abroad = form.daily_wage_abroad.data
                 warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
                 warrant.costs_pays = form.costs_pays.data
+                warrant.principal_id = form.principal_id.data
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
@@ -578,6 +588,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.daily_wage_abroad = form.daily_wage_abroad.data
                 warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
                 warrant.costs_pays = form.costs_pays.data
+                warrant.principal_id = form.principal_id.data
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
@@ -617,6 +628,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.daily_wage_abroad = form.daily_wage_abroad.data
                 warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
                 warrant.costs_pays = form.costs_pays.data
+                warrant.principal_id = form.principal_id.data
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
@@ -659,6 +671,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.daily_wage_abroad = form.daily_wage_abroad.data
                 warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
                 warrant.costs_pays = form.costs_pays.data
+                warrant.principal_id = form.principal_id.data
 
                 warrant.km_start = int(form.km_start.data)
                 warrant.km_end = int(form.km_end.data)
@@ -728,6 +741,7 @@ def travel_warrant_profile(warrant_id):
             form.daily_wage_abroad.data = warrant.daily_wage_abroad
             form.daily_wage_abroad_currency.data = warrant.daily_wage_abroad_currency
             form.costs_pays.data = warrant.costs_pays
+            form.principal_id.data = str(warrant.principal_id)
             form.km_start.data = warrant.km_start
             form.km_end.data = warrant.km_end
             form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat") , ("storniran", "storniran")]
