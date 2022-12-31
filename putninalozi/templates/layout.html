@@ -43,12 +43,7 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
-                {% if current_user.authorization == 's_admin' %}
-                  <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Kompanija</a>
-                  <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vozila</a>
-                  <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">Korisnici</a>
-                  <a class="nav-item nav-link" href="{{ url_for('users.logout') }}">Odjavite se</a>
-                {% elif current_user.authorization == 'c_admin'%}
+                {% if current_user.authorization in ['s_admin', 'c_admin', 'c_principal'] %}
                   <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Kompanija</a>
                   <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vozila</a>
                   <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">Korisnici</a>

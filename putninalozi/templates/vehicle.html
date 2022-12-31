@@ -73,7 +73,7 @@
         <div class="form-group">
           <a class="btn btn-info" href="{{url_for('vehicles.vehicle_list')}}">Nazad</a>
           {{ form.submit(class="btn btn-outline-info") }}
-          {% if current_user.authorization == 's_admin' or current_user.authorization == 'c_admin' %}
+          {% if current_user.authorization in ['s_admin', 'c_admin', 'c_principal'] %}
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Obrišite vozilo</button>
           {% endif %}
         </div>

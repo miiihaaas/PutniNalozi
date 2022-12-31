@@ -63,7 +63,7 @@ def register_tw(korisnik_id, datum):
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
 
-    if current_user.authorization == 'c_admin' or current_user.authorization == 's_admin':
+    if current_user.authorization in ['c_admin', 's_admin', 'c_principal']:
         user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         print(user_list)
         vehicle_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
@@ -311,11 +311,11 @@ def travel_warrant_profile(warrant_id):
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization != 's_admin' and current_user.user_company.id != warrant.travelwarrant_company.id:
-        abort(403)
+        return render_template('403.html')
     elif current_user.authorization == 'c_user' and current_user.id != warrant.travelwarrant_user.id:
-        abort(403)
+        return render_template('403.html')
 
-    if current_user.authorization != 'c_admin' and current_user.authorization != 's_admin':
+    if current_user.authorization not in ['c_admin', 's_admin', 'c_principal']:
         if warrant.status == 'storniran' or warrant.status == 'obračunat':
             return render_template('read_travel_warrant_user.html', title='Pregled putnog naloga', warrant=warrant, legend='Pregled putnog naloga', rod=rod, troskovi=troskovi)
         else:
@@ -764,7 +764,7 @@ def add_expenses(warrant_id):
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.user_company.id != warrant.company_id:
-            abort(403)
+            return render_template('403.html')
     form = TravelWarrantExpensesForm()
     if form.validate_on_submit():
         expense = TravelWarrantExpenses(expenses_type = form.expenses_type.data,
@@ -793,7 +793,7 @@ def expenses_profile(warrant_id, expenses_id): #ovo je funkcija a editovnaje tro
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.user_company.id != warrant.company_id:
-            abort(403)
+            return render_template('403.html')
     form = EditTravelWarrantExpenses()
     form.reset()
     # form.expenses_type.choices=[('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')]
@@ -846,10 +846,10 @@ def delete_travel_warrant(warrant_id):
         flash('Pogrešna lozinka!', 'danger')
         return render_template('403.html')
     else:
-        if current_user.authorization != 'c_admin' and  current_user.authorization != 's_admin':
+        if current_user.authorization not in ['c_admin', 's_admin', 'c_principal']:
             flash('Nemate ovlašćenje da brišete putne naloge!', 'danger')
             return render_template('403.html')
-        elif current_user.authorization == 'c_admin':
+        elif current_user.authorization not in ['c_admin', 'c_principal']:
             if current_user.user_company.id != warrant.company_id: #ako putni nalog nije iz kompanije trenutno ulogovanok korisnika
                 flash('Nemate ovlašćenje da brišete putne naloge drugih kompanija', 'danger')
                 return render_template('403.html')

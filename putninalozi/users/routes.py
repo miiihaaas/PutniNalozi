@@ -26,7 +26,7 @@ def register_u():
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    elif current_user.is_authenticated and (current_user.authorization != 'c_admin' and current_user.authorization != 's_admin'):
+    elif current_user.is_authenticated and (current_user.authorization not in ['c_admin', 's_admin', 'c_principal']):
         flash('Nemate autorizaciju da posetite ovu stranicu.', 'danger')
         return redirect(url_for('main.home'))
     form = RegistrationUserForm()
@@ -34,7 +34,7 @@ def register_u():
     form.default_vehicle.choices = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        if current_user.authorization == 'c_admin':
+        if current_user.authorization in ['c_admin', 'c_principal']:
             user = User(email=form.email.data,
                         password=hashed_password,
                         name=form.name.data,
@@ -70,13 +70,13 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
+    elif current_user.authorization not in ['s_admin', 'c_admin', 'c_principal']:
         if current_user.id != user.id:
-            abort(403)
+            return render_template('403.html')
     elif current_user.authorization == 's_admin':
         pass
     elif current_user.user_company.id != user.user_company.id:
-        abort(403)
+        return render_template('403.html')
 
     form = UpdateUserForm()
     form.reset()
@@ -120,7 +120,6 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         form.workplace.data = user.workplace
         form.email.data = user.email
 
-        # form.authorization.choices = [('c_user', 'USER'),('c_principal', 'NALOGODAVAC'),('c_cashier', 'BLAGAJNIK'),('c_admin', 'ADMIN')]
         form.authorization.data = user.authorization
 
         form.gender.choices = [(1, 'muški'),(2, 'ženski')]
@@ -169,10 +168,10 @@ def delete_user(user_id):
         flash('Pogrešna lozinka!', 'danger')
         return render_template('403.html')
     else:
-        if current_user.authorization != 'c_admin' and  current_user.authorization != 's_admin':
+        if current_user.authorization not in ['c_admin', 's_admin', 'c_principal']:
             flash('Nemate ovlašćenje da brišete profile korisnika!', 'danger')
             return render_template('403.html')
-        elif current_user.authorization == 'c_admin':
+        elif current_user.authorization in ['c_admin', 'c_principal']:
             if current_user.user_company.id != user.user_company.id:
                 flash('Nemate ovlašćenje da brišete profile korisnika drugih kompanija!', 'danger')
                 return render_template('403.html')

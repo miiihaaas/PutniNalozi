@@ -72,10 +72,10 @@ def company_profile(company_id): #ovo je funkcija za editovanje user-a
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
-        abort(403)
+    elif current_user.authorization not in ['s_admin', 'c_admin', 'c_principal']:
+        return render_template('403.html')
     elif current_user.user_company.id != company.id and current_user.authorization != 's_admin':
-        abort(403)
+        return render_template('403.html')
     form = EditCompanyForm()
     if form.validate_on_submit():
         if form.company_logo.data:

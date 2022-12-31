@@ -13,21 +13,21 @@ def vehicle_list():
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
-        abort(403)
+    elif current_user.authorization not in ['c_admin', 's_admin', 'c_principal']:
+        return render_template('403.html')
     vehicles = Vehicle.query.all()
     return render_template('vehicle_list.html', title='Vozila', vehicles=vehicles)
 
 
 @vehicles.route("/register_v", methods=['GET', 'POST'])
 def register_v():
-    if current_user.is_authenticated and (current_user.authorization != 'c_admin' and current_user.authorization != 's_admin'):
+    if current_user.is_authenticated and (current_user.authorization not in ['c_admin', 's_admin', 'c_principal']):
         flash('Nemate autorizaciju da registrujete nova vozila.' 'warning')
         return redirect(url_for('main.home'))
     form = RegistrationVehicleForm()
     form.reset()
     if form.validate_on_submit():
-        if current_user.authorization == 'c_admin':
+        if current_user.authorization in ['c_admin', 'c_principal']:
             vehicle = Vehicle(vehicle_type=form.vehicle_type.data.upper(),
                                 vehicle_brand=form.vehicle_brand.data.upper(),
                                 vehicle_registration=form.vehicle_registration.data.upper(),
@@ -54,13 +54,13 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    elif current_user.authorization != 's_admin' and current_user.authorization != 'c_admin':
-        flash('Nemate autorizaciju da uređujete podatke vozila.' 'warning')
-        abort(403)
-    elif current_user.authorization == 'c_admin':
+    elif current_user.authorization not in ['c_admin', 's_admin', 'c_principal']:
+        flash('Nemate autorizaciju da uređujete podatke vozila.', 'warning')
+        return render_template('403.html')
+    elif current_user.authorization in ['c_admin', 'c_principal']:
         if current_user.user_company.id != vehicle.vehicle_company.id:
             flash('Nemate autorizaciju da uređujete podatke vozila drugih kompanija.' 'warning')
-            abort(403)
+            return render_template('403.html')
     print(Company.query.filter_by(id=vehicle.company_id).first().id)
     form = UpdateVehicleForm()
     form.reset()
@@ -69,7 +69,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         vehicle.vehicle_type = form.vehicle_type.data.upper()
         vehicle.vehicle_brand = form.vehicle_brand.data.upper()
         vehicle.vehicle_registration = form.vehicle_registration.data.upper()
-        if current_user.authorization == 'c_admin':
+        if current_user.authorization in ['c_admin', 'c_principal']:
             vehicle.company_id=int(current_user.company_id)
         elif current_user.authorization == 's_admin':
             vehicle.company_id = form.company_id.data
@@ -94,13 +94,13 @@ def delete_vehicle(vehicle_id):
     print(f'debug - {request.form.get("input_password")}')
     if not bcrypt.check_password_hash(current_user.password, request.form.get("input_password")):
         print('nije dobar password')
-        abort(403)
+        return render_template('403.html')
     else:
-        if current_user.authorization != 'c_admin' and current_user.authorization != 's_admin':
-            abort(403)
-        elif current_user.authorization == 'c_admin':
+        if current_user.authorization not in ['c_admin', 's_admin', 'c_principal']:
+            return render_template('403.html')
+        elif current_user.authorization in ['c_admin', 'c_principal']:
             if current_user.user_company.id != vehicle.vehicle_company.id:
-                abort(403)
+                return render_template('403.html')
             db.session.delete(vehicle)
             db.session.commit()
             flash(f'Vozilo {vehicle.vehicle_brand} je obrisano.', 'success' )
