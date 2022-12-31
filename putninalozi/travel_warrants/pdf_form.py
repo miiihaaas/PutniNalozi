@@ -55,14 +55,15 @@ def replace_serbian_characters(string):
 def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino):
     rod = []
     if warrant.travelwarrant_user.gender == "1":
-        rod=["Radnik", "raspoređen", "Kolega", 'izvršio', "Osnivač"]
+        rod=["Radnik", "raspoređen", "Kolega", 'izvršio']
     elif warrant.travelwarrant_user.gender == "2":
-        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila', "Osnivač"]
+        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila']
 
     warrant_id = warrant.travel_warrant_id
     warrant_number = warrant.travel_warrant_number
     name = warrant.travelwarrant_user.name
     surname = warrant.travelwarrant_user.surname
+    authorization = warrant.travelwarrant_user.authorization #!
     workplace = warrant.travelwarrant_user.workplace
     with_task = warrant.with_task
     relation = warrant.relation
@@ -88,7 +89,7 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     company_mail = warrant.travelwarrant_company.company_mail
     company_site = warrant.travelwarrant_company.company_site
 
-    text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
+    text_form = f'''{f'Osnivač {name} {surname}'if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime} {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
 Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}{warrant.personal_registration}{regisrtacija_kolege_koji_vozi}.
 
@@ -237,6 +238,7 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     warrant_number = warrant.travel_warrant_number
     name = warrant.travelwarrant_user.name
     surname = warrant.travelwarrant_user.surname
+    authorization = warrant.travelwarrant_user.authorization #!
     workplace = warrant.travelwarrant_user.workplace
     with_task = warrant.with_task
     relation = warrant.relation
@@ -262,7 +264,7 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     company_mail = warrant.travelwarrant_company.company_mail
     company_site = warrant.travelwarrant_company.company_site
 
-    text_form = f'''{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
+    text_form = f'''{f'Osnivač {name} {surname}' if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
 Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}{warrant.personal_registration}{regisrtacija_kolege_koji_vozi}.
 

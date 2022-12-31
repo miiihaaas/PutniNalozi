@@ -41,8 +41,8 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(20), unique=False, nullable=False)
     surname = db.Column(db.String(20), unique=False, nullable=False)
     gender = db.Column(db.String(1)) #(0, "srednji"), (1, "muški"), (2, "ženski")
-    workplace = db.Column(db.String(20), unique=False, nullable=False)
-    authorization = db.Column(db.String(10), nullable = False) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
+    workplace = db.Column(db.String(20), unique=False, nullable=True)
+    authorization = db.Column(db.String(20), nullable = False) # ovde treba da budu tipovi korisnika: S_admin, C_admin, C_user
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     default_vehicle = db.Column(db.Integer) #kod radnika koji imaju svoj auto, da bude podrazumevana vrednost id tog vozila
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_user', lazy='dynamic', foreign_keys='TravelWarrant.user_id')
@@ -69,8 +69,8 @@ class User(db.Model, UserMixin):
 
 class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    vehicle_type = db.Column(db.String(10), nullable = False)
-    vehicle_brand = db.Column(db.String(10), nullable = False)
+    vehicle_type = db.Column(db.String(30), nullable = False)
+    vehicle_brand = db.Column(db.String(30), nullable = False)
     vehicle_registration = db.Column(db.String(12), nullable = False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_vehicle', lazy=True)

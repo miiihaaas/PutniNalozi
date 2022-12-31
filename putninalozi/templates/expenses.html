@@ -19,7 +19,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.expenses_type(class="form-select form-select-lg") }}
+                {{ form.expenses_type(id="expenses_type", class="form-select form-select-lg") }}
             {% endif %}
         </div>
         <div class="col form-group">
@@ -47,7 +47,7 @@
                   {% endfor %}
               </div>
           {% else %}
-              {{ form.description(class="form-control form-control-lg") }}
+              {{ form.description(id="description", class="form-control form-control-lg", readonly=false) }}
           {% endif %}
       </div>
 
@@ -62,7 +62,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                {{ form.amount(class="form-control form-control-lg") }}
+                {{ form.amount(id="amount", class="form-control form-control-lg") }}
             {% endif %}
         </div>
         <div class="col form-group">
@@ -142,5 +142,33 @@
       }
     } );
   } );
+</script>
+
+<script>
+const selectField = document.getElementById("expenses_type");
+const inputField = document.getElementById("description");
+const inputField2 = document.getElementById("amount");
+
+window.onload = function() {
+  if (selectField.value === "Troškovi amortizacije privatnog vozila") {
+    inputField.value = "30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
+    inputField.readOnly = true;
+    inputField2.placeholder = "uneti vrednost koja predstavlja 30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
+  } 
+};
+
+
+selectField.addEventListener("change", function() {
+  if (this.value === "Troškovi amortizacije privatnog vozila") {
+    inputField.value = "30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
+    inputField.readOnly = true;
+    inputField2.placeholder = "uneti vrednost koja predstavlja 30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
+  } else {
+    inputField.readOnly = false;
+    inputField.value = "";
+    inputField2.placeholder = "";
+  }
+});
+
 </script>
 {% endblock %}

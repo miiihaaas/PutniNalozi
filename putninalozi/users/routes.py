@@ -84,7 +84,10 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     if form.validate_on_submit():
         user.name = form.name.data
         user.surname = form.surname.data
-        user.workplace = form.workplace.data
+        if form.authorization.data != 'c_founder':
+            user.workplace = form.workplace.data
+        else:
+            user.workplace = ""
 
         if user.email == form.email.data:
             user.email = form.email.data
@@ -96,10 +99,9 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
             else:
                 user.email = form.email.data
 
-        # if current_user.authorization != 's_admin':
-        #     user.authorization = user.authorization
-        # else:
+        
         user.authorization = form.authorization.data
+        
 
         user.gender = form.gender.data
 
@@ -118,7 +120,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         form.workplace.data = user.workplace
         form.email.data = user.email
 
-        form.authorization.choices = [('c_user', 'USER'),('c_principal', 'NALOGODAVAC'),('c_cashier', 'BLAGAJNIK'),('c_admin', 'ADMIN')]
+        # form.authorization.choices = [('c_user', 'USER'),('c_principal', 'NALOGODAVAC'),('c_cashier', 'BLAGAJNIK'),('c_admin', 'ADMIN')]
         form.authorization.data = user.authorization
 
         form.gender.choices = [(1, 'muški'),(2, 'ženski')]

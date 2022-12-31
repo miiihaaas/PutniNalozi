@@ -470,6 +470,8 @@ def travel_warrant_profile(warrant_id):
                 print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
                 db.session.commit()
+                
+                send_email(warrant, current_user, file_name)
     ##########################################################################################
 
                 flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
@@ -794,7 +796,7 @@ def expenses_profile(warrant_id, expenses_id): #ovo je funkcija a editovnaje tro
             abort(403)
     form = EditTravelWarrantExpenses()
     form.reset()
-    form.expenses_type.choices=[('Ostale naknade', 'Ostale naknade'), ('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')]
+    # form.expenses_type.choices=[('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')]
     if form.validate_on_submit():
         expense.expenses_type = form.expenses_type.data
         expense.expenses_date = form.expenses_date.data
