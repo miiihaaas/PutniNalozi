@@ -37,7 +37,8 @@ class CreateTravelWarrantForm(FlaskForm):
     daily_wage_abroad = DecimalField('Iznos dnevnice u inostranstvu: ')
     daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('e', 'EUR'), ('usd', 'USD')])
     costs_pays = StringField('Putni troškovi padaju na teret: ', validators=[DataRequired()])
-    principal_id = SelectField('Nalogodavac:', validators=[Optional()], choices=[])
+    principal_id = SelectField('Nalogodavac: ', validators=[Optional()], choices=[])
+    cashier_id = SelectField('Blagajnik: ', validators=[Optional()], choices=[])
 
     submit = SubmitField('Kreiraj putni nalog')
     #nastaviti
@@ -73,9 +74,8 @@ class EditAdminTravelWarrantForm(FlaskForm):
     daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('e', 'EUR'), ('usd', 'USD')])
     costs_pays = StringField('Putni troškovi padaju na teret: ')
     principal_id = SelectField('Nalogodavac:', validators=[Optional()], choices=[])
+    cashier_id = SelectField('Blagajnik: ', validators=[Optional()], choices=[])
 
-    km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
-    km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
     # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
@@ -111,8 +111,6 @@ class EditUserTravelWarrantForm(FlaskForm):
     # daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
     # costs_pays = StringField('Putni troškovi padaju na teret: ')
 
-    km_start = IntegerField('Početna kilometraža: ', validators=[DataRequired()])
-    km_end = IntegerField('Završna kilometraža: ', validators=[DataRequired()])
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
     # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 

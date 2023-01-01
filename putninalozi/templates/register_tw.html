@@ -338,6 +338,19 @@
                 {{ form.principal_id(class="form-select form-select-lg") }}
             {% endif %}
         </div>
+        <div class="form-box">
+          {{ form.cashier_id.label(class="form-control-label") }}
+            {% if form.cashier_id.errors %}
+                {{ form.cashier_id(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.cashier_id.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.cashier_id(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
       </fieldset>
       <div class="form-group">
         <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">Nazad</a>

@@ -451,7 +451,7 @@ Pozdrav,
     # ako je završen nalog: adminu
     elif warrant.status == 'završen':
         subject = f'Završen je putni nalog broj: {warrant.travel_warrant_number}'
-        recipients = [] #dodaj kod za admina kompanije za dati putni nalog!!!
+        recipients = [] #todo dodaj kod za admina kompanije za dati putni nalog!!!
         text_body = f'''Poštovani,
 Završen je putni nalog {warrant.travel_warrant_number}. Klikom na donji link možete obračunati putni nalog:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
@@ -460,7 +460,7 @@ Pozdrav.'''
     # ako je obračunat nalog: blagajniku i korisniku
     elif warrant.status == 'obračunat':
         subject = f'Obračunat je putni nalog broj: {warrant.travel_warrant_number}'
-        recipients = [warrant.travelwarrant_user.email] #dodaj kod za blagajnika
+        recipients = [warrant.travelwarrant_user.email] #todo dodaj kod za blagajnika
         text_body = f'''Poštovani,
 Obračunat je putni nalog {warrant.travel_warrant_number}. Možete izvršiti uplatu dnevnica prema podacima iz priloga.
 

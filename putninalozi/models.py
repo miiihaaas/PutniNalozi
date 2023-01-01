@@ -46,7 +46,10 @@ class User(db.Model, UserMixin):
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=True)
     default_vehicle = db.Column(db.Integer) #kod radnika koji imaju svoj auto, da bude podrazumevana vrednost id tog vozila
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_user', lazy='dynamic', foreign_keys='TravelWarrant.user_id')
+    
     principals = db.relationship('TravelWarrant', backref='principal_user', lazy='dynamic', foreign_keys='TravelWarrant.principal_id')
+    cashiers = db.relationship('TravelWarrant', backref='cashier_user', lazy='dynamic', foreign_keys='TravelWarrant.cashier_id')
+    admins = db.relationship('TravelWarrant', backref='admin_user', lazy='dynamic', foreign_keys='TravelWarrant.admin_id')
     # principals = db.relationship('TravelWarrant', backref='travelwarrant_user', lazy=True)
     # https://www.reddit.com/r/flask/comments/2o4ejl/af_flask_sqlalchemy_two_foreign_keys_referencing/
 
@@ -108,12 +111,10 @@ class TravelWarrant(db.Model):
     daily_wage_abroad = db.Column(db.Float, nullable=False)
     daily_wage_abroad_currency = db.Column(db.String(5), nullable=False)
     costs_pays = db.Column(db.String(50), nullable=False)
+    
     principal_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # principal = db.relationship('User', foreign_keys='[TravelWarrant.principal_id]')
-    # user = db.relationship('User', foreign_keys='[TravelWarrant.user_id]')
-
-    km_start = db.Column(db.Integer, nullable=True)
-    km_end = db.Column(db.Integer, nullable=True)
+    cashier_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     status = db.Column(db.String(15), nullable=False)
     file_name = db.Column(db.String(100), nullable=True) #za PDF fajl

@@ -83,6 +83,7 @@ def register_tw(korisnik_id, datum):
         print(drivers)
         
         principal_list = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_principal').all()]
+        cashier_list = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
         
         ime_prezime = User.query.filter_by(id=korisnik_id).first().name + " " + User.query.filter_by(id=korisnik_id).first().surname
         print(ime_prezime)
@@ -113,6 +114,7 @@ def register_tw(korisnik_id, datum):
         form.vehicle_id.choices = vehicle_list
         form.together_with.choices = drivers
         form.principal_id.choices = principal_list
+        form.cashier_id.choices = cashier_list
         if request.method == 'GET':
             form.vehicle_id.data  = str(podrazumevano_vozilo)
             form.costs_pays.data = 'poslodavca'
@@ -150,6 +152,8 @@ def register_tw(korisnik_id, datum):
                 daily_wage_abroad_currency=form.daily_wage_abroad_currency.data,
                 costs_pays=form.costs_pays.data,
                 principal_id = form.principal_id.data,
+                cashier_id = form.cashier_id.data,
+                admin_id = current_user.id,
                 km_start=1,
                 km_end=1,
                 status='kreiran',
@@ -181,6 +185,8 @@ def register_tw(korisnik_id, datum):
                 daily_wage_abroad_currency=form.daily_wage_abroad_currency.data,
                 costs_pays=form.costs_pays.data,
                 principal_id = form.principal_id.data,
+                cashier_id = form.cashier_id.data,
+                admin_id = current_user.id,
                 km_start=1,
                 km_end=1,
                 status='kreiran',
@@ -212,6 +218,8 @@ def register_tw(korisnik_id, datum):
                 daily_wage_abroad_currency=form.daily_wage_abroad_currency.data,
                 costs_pays=form.costs_pays.data,
                 principal_id = form.principal_id.data,
+                cashier_id = form.cashier_id.data,
+                admin_id = current_user.id,
                 km_start=1,
                 km_end=1,
                 status='kreiran',
@@ -246,6 +254,8 @@ def register_tw(korisnik_id, datum):
                 daily_wage_abroad_currency=form.daily_wage_abroad_currency.data,
                 costs_pays=form.costs_pays.data,
                 principal_id = form.principal_id.data,
+                cashier_id = form.cashier_id.data,
+                admin_id = current_user.id,
                 km_start=1,
                 km_end=1,
                 status='kreiran',
@@ -524,6 +534,7 @@ def travel_warrant_profile(warrant_id):
         form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat"), ("storniran", "storniran")]
         form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_principal').all()]
+        form.cashier_id.choices = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
 
         if form.validate_on_submit():
             if form.together_with.data != '':
@@ -553,10 +564,10 @@ def travel_warrant_profile(warrant_id):
                 warrant.daily_wage_abroad = form.daily_wage_abroad.data
                 warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
                 warrant.costs_pays = form.costs_pays.data
+                
                 warrant.principal_id = form.principal_id.data
+                warrant.cashier_id = form.cashier_id.data
 
-                warrant.km_start = int(form.km_start.data)
-                warrant.km_end = int(form.km_end.data)
                 if request.form.get('dugme') == 'Završi':
                     warrant.status = 'završen'
                 elif request.form.get('dugme') == 'Obračunajte':
@@ -593,10 +604,10 @@ def travel_warrant_profile(warrant_id):
                 warrant.daily_wage_abroad = form.daily_wage_abroad.data
                 warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
                 warrant.costs_pays = form.costs_pays.data
+                
                 warrant.principal_id = form.principal_id.data
-
-                warrant.km_start = int(form.km_start.data)
-                warrant.km_end = int(form.km_end.data)
+                warrant.cashier_id = form.cashier_id.data
+                
                 if request.form.get('dugme') == 'Završi':
                     warrant.status = 'završen'
                 elif request.form.get('dugme') == 'Obračunajte':
@@ -633,10 +644,10 @@ def travel_warrant_profile(warrant_id):
                 warrant.daily_wage_abroad = form.daily_wage_abroad.data
                 warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
                 warrant.costs_pays = form.costs_pays.data
+                
                 warrant.principal_id = form.principal_id.data
-
-                warrant.km_start = int(form.km_start.data)
-                warrant.km_end = int(form.km_end.data)
+                warrant.cashier_id = form.cashier_id.data
+                
                 if request.form.get('dugme') == 'Završi':
                     warrant.status = 'završen'
                 elif request.form.get('dugme') == 'Obračunajte':
@@ -676,10 +687,10 @@ def travel_warrant_profile(warrant_id):
                 warrant.daily_wage_abroad = form.daily_wage_abroad.data
                 warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
                 warrant.costs_pays = form.costs_pays.data
+                
                 warrant.principal_id = form.principal_id.data
-
-                warrant.km_start = int(form.km_start.data)
-                warrant.km_end = int(form.km_end.data)
+                warrant.cashier_id = form.cashier_id.data
+                
                 if request.form.get('dugme') == 'Završi':
                     warrant.status = 'završen'
                 elif request.form.get('dugme') == 'Obračunajte':
@@ -750,8 +761,7 @@ def travel_warrant_profile(warrant_id):
             form.daily_wage_abroad_currency.data = warrant.daily_wage_abroad_currency
             form.costs_pays.data = warrant.costs_pays
             form.principal_id.data = str(warrant.principal_id)
-            form.km_start.data = warrant.km_start
-            form.km_end.data = warrant.km_end
+            form.cashier_id.data = str(warrant.cashier_id)
             form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat") , ("storniran", "storniran")]
             form.status.data = str(warrant.status)
 

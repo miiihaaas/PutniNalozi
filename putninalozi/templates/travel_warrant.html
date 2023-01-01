@@ -288,30 +288,6 @@
                 {% else %} {{ form.vehicle_id(class="form-select
                 form-select-lg") }} {% endif %}
               </div>
-              <div class="form-box">
-                {{ form.km_start.label(class="form-control-label") }} {% if
-                form.km_start.errors %} {{ form.km_start(class="form-control
-                form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.km_start.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.km_start(class="form-control
-                form-control-lg") }} {% endif %}
-              </div>
-              <div class="form-box">
-                {{ form.km_end.label(class="form-control-label") }} {% if
-                form.km_end.errors %} {{ form.km_end(class="form-control
-                form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.km_end.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.km_end(class="form-control form-control-lg")
-                }} {% endif %}
-              </div>
             </div>
           </div>
         </div>
@@ -465,6 +441,19 @@
               </div>
           {% else %}
               {{ form.principal_id(class="form-select form-select-lg") }}
+          {% endif %}
+      </div>
+      <div class="form-box">
+        {{ form.cashier_id.label(class="form-control-label") }}
+          {% if form.cashier_id.errors %}
+              {{ form.cashier_id(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                  {% for error in form.cashier_id.errors %}
+                      <span>{{ error }}</span>
+                  {% endfor %}
+              </div>
+          {% else %}
+              {{ form.cashier_id(class="form-select form-select-lg") }}
           {% endif %}
       </div>
       <br />
