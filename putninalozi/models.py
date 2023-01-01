@@ -22,8 +22,6 @@ class Company(db.Model):
     company_mail = db.Column(db.String(120), unique=True, nullable=False)
     company_phone = db.Column(db.String(20), nullable=False)
     company_logo = db.Column(db.String(60), nullable=False)
-    cashier_email = db.Column(db.String(120), unique=True, nullable=False) #mejl blagajnika koji će se koristiti kada se zatvrori nalog da pošalje pdf sa preračunatim računima i potrebnoj uplati
-    CEO = db.Column(db.String(120), nullable=False) #ime i prezime direkora (osobe) koji odobrava putovanje, akontaciju ...
     users = db.relationship('User', backref='user_company', lazy=True)
     vehicles = db.relationship('Vehicle', backref='vehicle_company', lazy=True)
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_company', lazy=True)

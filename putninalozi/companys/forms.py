@@ -12,13 +12,11 @@ class RegistrationCompanyForm(FlaskForm):
     company_city = StringField('Mesto', validators=[DataRequired(), Length(min=2, max=50)])
     company_state = StringField('Država', validators=[DataRequired(), Length(min=2, max=50)])
     company_pib = StringField('PIB', validators=[DataRequired(), Length(min=5, max=9)]) #koji me min max broj cifara - da li su samo cifre - dali je fiksan broj cifara?
-    company_mb = StringField('MB', validators=[DataRequired(), Length(min=5, max=8)]) #šta je ovo
+    company_mb = StringField('MB', validators=[DataRequired(), Length(min=5, max=8)])
     company_site = StringField('Veb sajt', validators=[DataRequired(), Length(min=5, max=50)])
     company_mail = StringField('Email', validators=[DataRequired(), Email()])
     company_phone = StringField('Telefonski broj', validators=[DataRequired(), Length(min=9, max=13)])
     company_logo = FileField('Promeni logo', validators=[FileAllowed(['jpg', 'png'])]) #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
-    cashier_email = StringField('Blagajnik', validators=[DataRequired(), Email()])
-    CEO = StringField('Nalogodavac', validators=[DataRequired(), Length(min=5, max=120)])
     submit = SubmitField('Kreiraj kompaniju')
 
     def validate_companyname(self, companyname):
@@ -39,6 +37,4 @@ class EditCompanyForm(FlaskForm):
     company_mail = StringField('Email', validators=[DataRequired(), Email()])
     company_phone = StringField('Telefonski broj', validators=[DataRequired(), Length(min=9, max=13)])
     company_logo = FileField('Promeni logo', validators=[FileAllowed(['jpg', 'png'])]) #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
-    cashier_email = StringField('Blagajnik', validators=[DataRequired(), Email()])
-    CEO = StringField('Nalogodavac', validators=[DataRequired(), Length(min=5, max=120)])
     submit = SubmitField('Ažurirajte podatke')

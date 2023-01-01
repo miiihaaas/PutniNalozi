@@ -161,49 +161,20 @@
                       {{ form.company_pib(class="form-control form-control-lg") }}
                   {% endif %}
               </div>
-              <div class="col form-group">
-                  {{ form.cashier_email.label(class="form-control-label") }}
-                  {% if form.cashier_email.errors %}
-                      {{ form.cashier_email(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.cashier_email.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.cashier_email(class="form-control form-control-lg") }}
-                  {% endif %}
-              </div>
+                <div class="col form-group">
+                    {{ form.company_mb.label(class="form-control-label") }}
+                    {% if form.company_mb.errors %}
+                        {{ form.company_mb(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.company_mb.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.company_mb(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
             </div>
-            <div class="row">
-              <div class="col form-group">
-                  {{ form.company_mb.label(class="form-control-label") }}
-                  {% if form.company_mb.errors %}
-                      {{ form.company_mb(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.company_mb.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.company_mb(class="form-control form-control-lg") }}
-                  {% endif %}
-              </div>
-              <div class="col form-group">
-                  {{ form.CEO.label(class="form-control-label") }}
-                  {% if form.CEO.errors %}
-                      {{ form.CEO(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.CEO.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.CEO(class="form-control form-control-lg") }}
-                  {% endif %}
-              </div>
-            </div>
-
         </fieldset>
         <div class="form-group">
           <a class="btn btn-info" href="{{url_for('companys.company_list')}}">Nazad</a>
