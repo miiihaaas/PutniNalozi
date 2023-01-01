@@ -154,8 +154,6 @@ def register_tw(korisnik_id, datum):
                 principal_id = form.principal_id.data,
                 cashier_id = form.cashier_id.data,
                 admin_id = current_user.id,
-                km_start=1,
-                km_end=1,
                 status='kreiran',
                 travel_warrant_number=datum.strftime('%Y%m%d') + brojac,
                 file_name="",
@@ -187,8 +185,6 @@ def register_tw(korisnik_id, datum):
                 principal_id = form.principal_id.data,
                 cashier_id = form.cashier_id.data,
                 admin_id = current_user.id,
-                km_start=1,
-                km_end=1,
                 status='kreiran',
                 travel_warrant_number=datum.strftime('%Y%m%d') + brojac,
                 file_name="",
@@ -220,8 +216,6 @@ def register_tw(korisnik_id, datum):
                 principal_id = form.principal_id.data,
                 cashier_id = form.cashier_id.data,
                 admin_id = current_user.id,
-                km_start=1,
-                km_end=1,
                 status='kreiran',
                 travel_warrant_number=datum.strftime('%Y%m%d') + brojac,
                 file_name="",
@@ -256,8 +250,6 @@ def register_tw(korisnik_id, datum):
                 principal_id = form.principal_id.data,
                 cashier_id = form.cashier_id.data,
                 admin_id = current_user.id,
-                km_start=1,
-                km_end=1,
                 status='kreiran',
                 travel_warrant_number=datum.strftime('%Y%m%d') + brojac,
                 file_name="",
@@ -364,8 +356,6 @@ def travel_warrant_profile(warrant_id):
                     warrant.personal_registration=""
                     warrant.other=""
 
-                    warrant.km_start = int(form.km_start.data)
-                    warrant.km_end = int(form.km_end.data)
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
                     else:
@@ -391,8 +381,6 @@ def travel_warrant_profile(warrant_id):
                     warrant.personal_registration=form.personal_registration.data
                     warrant.other=""
 
-                    warrant.km_start = int(form.km_start.data)
-                    warrant.km_end = int(form.km_end.data)
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
                     else:
@@ -418,8 +406,6 @@ def travel_warrant_profile(warrant_id):
                     warrant.personal_registration=""
                     warrant.other=form.other.data
 
-                    warrant.km_start = int(form.km_start.data)
-                    warrant.km_end = int(form.km_end.data)
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
                     else:
@@ -448,8 +434,6 @@ def travel_warrant_profile(warrant_id):
                     warrant.personal_registration=""
                     warrant.other=""
 
-                    warrant.km_start = int(form.km_start.data)
-                    warrant.km_end = int(form.km_end.data)
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
                     else:
@@ -507,8 +491,6 @@ def travel_warrant_profile(warrant_id):
                 form.personal_registration.data = warrant.personal_registration
                 form.other.data = warrant.other
 
-                form.km_start.data = warrant.km_start
-                form.km_end.data = warrant.km_end
                 form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
                 form.status.data = str(warrant.status)
 
