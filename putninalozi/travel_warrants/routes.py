@@ -173,7 +173,7 @@ def register_tw(korisnik_id, datum):
                 together_with="",
                 personal_type=form.personal_type.data,
                 personal_brand=form.personal_brand.data,
-                personal_registration=form.personal_registration.data,
+                personal_registration=(form.personal_registration.data).upper(),
                 other="",
                 advance_payment=form.advance_payment.data,
                 advance_payment_currency=form.advance_payment_currency.data,
@@ -378,7 +378,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.together_with=""
                     warrant.personal_type=form.personal_type.data
                     warrant.personal_brand=form.personal_brand.data
-                    warrant.personal_registration=form.personal_registration.data
+                    warrant.personal_registration=(form.personal_registration.data).upper()
                     warrant.other=""
 
                     if request.form.get('dugme') == 'Završi':
@@ -509,7 +509,7 @@ def travel_warrant_profile(warrant_id):
                                                                                                                     warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                                     warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         form.together_with.choices = drivers
-
+        global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
         # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         form.vehicle_id.choices = vehicle_list
         print(f'{form.vehicle_id.choices=}')
@@ -576,7 +576,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.together_with=""
                 warrant.personal_type=form.personal_type.data
                 warrant.personal_brand=form.personal_brand.data
-                warrant.personal_registration=form.personal_registration.data
+                warrant.personal_registration=(form.personal_registration.data).upper()
                 warrant.other=""
 
                 warrant.advance_payment = int(form.advance_payment.data)
