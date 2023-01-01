@@ -32,11 +32,17 @@ def settings(company_id):
     if form.validate_on_submit():
         global_settings.daily_wage_domestic = form.daily_wage_domestic.data
         global_settings.daily_wage_abroad = form.daily_wage_abroad.data
+        global_settings.send_email_kreiran = form.send_email_kreiran.data
+        global_settings.send_email_zavrsen = form.send_email_zavrsen.data
+        global_settings.send_email_obracunat = form.send_email_obracunat.data
         db.session.commit()
         flash(f'Ažurirana su podešavanja.', 'success')
         return redirect(url_for('main.home'))
     elif request.method == 'GET':
         form.daily_wage_domestic.data = global_settings.daily_wage_domestic
         form.daily_wage_abroad.data = global_settings.daily_wage_abroad
+        form.send_email_kreiran.data = global_settings.send_email_kreiran
+        form.send_email_zavrsen.data = global_settings.send_email_zavrsen
+        form.send_email_obracunat.data = global_settings.send_email_obracunat
 
     return render_template('settings.html', title='Podešavanja', legend='Podešavanja', global_settings=global_settings, form=form)

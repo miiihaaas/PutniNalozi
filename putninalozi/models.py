@@ -142,6 +142,9 @@ class Settings(db.Model):
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     daily_wage_domestic = db.Column(db.Float, nullable=False)
     daily_wage_abroad = db.Column(db.Float, nullable=False)
+    send_email_kreiran = db.Column(db.Boolean, nullable=False)
+    send_email_zavrsen = db.Column(db.Boolean, nullable=False)
+    send_email_obracunat = db.Column(db.Boolean, nullable=False)
 
 
 db.create_all()

@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect, abort, request, send_file
 from putninalozi import db, bcrypt
-from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses, Company, Settings
+from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses, Settings
 from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm, EditTravelWarrantExpenses
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
@@ -284,11 +284,11 @@ def register_tw(korisnik_id, datum):
         print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
 
-
-        send_email(warrant, current_user, file_name)
         flash(f'Putni nalog broj: {warrant.travel_warrant_number} je uspešno kreiran!', 'success')
-        # todo - je dobila / je dobio
-        flash(f'{warrant.travelwarrant_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa detaljima putnog naloga.', 'success')
+        if global_settings.send_email_kreiran:
+            send_email(warrant, current_user, file_name)
+            # todo - je dobila / je dobio
+            flash(f'{warrant.travelwarrant_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa detaljima putnog naloga.', 'success')
         return redirect(url_for('travel_warrants.travel_warrant_list'))
 
     return render_template('register_tw.html', title='Kreiranje putnog naloga',
@@ -326,6 +326,7 @@ def travel_warrant_profile(warrant_id):
                                                                                         TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
                                                                                                                         warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                                         warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
+            global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
             form.together_with.choices = drivers
             # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
             form.vehicle_id.choices = vehicle_list
@@ -471,10 +472,12 @@ def travel_warrant_profile(warrant_id):
 
                 db.session.commit()
                 
-                send_email(warrant, current_user, file_name)
     ##########################################################################################
 
                 flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
+                if global_settings.send_email_zavrsen:
+                    send_email(warrant, current_user, file_name)
+                    flash(f'admin je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 return redirect(url_for('travel_warrants.travel_warrant_list'))
             elif request.method == 'GET':
                 form.with_task.data = warrant.with_task
@@ -687,7 +690,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.expenses = []
                 print('službeno vozilo')
 
-##########################################################################################
+                ##########################################################################################
             br_casova = form.end_datetime.data - form.start_datetime.data
             print(f'razlika u vremenu {br_casova}')
             br_casova = br_casova.total_seconds() / 3600
@@ -710,11 +713,14 @@ def travel_warrant_profile(warrant_id):
             warrant.text_form = text_form
             print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
-            db.session.commit()
-##########################################################################################
+
+                ##########################################################################################
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
+            if global_settings.send_email_obracunat:
+                send_email(warrant, current_user, file_name)
+                flash(f'mejl je poslat blagajniku i korisniku - napiši lepše tekst', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
             # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
