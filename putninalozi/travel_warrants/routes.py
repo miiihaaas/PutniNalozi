@@ -63,7 +63,7 @@ def register_tw(korisnik_id, datum):
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
 
-    if current_user.authorization in ['c_admin', 's_admin', 'c_principal']:
+    if current_user.authorization in ['c_admin', 's_admin', 'c_principal', 'c_founder']:
         user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         print(user_list)
         vehicle_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
@@ -317,7 +317,7 @@ def travel_warrant_profile(warrant_id):
     elif current_user.authorization == 'c_user' and current_user.id != warrant.travelwarrant_user.id:
         return render_template('403.html')
 
-    if current_user.authorization not in ['c_admin', 's_admin', 'c_principal']:
+    if current_user.authorization not in ['c_admin', 's_admin', 'c_principal', 'c_founder']:
         if warrant.status == 'storniran' or warrant.status == 'obračunat':
             return render_template('read_travel_warrant_user.html', title='Pregled putnog naloga', warrant=warrant, legend='Pregled putnog naloga', rod=rod, troskovi=troskovi)
         else:
@@ -844,10 +844,10 @@ def delete_travel_warrant(warrant_id):
         flash('Pogrešna lozinka!', 'danger')
         return render_template('403.html')
     else:
-        if current_user.authorization not in ['c_admin', 's_admin', 'c_principal']:
+        if current_user.authorization not in ['c_admin', 's_admin', 'c_principal', 'c_founder']:
             flash('Nemate ovlašćenje da brišete putne naloge!', 'danger')
             return render_template('403.html')
-        elif current_user.authorization not in ['c_admin', 'c_principal']:
+        elif current_user.authorization not in ['c_admin', 'c_principal', 'c_founder']:
             if current_user.user_company.id != warrant.company_id: #ako putni nalog nije iz kompanije trenutno ulogovanok korisnika
                 flash('Nemate ovlašćenje da brišete putne naloge drugih kompanija', 'danger')
                 return render_template('403.html')

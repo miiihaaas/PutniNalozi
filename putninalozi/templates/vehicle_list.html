@@ -24,7 +24,7 @@
         </tr>
       {% endfor %}
     </tbody>
-  {% elif current_user.authorization in ['c_admin', 'c_principal'] %}
+  {% elif current_user.authorization in ['c_admin', 'c_principal', 'c_founder'] %}
     <thead>
       <tr>
         <th>Tip Vozila</th>

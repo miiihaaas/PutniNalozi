@@ -129,7 +129,7 @@
         <div class="form-group">
             <a class="btn btn-info" href="{{url_for('users.user_list')}}">Nazad</a>
             {{ form.submit(class="btn btn-outline-info") }}
-            {% if current_user.authorization in ['c_admin', 's_admin', 'c_principal'] %}
+            {% if current_user.authorization in ['c_admin', 's_admin', 'c_principal', 'c_founder'] %}
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Obrišite profil korisnika</button>
             {% endif %}
         </div>

@@ -38,7 +38,7 @@
                 <a class="nav-item nav-link" href="{{ url_for('main.home') }}">Početna</a>
                 <a class="nav-item nav-link" href="{{ url_for('main.about') }}">O softveru</a>
                 <a class="nav-item nav-link" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni nalozi</a>
-                {% if current_user.authorization in ['s_admin', 'c_admin', 'c_principal'] %}
+                {% if current_user.authorization in ['s_admin', 'c_admin', 'c_principal', 'c_founder'] %}
                 <a class="nav-item nav-link" href="{{ url_for('companys.company_list') }}">Kompanija</a>
                 <a class="nav-item nav-link" href="{{ url_for('vehicles.vehicle_list') }}">Vozila</a>
                 <a class="nav-item nav-link" href="{{ url_for('users.user_list') }}">Korisnici</a>
