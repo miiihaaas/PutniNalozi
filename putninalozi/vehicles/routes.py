@@ -110,3 +110,7 @@ def delete_vehicle(vehicle_id):
             db.session.commit()
             flash(f'Vozilo: {vehicle.vehicle_brand} je obrisano.', 'success' )
             return redirect(url_for('vehicles.vehicle_list'))
+
+@vehicles.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404

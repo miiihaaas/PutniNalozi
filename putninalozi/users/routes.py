@@ -243,3 +243,7 @@ def reset_token(token):
             return redirect(url_for('users.login'))
 
         return render_template('reset_token.html', title='Resetovanje lozinke', form=form)
+
+@users.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
