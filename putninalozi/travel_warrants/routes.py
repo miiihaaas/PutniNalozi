@@ -862,3 +862,8 @@ def delete_travel_warrant(warrant_id):
             db.session.commit()
             flash(f'Putni nalog: {warrant.travel_warrant_number} je obrisan.', 'success' )
             return redirect(url_for('travel_warrants.travel_warrant_list'))
+        
+
+@travel_warrants.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
