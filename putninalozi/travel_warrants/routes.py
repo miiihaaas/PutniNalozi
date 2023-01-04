@@ -313,8 +313,10 @@ def travel_warrant_profile(warrant_id):
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization != 's_admin' and current_user.user_company.id != warrant.travelwarrant_company.id:
+        flash('Nemate ovlašćenje da posetite ovu stranici.', 'danger')
         return render_template('403.html')
-    elif current_user.authorization == 'c_user' and current_user.id != warrant.travelwarrant_user.id:
+    elif current_user.authorization in ['c_user', 'c_member'] and current_user.id != warrant.travelwarrant_user.id:
+        flash('Nemate ovlašćenje da posetite ovu stranici.', 'danger')
         return render_template('403.html')
 
     if current_user.authorization not in ['c_admin', 's_admin', 'c_principal', 'c_founder']:

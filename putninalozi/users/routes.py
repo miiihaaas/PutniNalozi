@@ -71,8 +71,8 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.authorization not in ['s_admin', 'c_admin', 'c_principal', 'c_founder']:
-        if current_user.id != user.id:
-            return render_template('403.html')
+        flash('Nemate ovlašćenje da pristupite ovoj stranici.', 'danger')
+        return render_template('403.html')
     elif current_user.authorization == 's_admin':
         pass
     elif current_user.user_company.id != user.user_company.id:
@@ -84,7 +84,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     if form.validate_on_submit():
         user.name = form.name.data
         user.surname = form.surname.data
-        if form.authorization.data != 'c_founder':
+        if form.authorization.data not in ['c_member', 'c_founder']:
             user.workplace = form.workplace.data
         else:
             user.workplace = ""

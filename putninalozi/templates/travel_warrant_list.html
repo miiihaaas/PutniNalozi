@@ -6,7 +6,7 @@
       &#128663; &#128665; &#128666; {{ legend }} &#128663; &#128665; &#128666;
     </legend>
   </fieldset>
-  {% if current_user.authorization != 'c_user' %}
+  {% if current_user.authorization not in ['c_user', 'c_member'] %}
   <div id="accordionZero">
     <div class="accordion" id="accordionZero">
       <div class="accordion-item">

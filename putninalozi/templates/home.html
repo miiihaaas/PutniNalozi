@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    {% if current_user.authorization != 'c_user' %}
+    {% if current_user.authorization not in ['c_user', 'c_member'] %}
     <tr>
       <td> <a class="btn btn-info" href="{{ url_for('main.settings', company_id=current_user.user_company.id) }}">Podešavanja</a> </td>
       <td>Podešavanja - razna</td>
