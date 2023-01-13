@@ -4,7 +4,7 @@ h2 { font-size: 1.4rem; }
 h3 { font-size: 1.2rem; }
 header { background-color: #104e97; padding-bottom: 40px; }
 .bg-steel { background-color: #104e97; }
-.alert { display: inline-block; padding: 5px 20px 3px 40px !important; }
+.alert { display: inline-block; padding: 5px 20px 3px 40px !important; margin-top: 20px; }
 .alert-success { color: #009cdb; background-color: transparent;  border: 1px solid #009cdb; font-weight: 700; font-size: 16px; text-align: left; border-radius: 50px;}
 .alert-success:before { position: absolute; content: '\f058'; font-family: "Font Awesome 6 Free"; left: 0; top: -8px; font-size: 32px; }
 .alert-danger { color: #92004f !important; background-color: transparent !important; border: 1px solid #92004f !important; font-weight: 700; font-size: 16px; text-align: left; border-radius: 50px !important;}
@@ -21,6 +21,8 @@ header { background-color: #104e97; padding-bottom: 40px; }
 .bg-implicit-deepblue { background-color: #104e97; }
 .bg-implicit-skyblue { background-color: #009dde; }
 .bg-implicit-purple { background-color: #940052; }
+a.btn.btn-outline-info { background-image: linear-gradient(#ff0000, #990000) !important; }
+a.btn.btn-outline-info:hover { color: #fff; background-image: linear-gradient(#555, #222) !important; border-color: transparent; }
 
 body.login title /*body.Login header*/ { display: none; }
 body.login main.container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; padding-top: 5%; }
@@ -40,8 +42,12 @@ body.login .container label.form-control-label { color: #bbb; font-style: italic
 body.login main.container .content-section a { text-decoration: none; color: #104e97; font-weight: 500; }
 #email:before {content: '\f0e0' !important; position: absolute; font-family: "Font Awesome 6 Free"; }
 .btn { border: none; background-color: #009dde; background-image: linear-gradient(#009dde, #104e97); border-radius: 5px; color: #fff; text-transform: uppercase; font-weight: 500; font-size: 12px; padding: 10px 20px; }
-.btn:hover { color: #fff; background: #104e97 !important; border-color: transparent; }
+.btn:hover { color: #fff; /*background: #104e97 !important;*/background-image: linear-gradient(#555, #222); border-color: transparent; }
 input:-webkit-autofill, input:-webkit-autofill:focus { transition: background-color 600000s 0s, color 600000s 0s; }
+
+body.home .btn.btn-info { min-width: 140px; }
+
+body.tw-list .btn.btn-info { min-width: 120px; }
 
 body.Početna .two-inputs-in-row { display: flex; justify-content: space-between; align-items: baseline; }
 body.Početna .two-inputs-in-row h2 { color: #940052; font-size: 1.2rem; }
@@ -68,6 +74,7 @@ body:not(.login) h1 { display: block; font-size: 24px; font-weight: 700; color: 
 .accordion-button::after { transform: rotate(0deg); }
 .accordion-button:not(.collapsed)::after { transform: rotate(180deg); }
 .accordion-button.collapsed::after { transform: rotate(0deg); }
+.accordion-button h1 { margin: 0 !important; background-color: transparent !important; padding: 0 !important; color: #555 !important; }
 .btn-check:focus+.btn-info, .btn-info:focus { color: #000; background-color: transparent; border-color: transparent; box-shadow: none; }
 .accordion-item .card-body .col { display: flex; align-items: baseline; color: #555; }
 .accordion-item input { font-size: 16px; padding: 10px 20px; border-radius: 5px !important; }
@@ -91,8 +98,8 @@ th.sorting.sorting_desc, th.sorting.sorting_asc { color: #009cdd; }
 .page-item:last-child .page-link { border-top-right-radius: 5px; border-bottom-right-radius: 5px; }
 .page-link:focus { box-shadow: none; }
 a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link, .page-item.disabled a.page-link) { background-image: linear-gradient(#009dde, #104e97); color: #fff; }
-a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link):hover { background-image: linear-gradient(#104e97, #009dde); }
-.page-item.active a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link) { background-image: linear-gradient(#082950, #082950); }
+a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link):hover { background-image: linear-gradient(#555, #222); }
+.page-item.active a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link) { background-image: linear-gradient(#555, #222); }
 .page-item.active .page-link { border-color: unset; }
 .page-item.disabled a:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link) { border: 0 !important; }
 .page-item:first-child:not(.disabled) .page-link { background-image: linear-gradient(#eee, #ccc); color: #555; }
@@ -122,6 +129,9 @@ form > div.form-group { text-align: center; }
 	/*body:not(.Korisnici) .btn-info { width: 100%}*/
 	body.Fakture table#data .btn.btn-info { width: 100%; }
 	body.Kompanija table#data .btn.btn-info { width: 100%; }
+	.accordion .card-body .row { flex-wrap: nowrap; }
+	.accordion-item input[type=submit] { width: auto; }
+	.accordion .card-body .row .form-group { width: auto; }
 }
 @media (max-width: 991px) {
 	table.dataTable { max-width: 100% !important; width: 100% !important; }
