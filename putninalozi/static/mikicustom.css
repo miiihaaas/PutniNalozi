@@ -49,6 +49,8 @@ body.home .btn.btn-info { min-width: 140px; }
 
 body.tw-list .btn.btn-info { min-width: 120px; }
 
+body.company-list table#data .btn.btn-info { width: 100%; }
+
 body.Početna .two-inputs-in-row { display: flex; justify-content: space-between; align-items: baseline; }
 body.Početna .two-inputs-in-row h2 { color: #940052; font-size: 1.2rem; }
 body.softveru a.btn.btn-info { margin-top: 40px !important; }
