@@ -14,12 +14,12 @@ def home():
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    return render_template('home.html', title='Početna')
+    return render_template('home.html', title='Početna', legend='Početna')
 
 
 @main.route("/about")
 def about():
-    return render_template('about.html', title='O softveru')
+    return render_template('about.html', title='O softveru', legend='O softveru')
 
 
 @main.route("/settings/<int:company_id>", methods=['GET', 'POST'])

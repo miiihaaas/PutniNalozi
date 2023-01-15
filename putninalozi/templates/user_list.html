@@ -1,10 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
-
 {% if current_user.authorization not in ['c_user', 'c_member'] %}
   <a class="btn btn-info btn-sm m-1" href="{{ url_for('users.register_u') }}">Registrujte novog korisnika</a>
+  <hr>
 {% endif %}
-<hr>
 
 <table id="data" border="1" class="table table-striped">
   {% if current_user.authorization == 's_admin' %}

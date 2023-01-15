@@ -4,7 +4,7 @@
   <form method="POST" action="">
     {{ form.hidden_tag() }}
       <fieldset class="form-group">
-        <legend class="border-bottom mb-4">{{legend}} {{ ime_prezime }} ({{ datum }})</legend>
+        <legend class="border-bottom mb-4">Zaposleni: {{ ime_prezime }} ({{ datum }})</legend>
         <div class="row">
           <div class=" col form-group">
             {{ form.with_task.label(class="form-control-label") }}

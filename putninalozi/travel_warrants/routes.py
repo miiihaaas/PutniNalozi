@@ -294,7 +294,7 @@ def register_tw(korisnik_id, datum):
         return redirect(url_for('travel_warrants.travel_warrant_list'))
 
     return render_template('register_tw.html', title='Kreiranje putnog naloga',
-                            legend='Kreiranje putnog naloga, zaposleni: ',
+                            legend='Kreiranje putnog naloga',
                             form=form, ime_prezime=ime_prezime, datum=datum)
 
 

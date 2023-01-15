@@ -2,9 +2,6 @@
 <form method="POST" action="">
   {{ form.hidden_tag() }}
   <fieldset class="form-group">
-    <legend class="border-bottom mb-3">
-      &#128663; &#128665; &#128666; {{ legend }} &#128663; &#128665; &#128666;
-    </legend>
   </fieldset>
   {% if current_user.authorization not in ['c_user', 'c_member'] %}
   <div id="accordionZero">
@@ -19,7 +16,7 @@
             aria-expanded="false"
             aria-controls="collapseZero"
           >
-            <h1>Kreiranje novog putnog naloga</h1>
+            <h2>Kreiranje novog putnog naloga</h2>
           </button>
         </div>
 
@@ -65,7 +62,6 @@
       </div>
     </div>
   </div>
-  <hr />
   {% endif %}
   <table id="data" border="1" class="table table-striped">
     {% if current_user.authorization == 's_admin' %}

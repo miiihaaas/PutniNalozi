@@ -2,8 +2,8 @@
 {% block content %}
 {% if current_user.authorization not in ['c_user', 'c_member'] %}
 <a class="btn btn-info btn-sm m-1" href="{{ url_for('vehicles.register_v') }}">Registrujte novo vozilo</a>
-{% endif %}
 <hr>
+{% endif %}
 <table id="data" border="1" class="table table-striped">
   {% if current_user.authorization == 's_admin' %}
     <thead>
