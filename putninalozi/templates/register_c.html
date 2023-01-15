@@ -4,7 +4,6 @@
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">{{legend}}</legend>
             <div class="row">
               <div class="col form-group">
                   {{ form.companyname.label(class="form-control-label") }}
@@ -165,4 +164,5 @@
         </div>
       </form>
     </div>
+    <script>document.body.classList.add('register-c');</script>
 {% endblock content%}

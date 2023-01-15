@@ -1,8 +1,7 @@
-{% extends "layout.html" %} {% block content %} {% if current_user.authorization
-== 's_admin' %}
-<a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}"
-  >Kreiraj Novu Kompaniju</a
->
+{% extends "layout.html" %} 
+{% block content %} 
+{% if current_user.authorization == 's_admin' %}
+<a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}">Kreiraj Novu Kompaniju</a>
 {% endif %}
 <hr />
 <table id="data" border="1" class="table table-striped">
@@ -57,7 +56,9 @@
   </tbody>
   {% endif %}
 </table>
-{% endblock content%} {% block scripts %}
+{% endblock content%} 
+
+{% block scripts %}
 <script>
   $(document).ready(function () {
     $("#data").DataTable({
@@ -67,4 +68,5 @@
     });
   });
 </script>
+<script>document.body.classList.add('company-list');</script>
 {% endblock %}

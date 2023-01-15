@@ -16,7 +16,7 @@ def vehicle_list():
     elif current_user.authorization not in ['c_admin', 's_admin', 'c_principal', 'c_founder']:
         return render_template('403.html')
     vehicles = Vehicle.query.all()
-    return render_template('vehicle_list.html', title='Vozila', vehicles=vehicles)
+    return render_template('vehicle_list.html', title='Vozila', legend='Vozila', vehicles=vehicles)
 
 
 @vehicles.route("/register_v", methods=['GET', 'POST'])

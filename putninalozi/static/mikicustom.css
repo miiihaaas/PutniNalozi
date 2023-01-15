@@ -1,12 +1,13 @@
 body { background: url(img/loginbg.jpg) center center no-repeat; background-size: cover; background-attachment: fixed; font-family: 'Montserrat', sans-serif; padding-left: calc(100vw - 100%); margin-left: -17px; }
-h1 { font-size: 1.6rem; color: #999; font-weight: 700; padding: 30px 0 0 0; }
+body.login h1 { font-size: 1.6rem; color: #999; font-weight: 700; padding: 30px 0 0 0; text-align: center; }
 h2 { font-size: 1.4rem; }
 h3 { font-size: 1.2rem; }
-body.Dodavanje fieldset.form-group { max-width: 100% !important;}
-.alert { display: inline-block; padding: 5px 20px 3px 40px !important; }
+header { background-color: #104e97; padding-bottom: 40px; }
+.bg-steel { background-color: #104e97; }
+.alert { display: inline-block; padding: 5px 20px 3px 40px !important; margin-top: 20px; }
 .alert-success { color: #009cdb; background-color: transparent;  border: 1px solid #009cdb; font-weight: 700; font-size: 16px; text-align: left; border-radius: 50px;}
 .alert-success:before { position: absolute; content: '\f058'; font-family: "Font Awesome 6 Free"; left: 0; top: -8px; font-size: 32px; }
-.alert-danger { color: #92004f; background-color: transparent; border: 1px solid #92004f; font-weight: 700; font-size: 16px; text-align: left; border-radius: 50px;}
+.alert-danger { color: #92004f !important; background-color: transparent !important; border: 1px solid #92004f !important; font-weight: 700; font-size: 16px; text-align: left; border-radius: 50px !important;}
 .alert-danger:before { position: absolute; content: '\f057'; font-family: "Font Awesome 6 Free"; left: 0; top: -8px; font-size: 32px; }
 .alert-message { color: #104e97; background-color: transparent; border: 1px solid #104e97; font-weight: 700; font-size: 16px; text-align: left; border-radius: 50px;}
 .alert-message:before { position: absolute; content: '\f06a'; font-family: "Font Awesome 6 Free"; left: 0; top: -8px; font-size: 32px; }
@@ -20,33 +21,43 @@ body.Dodavanje fieldset.form-group { max-width: 100% !important;}
 .bg-implicit-deepblue { background-color: #104e97; }
 .bg-implicit-skyblue { background-color: #009dde; }
 .bg-implicit-purple { background-color: #940052; }
+a.btn.btn-outline-info { background-image: linear-gradient(#ff0000, #990000) !important; }
+a.btn.btn-outline-info:hover { color: #fff; background-image: linear-gradient(#555, #222) !important; border-color: transparent; }
+
 body.login title /*body.Login header*/ { display: none; }
-main.login-screen { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; padding-top: 5%; }
-main.login-screen .row { display: flex; max-width: 700px; width: 700px; background: rgba(255,255,255,0.7); border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.04); padding: 20px; }
-body.login main:not(.login-screen) { margin-top: 0; background-color: transparent !important; box-shadow: none; }
+body.login main.container { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column; padding-top: 5%; }
+body.login .col-md-12 { display: flex; flex-direction: column; }
+body.login main.container .rowinho { display: flex; max-width: 700px; width: 700px; background: rgba(255,255,255,0.7); border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.04); padding: 20px; }
 body.login fieldset.form-group { max-width: 100%; }
-body.login .row form > div.form-group { margin-top: 30px; }
-body.login .login-screen form > div.form-group { display: flex; justify-content: space-between; }
-.login-logo { margin: 0px 0 0px 0; max-width: 300px; width: 100%; }
-main.login-screen .content-section { background: transparent; padding: 0; border: none; border-radius: unset; margin-bottom: 0; max-width: 350px; margin: auto; }
-main.login-screen .subtitle { text-align: center; }
-main.login-screen i { color: #bbb; }
-.login-screen input.form-control { border: 0; border-bottom: 1px solid #ccc; border-radius: 0; }
-.login-screen input.form-control:focus { box-shadow: none; border-bottom: 3px solid #940052 !important; }
-.login-screen input:-internal-autofill-selected { background-color: transparent !important; }
-.login-screen label.form-control-label { color: #bbb; font-style: italic; font-size: 14px; }
+body.login .rowinho form > div.form-group { margin-top: 30px; }
+body.login .container form > div.form-group { display: flex; justify-content: space-between; }
+.login-logo { margin: auto; max-width: 200px; width: 100%; }
+body.login main.container .content-section { background: transparent; padding: 0; border: none; border-radius: unset; margin-bottom: 0; max-width: 350px; margin: auto; }
+body.login main.container .subtitle { text-align: center; }
+body.login main.container i { color: #bbb; }
+body.login .container input.form-control { border: 0; border-bottom: 1px solid #ccc; border-radius: 0; }
+body.login .container input.form-control:focus { box-shadow: none; border-bottom: 3px solid #940052 !important; }
+body.login .container input:-internal-autofill-selected { background-color: transparent !important; }
+body.login .container label.form-control-label { color: #bbb; font-style: italic; font-size: 14px; }
+body.login main.container .content-section a { text-decoration: none; color: #104e97; font-weight: 500; }
 #email:before {content: '\f0e0' !important; position: absolute; font-family: "Font Awesome 6 Free"; }
 .btn { border: none; background-color: #009dde; background-image: linear-gradient(#009dde, #104e97); border-radius: 5px; color: #fff; text-transform: uppercase; font-weight: 500; font-size: 12px; padding: 10px 20px; }
-.btn:hover { color: #fff; background: #104e97 !important; border-color: transparent; }
-main.login-screen .content-section a { text-decoration: none; color: #104e97; font-weight: 500; }
+.btn:hover { color: #fff; /*background: #104e97 !important;*/background-image: linear-gradient(#555, #222); border-color: transparent; }
+input:-webkit-autofill, input:-webkit-autofill:focus { transition: background-color 600000s 0s, color 600000s 0s; }
+
+body.home .btn.btn-info { min-width: 140px; }
+
+body.tw-list .btn.btn-info { min-width: 120px; }
+
+body.company-list table#data .btn.btn-info { width: 100%; }
+
 body.Početna .two-inputs-in-row { display: flex; justify-content: space-between; align-items: baseline; }
 body.Početna .two-inputs-in-row h2 { color: #940052; font-size: 1.2rem; }
 body.softveru a.btn.btn-info { margin-top: 40px !important; }
+body.Dodavanje fieldset.form-group { max-width: 100% !important;}
 
-header { background-color: #104e97; padding-bottom: 40px; }
-.bg-steel { background-color: #104e97; }
-main.container:not(.login-screen) { margin-top:-40px; background-color: #fff; box-shadow: 0 0 10px #00000030; border-radius: 5px; padding: 0 20px 20px 20px; margin-bottom: 20px; overflow: hidden; }
-h1 { display: block; font-size: 24px; font-weight: 700; color: #999; text-shadow: 1px 1px 1px #fff; background-color: #eee; padding: 10px; margin: 0 -20px 20px -20px; }
+body:not(.login) main.container { margin-top:-40px; background-color: #fff; box-shadow: 0 0 10px #00000030; border-radius: 5px; padding: 0 20px 20px 20px; margin-bottom: 20px; overflow: hidden; }
+body:not(.login) h1 { display: block; font-size: 24px; font-weight: 700; color: #999; text-shadow: 1px 1px 1px #fff; background-color: #eee; padding: 10px; margin: 0 -20px 20px -20px; }
 .navbar>.container, .navbar>.container-fluid, .navbar>.container-lg, .navbar>.container-md, .navbar>.container-sm, .navbar>.container-xl, .navbar>.container-xxl { justify-content: space-between; }
 .navbar-brand img { max-width: 160px; }
 .navbar-dark .navbar-nav .nav-link { border-bottom: 1px solid; margin-right: 3px; }
@@ -65,6 +76,7 @@ h1 { display: block; font-size: 24px; font-weight: 700; color: #999; text-shadow
 .accordion-button::after { transform: rotate(0deg); }
 .accordion-button:not(.collapsed)::after { transform: rotate(180deg); }
 .accordion-button.collapsed::after { transform: rotate(0deg); }
+.accordion-button h1 { margin: 0 !important; background-color: transparent !important; padding: 0 !important; color: #555 !important; }
 .btn-check:focus+.btn-info, .btn-info:focus { color: #000; background-color: transparent; border-color: transparent; box-shadow: none; }
 .accordion-item .card-body .col { display: flex; align-items: baseline; color: #555; }
 .accordion-item input { font-size: 16px; padding: 10px 20px; border-radius: 5px !important; }
@@ -75,7 +87,7 @@ h1 { display: block; font-size: 24px; font-weight: 700; color: #999; text-shadow
 .form-select:focus { border-color: #555; box-shadow: none; }
 input[type=search] { min-height: 38px; height: 38px; border-radius: 5px; }
 select.form-select.form-select-sm { min-height: 38px; }
-table#data { border: 0; width: 100% !important; }
+table#data { border: 0; width: 100% !important; margin-top: 20px; }
 .table>:not(caption)>*>* { padding: 6px; box-shadow: none; border: 0; border-right: 1px solid #fff; border-bottom: 1px solid #fff; }
 .table>thead { background-color: #ddd; font-size: 12px; }
 .table thead th { vertical-align: bottom; border-bottom: 1px solid #fff !important; }
@@ -88,8 +100,8 @@ th.sorting.sorting_desc, th.sorting.sorting_asc { color: #009cdd; }
 .page-item:last-child .page-link { border-top-right-radius: 5px; border-bottom-right-radius: 5px; }
 .page-link:focus { box-shadow: none; }
 a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link, .page-item.disabled a.page-link) { background-image: linear-gradient(#009dde, #104e97); color: #fff; }
-a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link):hover { background-image: linear-gradient(#104e97, #009dde); }
-.page-item.active a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link) { background-image: linear-gradient(#082950, #082950); }
+a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link):hover { background-image: linear-gradient(#555, #222); }
+.page-item.active a.page-link:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link) { background-image: linear-gradient(#555, #222); }
 .page-item.active .page-link { border-color: unset; }
 .page-item.disabled a:not(.page-item:first-child a.page-link, .page-item:last-child a.page-link) { border: 0 !important; }
 .page-item:first-child:not(.disabled) .page-link { background-image: linear-gradient(#eee, #ccc); color: #555; }
@@ -119,6 +131,9 @@ form > div.form-group { text-align: center; }
 	/*body:not(.Korisnici) .btn-info { width: 100%}*/
 	body.Fakture table#data .btn.btn-info { width: 100%; }
 	body.Kompanija table#data .btn.btn-info { width: 100%; }
+	.accordion .card-body .row { flex-wrap: nowrap; }
+	.accordion-item input[type=submit] { width: auto; }
+	.accordion .card-body .row .form-group { width: auto; }
 }
 @media (max-width: 991px) {
 	table.dataTable { max-width: 100% !important; width: 100% !important; }
@@ -158,7 +173,7 @@ form > div.form-group { text-align: center; }
 	.navbar-expand-md .navbar-collapse { flex-grow: 0; }
 }
 @media (max-width: 767px) {
-	main.login-screen .row { width: auto; }
+	body.login main.container .rowinho { width: auto; }
 	fieldset.form-group { max-width: 100%; margin: auto; }
 	.navbar>.container, .navbar>.container-fluid, .navbar>.container-lg, .navbar>.container-md, .navbar>.container-sm, .navbar>.container-xl, .navbar>.container-xxl { justify-content: space-between; }
 	body.Login .login-screen form > div.form-group { flex-direction: column; }
@@ -166,9 +181,9 @@ form > div.form-group { text-align: center; }
 @media (max-width: 575px) {
 	body { background-color: #f5f5f5; padding-left: 0; margin-left: 0; }
 	main.container { width: auto; border: 10px solid #fff; background-color: #f5f5f5 !important; }
-	main.login-screen { border: 0; background-color: transparent !important; }
-	body.login .row { margin: 10px; }
-	body.login .row form > div.form-group { display: flex; margin-top: 30px; }
+	body.login main.container { border: 0; background-color: transparent !important; }
+	body.login .rowinho { margin: 10px; }
+	body.login .rowinho form > div.form-group { display: flex; margin-top: 30px; }
 	.col-md-9, .col-sm-12 { padding: 0; }
 	#collapseZero { background-color: #fff; border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; box-shadow: 0 0 10px #e9e9e9; }
 	.table>:not(caption)>*>* { border-right: 0; }

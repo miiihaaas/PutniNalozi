@@ -4,7 +4,6 @@
   <form action="" method="POST">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
-      <legend class="border-bottom mb-3">{{ legend }}</legend>
       <div class="row">
         <div class="col form-box col-md-6">
           {{ form.daily_wage_domestic.label(class="form-control-label") }}
@@ -62,5 +61,5 @@
     </fieldset>
   </form>
 </div>
-
+<script>document.body.classList.add('settings');</script>
 {% endblock content%}

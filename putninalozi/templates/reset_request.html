@@ -4,7 +4,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">{{legend}}</legend>
+                <p>Uneste mejl na kome ćemo Vam poslati link za resetovanje lozike</p>
                 <div class="form-group">
                     {{ form.email.label(class="form-control-label") }}
 
@@ -25,4 +25,5 @@
             </div>
           </form>
         </div>
+        <script>document.body.classList.add('reset-request');</script>
 {% endblock content%}
