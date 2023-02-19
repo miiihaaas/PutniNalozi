@@ -27,7 +27,7 @@ class CreateTravelWarrantForm(FlaskForm):
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
     personal_type = SelectField('Tip vozila: ', choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     personal_brand = StringField('Brend vozila: ')
-    personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
+    personal_registration = StringField('Registraciona oznaka ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
 
     advance_payment = DecimalField('Akontacija: ', validators=[Optional('oriban')])
@@ -63,7 +63,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
     personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     personal_brand = StringField('Brend vozila: ')
-    personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
+    personal_registration = StringField('Registraciona oznaka ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
 
     advance_payment = DecimalField('Akontacija: ')
@@ -102,7 +102,7 @@ class EditUserTravelWarrantForm(FlaskForm):
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
     personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
     personal_brand = StringField('Brend vozila: ')
-    personal_registration = StringField('Registracija ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
+    personal_registration = StringField('Registraciona oznaka ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
     other = StringField('Drugo: ')
 
     # advance_payment = IntegerField('Akontacija: ')

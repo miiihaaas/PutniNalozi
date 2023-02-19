@@ -1,11 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>{{ legend }}</h1>
 <div class="content-section">
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
-            <div class="row">
+            <div class="row just-column">
                 <div class="col form-group">
                     {{ form.name.label(class="form-control-label") }}
                     {% if form.name.errors %}
@@ -17,6 +16,34 @@
                         </div>
                     {% else %}
                         {{ form.name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="col form-group">
+                    {{ form.surname.label(class="form-control-label") }}
+                    {% if form.surname.errors %}
+                        {{ form.surname(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.surname.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.surname(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row just-column">
+                <div class="col form-group">
+                    {{ form.gender.label(class="form-control-label") }}
+                    {% if form.gender.errors %}
+                        {{ form.gender(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.gender.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.gender(class="form-select form-select-lg") }}
                     {% endif %}
                 </div>
                 <div class="col form-group">
@@ -34,20 +61,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col form-group">
-                    {{ form.surname.label(class="form-control-label") }}
-                    {% if form.surname.errors %}
-                        {{ form.surname(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.surname.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.surname(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
+            <div class="row just-column">
                 <div class="col form-group">
                     {{ form.workplace.label(class="form-control-label") }}
                     {% if form.workplace.errors %}
@@ -61,38 +75,6 @@
                         {{ form.workplace(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col form-group">
-                    {{ form.gender.label(class="form-control-label") }}
-                    {% if form.gender.errors %}
-                        {{ form.gender(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.gender.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.gender(class="form-select form-select-lg") }}
-                    {% endif %}
-                </div>
-                <div class="col form-group">
-                    {{ form.default_vehicle.label(class="form-control-label") }}
-                    {% if form.default_vehicle.errors %}
-                        {{ form.default_vehicle(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.default_vehicle.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.default_vehicle(class="form-select form-select-lg") }}
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="col form-group">
                     {{ form.authorization.label(class="form-control-label") }}
                     {% if form.authorization.errors %}
@@ -104,6 +86,22 @@
                         </div>
                     {% else %}
                         {{ form.authorization(class="form-select form-select-lg") }}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row just-column">
+                <div class="col form-group">
+                    {{ form.default_vehicle.label(class="form-control-label") }}
+                    {% if form.default_vehicle.errors %}
+                        {{ form.default_vehicle(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.default_vehicle.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.default_vehicle(class="form-select form-select-lg") }}
                     {% endif %}
                 </div>
                 {% if current_user.authorization == 's_admin'%}

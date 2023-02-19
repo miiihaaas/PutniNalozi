@@ -4,7 +4,7 @@
 <a class="btn btn-info btn-sm m-1" href="{{ url_for('vehicles.register_v') }}">Registrujte novo vozilo</a>
 <hr>
 {% endif %}
-<table id="data" border="1" class="table table-striped">
+<table id="data" border="1" class="table table-striped vehiclelist">
   {% if current_user.authorization == 's_admin' %}
     <thead>
       <tr>

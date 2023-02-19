@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<img src="../static/img/logo.png" class="login-logo">
+<img src="../static/img/putni-nalozi-logo.png" class="login-logo">
 <h1>{{ legend }}</h1>
 <p class="subtitle">Molimo unesite vaše podatke</p>
 <div class="rowinho"> 
@@ -45,7 +45,7 @@
             <div class="form-group">
               {{ form.submit(class="btn btn-outline-info") }}
               <small class="text-muted ml-2">
-                <a href="{{ url_for('users.reset_request') }}">Resetovanje lozinke? </a>
+                <a href="{{ url_for('users.reset_request') }}">Resetujte lozinku </a>
               </small>
             </div>
           </form>

@@ -16,7 +16,7 @@
             aria-expanded="false"
             aria-controls="collapseZero"
           >
-            <h2>Kreiranje novog putnog naloga</h2>
+            Kreiranje novog putnog naloga
           </button>
         </div>
 
@@ -40,7 +40,7 @@
                 {% else %} {{ form.user_id(class="form-select form-select-lg")
                 }} {% endif %}
               </div>
-              <div class="col form-box">
+              <div class="col form-box start-time">
                 {{ form.start_datetime.label(class="form-control-label") }} {%
                 if form.start_datetime.errors %} {{
                 form.start_datetime(class="form-control form-control-lg
@@ -63,11 +63,11 @@
     </div>
   </div>
   {% endif %}
-  <table id="data" border="1" class="table table-striped">
+  <table id="data" border="1" class="table table-striped twlist">
     {% if current_user.authorization == 's_admin' %}
     <thead>
       <tr id="header">
-        <th>Br.</th>
+        <th>Br. putnog naloga</th>
         <th>Kompanija</th>
         <th>Zaposleni</th>
         <th>Vozilo</th>
@@ -78,7 +78,7 @@
       {% for warrant in warrants %}
       <tr>
         <td class="align-middle">
-          <div class="btn-group">
+          <div class="btn-group blue-purple-group">
             <a
               class="btn btn-info"
               href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}"
