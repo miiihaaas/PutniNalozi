@@ -5,7 +5,7 @@
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
       <div class="row">
-        <div class="col form-box col-md-6">
+        <div class="col form-box col-md-6 full-on-mob">
           {{ form.daily_wage_domestic.label(class="form-control-label") }}
             {% if form.daily_wage_domestic.errors %}
                 {{ form.daily_wage_domestic(class="form-control form-control-lg is-invalid") }}
@@ -18,7 +18,7 @@
                 {{ form.daily_wage_domestic(class="form-control form-control-lg") }}
             {% endif %}
         </div>
-        <div class="col form-box col-md-6">
+        <div class="col form-box col-md-6 full-on-mob top15mob">
           {{ form.daily_wage_abroad.label(class="form-control-label") }}
             {% if form.daily_wage_abroad.errors %}
                 {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
@@ -46,12 +46,12 @@
           {{ form.send_email_obracunat(class="form-check-input") }} 
           {{ form.send_email_obracunat.label(class="form-check-label") }}
         </div>
-        <legend class="border-bottom mb-3">Buduće nadogradnje softvera:</legend>
+        <!--<legend class="border-bottom mb-3">Buduće nadogradnje softvera:</legend>-->
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
           <label class="form-check-label" for="flexSwitchCheckDefault">Slanje mejla blagajniku</label>
         </div>
-        <div class="">
+        <div class="button-group">
           <br>
           <a class="btn btn-info" href="{{url_for('main.home')}}">Nazad</a>
           {{ form.submit(class="btn btn-outline-primary") }}

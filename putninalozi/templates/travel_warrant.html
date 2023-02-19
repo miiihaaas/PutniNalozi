@@ -4,18 +4,19 @@
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
       {% if form.errors %} debag line: {{ form.errors }} {% endif %}
-      <div class="accordion" id="accordionZero">
+      <h3><strong>Broj putnog naloga: {{ warrant.travel_warrant_number }}</strong></h3>
+      <div class="accordion nothere" id="accordionZero">
         <div class="accordion-item">
           <div class="accordion-header" id="headingZero">
             <button
               type="button"
-              class="accordion-button"
+              class="accordion-button collapsed"
               data-toggle="collapse"
               data-target="#collapseZero"
               aria-expanded="false"
               aria-controls="collapseZero"
             >
-              <h2>Broj putnog naloga: {{ warrant.travel_warrant_number }}</h2>
+              Detalji
               <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
               <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
               <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
@@ -81,12 +82,12 @@
         </div>
       </div>
       <br />
-      <div class="form-check form-switch" onload="myFunction()">
+      <div class="form-check form-switch top0" onload="myFunction()">
         {{ form.abroad(class="form-check-input", onclick="myFunction()", id="abroad_id") }} 
         {{ form.abroad.label(class="form-check-label") }}
         <!-- test: {{form.abroad.data}} -->
       </div>
-      <div class="col form-box">
+      <div class="form-box">
         {{ form.relation.label(class="form-control-label") }} 
         {% if form.relation.errors %} 
         {{ form.relation(class="form-control form-control-lg is-invalid") }}
@@ -172,7 +173,7 @@
         </div>
       </div>
       <br />
-      <div class="row">
+      <div class="row just-column">
         <div class="col form-box">
           {{ form.costs_pays.label(class="form-control-label") }} 
           {% if form.costs_pays.errors %} 
@@ -199,7 +200,7 @@
           {% else %} {{ form.daily_wage(class="form-control form-control-lg") }}
           {% endif %}
         </div>
-        <div class="col form-box col-md-2">
+        <div class="col form-box col-md-2 minw120">
           {{ form.daily_wage_currency.label(class="form-control-label") }} {% if
           form.daily_wage_currency.errors %} {{
           form.daily_wage_currency(class="form-control form-control-lg
@@ -213,7 +214,7 @@
           form-select-lg") }} {% endif %}
         </div>
       </div>
-      <div class="row">
+      <div class="row top15 just-column">
         <div class="col form-box">
           {{ form.status.label(class="form-control-label") }} {% if
           form.status.errors %} {{ form.status(class="form-control
@@ -239,7 +240,7 @@
           {% else %} {{ form.advance_payment(class="form-control
           form-control-lg") }} {% endif %}
         </div>
-        <div class="col form-box col-md-2">
+        <div class="col form-box col-md-2 minw120">
           {{ form.advance_payment_currency.label(class="form-control-label") }}
           {% if form.advance_payment_currency.errors %} {{
           form.advance_payment_currency(class="form-control form-control-lg
@@ -259,7 +260,7 @@
           <div class="accordion-header" id="headingOne">
             <button
               type="button"
-              class="accordion-button"
+              class="accordion-button collapsed"
               data-toggle="collapse"
               data-target="#collapseOne"
               aria-expanded="true"
@@ -270,7 +271,7 @@
           </div>
           <div
             id="collapseOne"
-            class="collapse show"
+            class="collapse"
             aria-labelledby="headingOne"
             data-parent="#accordion"
           >
@@ -341,7 +342,7 @@
           </div>
           <div
             id="collapseThree"
-            class="collapse"
+            class="collapse inertop15"
             aria-labelledby="headingThree"
             data-parent="#accordion"
           >
@@ -442,7 +443,7 @@
               {{ form.principal_id(class="form-select form-select-lg") }}
           {% endif %}
       </div>
-      <div class="form-box">
+      <div class="form-box top15">
         {{ form.cashier_id.label(class="form-control-label") }}
           {% if form.cashier_id.errors %}
               {{ form.cashier_id(class="form-control form-control-lg is-invalid") }}
@@ -459,13 +460,13 @@
       <hr />
       <div class="form-group">
         <a
-          class="shadow btn btn-outline-danger btn-block"
+          class="btn btn-outline-danger btn-block"
           href="{{ url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id) }}"
           >Dodaj trošak</a
         >
       </div>
       <br />
-      <table id="data" border="1" class="table table-striped">
+      <table id="data" border="1" class="table table-striped twtable">
         <thead>
           <tr id="header">
             <th>Tip troška</th>
@@ -520,7 +521,7 @@
       {% endif %} 
       {{ form.submit(class="btn btn-outline-primary") }}
       <a
-        class="shadow btn btn-outline-info"
+        class="btn btn-info"
         href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
         >Preuzmite dokument</a>
       {% if current_user.authorization in ['c_principal', 's_admin', 'c_admin', 'c_founder']  %}
