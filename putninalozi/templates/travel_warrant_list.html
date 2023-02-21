@@ -68,9 +68,9 @@
     <thead>
       <tr id="header">
         <th>Br. putnog naloga</th>
-        <th>Kompanija</th>
         <th>Zaposleni</th>
         <th>Vozilo</th>
+        <th>Kompanija</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -94,19 +94,26 @@
           </div>
         </td>
         <td class="align-middle">
+          {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }}
+        </td>
+        <td class="align-middle">
+          {% if warrant.together_with %} 
+            Putuje sa: <br />
+            {{warrant.together_with}} 
+          {% elif warrant.other %}
+            {{ warrant.other }}
+          {% elif warrant.personal_type %}
+            {{warrant.personal_type }}  <br />
+            {{warrant.personal_brand}} <br />
+            {{warrant.personal_registration}}
+          {% else %} 
+            {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
+            {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
+            {{warrant.travelwarrant_vehicle.vehicle_registration}}
+          {% endif %}
+        </td>
+        <td class="align-middle">
           {{ warrant.travelwarrant_company.companyname }}
-        </td>
-        <td class="align-middle">
-          {{ warrant.travelwarrant_user.name }} {{
-          warrant.travelwarrant_user.surname }}
-        </td>
-        <td class="align-middle">
-          {% if warrant.together_with %} Putuje sa: <br />
-          {{warrant.together_with}} {% endif %} {{ warrant.other }} {{
-          warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type
-          }} <br />
-          {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
-          {{warrant.travelwarrant_vehicle.vehicle_registration}}
         </td>
         <td class="align-middle">{{ warrant.status }}</td>
       </tr>
@@ -147,12 +154,20 @@
           warrant.travelwarrant_user.surname}}
         </td>
         <td class="align-middle">
-          {% if warrant.together_with %} Putuje sa: <br />
-          {{warrant.together_with}} {% endif %} {{ warrant.other }} {{
-          warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type
-          }} <br />
-          {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
-          {{warrant.travelwarrant_vehicle.vehicle_registration}}
+          {% if warrant.together_with %} 
+            Putuje sa: <br />
+            {{warrant.together_with}} 
+          {% elif warrant.other %}
+            {{ warrant.other }}
+          {% elif warrant.personal_type %}
+            {{warrant.personal_type }}  <br />
+            {{warrant.personal_brand}} <br />
+            {{warrant.personal_registration}}
+          {% else %} 
+            {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
+            {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
+            {{warrant.travelwarrant_vehicle.vehicle_registration}}
+          {% endif %}
         </td>
         <td class="align-middle">{{ warrant.start_datetime.date() }}</td>
         <td class="align-middle">{{ warrant.status }}</td>
@@ -194,12 +209,20 @@
           warrant.travelwarrant_user.surname}}
         </td>
         <td class="align-middle">
-          {% if warrant.together_with %} Putuje sa: <br />
-          {{warrant.together_with}} {% endif %} {{ warrant.other }} {{
-          warrant.personal_type }} {{ warrant.travelwarrant_vehicle.vehicle_type
-          }} <br />
-          {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
-          {{warrant.travelwarrant_vehicle.vehicle_registration}}
+          {% if warrant.together_with %} 
+            Putuje sa: <br />
+            {{warrant.together_with}} 
+          {% elif warrant.other %}
+            {{ warrant.other }}
+          {% elif warrant.personal_type %}
+            {{warrant.personal_type }}  <br />
+            {{warrant.personal_brand}} <br />
+            {{warrant.personal_registration}}
+          {% else %} 
+            {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
+            {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
+            {{warrant.travelwarrant_vehicle.vehicle_registration}}
+          {% endif %}
         </td>
         <td class="align-middle">{{ warrant.start_datetime.date() }}</td>
         <td class="align-middle">{{ warrant.status }}</td>
