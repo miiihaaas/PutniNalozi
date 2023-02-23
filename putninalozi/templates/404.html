@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
 <h1>Stranica koju tražite ne postoji.</h1>
-<h2>miki, stavi privremeno bilo koju sliku, a kasnije će se uklapati u dizajn nova slika: na slici treba da bude put sa znakom slepe ulice.</h2>
-<a class="btn btn-info" href="{{ url_for('main.home') }}">Početna</a>
-<button class="btn btn-info" onclick="history.back()">Nazad</button>
+<div>
+    <a class="btn btn-info" href="{{ url_for('main.home') }}">Početna</a>
+    <button class="btn btn-info" onclick="history.back()">Nazad</button>
+</div>
+<img src="/static/img/404.jpg" alt="Stranica 404" width="1200" height="800">
 {% endblock content%}
