@@ -125,7 +125,7 @@
         <td class="align-middle"> {{ trosak.expenses_type }} </td>
         <td class="align-middle"> 2022-10-09 </td>
         <td class="align-middle"> {{ trosak.description }} </td>
-        <td class="align-middle"> {{ trosak.amount }} {{ trosak.amount_currency }} </td>
+        <td class="align-middle"> {{ '{:,.2f}'.format(trosak.amount) }} {{ trosak.amount_currency }} </td>
       </tr>
       {% endfor %}
     </tbody>
