@@ -274,7 +274,7 @@ def travel_warrant_profile(warrant_id):
 
                     warrant.vehicle_id=None
                     warrant.together_with=form.together_with.data
-                    warrant.personal_vehicle_id=""
+                    warrant.personal_vehicle_id=None
                     warrant.other=""
 
                     if request.form.get('dugme') == 'Završi':
@@ -320,7 +320,7 @@ def travel_warrant_profile(warrant_id):
 
                     warrant.vehicle_id=None
                     warrant.together_with=""
-                    warrant.personal_vehicle_id=""
+                    warrant.personal_vehicle_id=None
                     warrant.other=form.other.data
 
                     if request.form.get('dugme') == 'Završi':
@@ -347,7 +347,7 @@ def travel_warrant_profile(warrant_id):
 
                     warrant.vehicle_id=form.vehicle_id.data
                     warrant.together_with=""
-                    warrant.personal_vehicle_id=""
+                    warrant.personal_vehicle_id=None
                     warrant.other=""
 
                     if request.form.get('dugme') == 'Završi':
@@ -447,7 +447,7 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.vehicle_id=None
                 warrant.together_with=form.together_with.data
-                warrant.personal_vehicle_id=""
+                warrant.personal_vehicle_id=None
                 warrant.other=""
 
                 warrant.advance_payment = int(form.advance_payment.data)
@@ -523,7 +523,7 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.vehicle_id=None
                 warrant.together_with=""
-                warrant.personal_vehicle_id=""
+                warrant.personal_vehicle_id=None
                 warrant.other=form.other.data
 
                 warrant.advance_payment = int(form.advance_payment.data)
@@ -564,7 +564,7 @@ def travel_warrant_profile(warrant_id):
 
                 warrant.vehicle_id=form.vehicle_id.data
                 warrant.together_with=""
-                warrant.personal_vehicle_id=""
+                warrant.personal_vehicle_id=None
                 warrant.other=""
 
                 warrant.advance_payment = int(form.advance_payment.data)
