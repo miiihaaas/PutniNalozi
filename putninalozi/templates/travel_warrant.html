@@ -5,6 +5,9 @@
     <fieldset class="form-group">
       {% if form.errors %} debag line: {{ form.errors }} {% endif %}
       <h3><strong>Broj putnog naloga: {{ warrant.travel_warrant_number }}</strong></h3>
+      Zaposleni: 
+      <input type="text" class="form-control form-control-lg" value="{{ warrant.travelwarrant_user.name }}  {{ warrant.travelwarrant_user.surname }}" disabled>
+      <input class="form-control form-control-lg" type="datetime-local", value="{{ warrant.start_datetime }}" disabled>
       <div class="accordion nothere" id="accordionZero">
         <div class="accordion-item">
           <div class="accordion-header" id="headingZero">
@@ -70,14 +73,14 @@
         <div class="col form-box col-md-3">
           {{ form.end_datetime.label(class="form-control-label") }} 
           {% if form.end_datetime.errors %} 
-            {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
+            {{ form.end_datetime(class="form-control form-control-lg is-invalid", min=warrant.start_datetime) }}
             <div class="invalid-feedback">
               {% for error in form.end_datetime.errors %}
               <span>{{ error }}</span>
               {% endfor %}
             </div>
           {% else %} 
-            {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }} 
+            {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local", min=warrant.start_datetime) }} 
           {% endif %}
         </div>
       </div>

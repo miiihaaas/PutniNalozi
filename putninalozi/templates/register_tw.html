@@ -23,14 +23,14 @@
           <div class="col form-box col-md-3">
             {{ form.end_datetime.label(class="form-control-label") }}
               {% if form.end_datetime.errors %}
-                  {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
+                  {{ form.end_datetime(class="form-control form-control-lg is-invalid", min=datum) }}
                   <div class="invalid-feedback">
                       {% for error in form.end_datetime.errors %}
                           <span>{{ error }}</span>
                       {% endfor %}
                   </div>
               {% else %}
-                  {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
+                  {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local", min=datum) }}
               {% endif %}
           </div>
         </div>
@@ -42,14 +42,12 @@
         <div class="form-box top15">
           {{ form.relation.label(class="form-control-label") }} 
           {% if form.relation.errors %} 
-          {{ form.relation(class="form-control form-control-lg is-invalid") }}
-          <div class="invalid-feedback">
-            {% for error in form.relation.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
+            {{ form.relation(class="form-control form-control-lg is-invalid") }}
+              {% for error in form.relation.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
           {% else %} 
-          {{ form.relation(class="form-control form-control-lg") }}
+            {{ form.relation(class="form-control form-control-lg") }}
           {% endif %}
         </div>
         <div class="row top15 dva-jedan">

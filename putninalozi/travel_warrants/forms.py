@@ -29,11 +29,11 @@ class CreateTravelWarrantForm(FlaskForm):
     other = StringField('Drugo: ')
 
     advance_payment = DecimalField('Akontacija: ', validators=[Optional('oriban'), NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
-    advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     daily_wage = DecimalField('Iznos dnevnice u državi: ', validators=[NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
-    daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     daily_wage_abroad = DecimalField('Iznos dnevnice u inostranstvu: ', validators=[NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
-    daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('e', 'EUR'), ('usd', 'USD')])
+    daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('€', 'EUR'), ('usd', 'USD')])
     costs_pays = StringField('Putni troškovi padaju na teret: ', validators=[DataRequired()])
     principal_id = SelectField('Nalogodavac: ', validators=[Optional()], choices=[])
     cashier_id = SelectField('Blagajnik: ', validators=[Optional()], choices=[])
@@ -63,11 +63,11 @@ class EditAdminTravelWarrantForm(FlaskForm):
     other = StringField('Drugo: ')
 
     advance_payment = DecimalField('Akontacija: ', validators=[NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
-    advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     daily_wage = DecimalField('Iznos dnevnice u državi: ', validators=[NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
-    daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     daily_wage_abroad = DecimalField('Iznos dnevnice u inostranstvu: ', validators=[NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
-    daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('e', 'EUR'), ('usd', 'USD')])
+    daily_wage_abroad_currency = SelectField('Valuta: ', choices=[('€', 'EUR'), ('usd', 'USD')])
     costs_pays = StringField('Putni troškovi padaju na teret: ')
     principal_id = SelectField('Nalogodavac:', validators=[Optional()], choices=[])
     cashier_id = SelectField('Blagajnik: ', validators=[Optional()], choices=[])
@@ -100,9 +100,9 @@ class EditUserTravelWarrantForm(FlaskForm):
     other = StringField('Drugo: ')
 
     # advance_payment = IntegerField('Akontacija: ')
-    # advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    # advance_payment_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     # daily_wage = IntegerField('Dnevnica: ')
-    # daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    # daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     # costs_pays = StringField('Putni troškovi padaju na teret: ')
 
     status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
@@ -119,7 +119,7 @@ class TravelWarrantExpensesForm(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
     description = StringField('Opis troška: ')
     amount = DecimalField('Iznos: ', validators=[DataRequired(), NumberRange(min=0, message='Iznos troška mora biti veći od 0.')])
-    amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     submit = SubmitField('Dodajte trošak')
 
     def reset(self):
@@ -130,7 +130,7 @@ class EditTravelWarrantExpenses(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
     description = StringField('Opis troška: ')
     amount = DecimalField('Iznos: ', validators=[DataRequired(), NumberRange(min=0, message='Iznos troška mora biti veći od 0.')])
-    amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
+    amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     submit = SubmitField('Ažurirajte trošak')
 
     def reset(self):

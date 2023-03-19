@@ -375,16 +375,16 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
                 ukupni_trosak = ukupni_trosak + trosak.amount
                 print(ukupni_trosak)
 
-                pdf.cell(24,4, f'{trosak.expenses_date.strftime("%d/%m/%Y")}', border=1, ln=False, align='C')
-                pdf.cell(56,4, f'{trosak.expenses_type}', border=1, ln=False, align='L')
+                # pdf.cell(24,4, f'{trosak.expenses_date.strftime("%d/%m/%Y")}', border=1, ln=False, align='C')
+                pdf.cell(80,4, f'{trosak.expenses_type}', border=1, ln=False, align='L')
                 pdf.cell(75,4, f'{trosak.description}', border=1, ln=False, align='L')
                 pdf.cell(18,4, f'{trosak.amount} {trosak.amount_currency}', border=1, ln=False, align='R')
                 pdf.cell(17,4, f'-', border=1, ln=True, align='C')
             else:
                 ino_currency = trosak.amount_currency
                 ukupni_trosak_ino = ukupni_trosak_ino + trosak.amount
-                pdf.cell(24,4, f'{trosak.expenses_date.strftime("%d/%m/%Y")}', border=1, ln=False, align='C')
-                pdf.cell(56,4, f'{trosak.expenses_type}', border=1, ln=False, align='L')
+                # pdf.cell(24,4, f'{trosak.expenses_date.strftime("%d/%m/%Y")}', border=1, ln=False, align='C')
+                pdf.cell(80,4, f'{trosak.expenses_type}', border=1, ln=False, align='L')
                 pdf.cell(75,4, f'{trosak.description}', border=1, ln=False, align='L')
                 pdf.cell(18,4, f'-', border=1, ln=False, align='C')
                 pdf.cell(17,4, f'{trosak.amount} {trosak.amount_currency}', border=1, ln=True, align='R')
