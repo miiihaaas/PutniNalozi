@@ -80,6 +80,10 @@ def register_tw(korisnik_id, datum):
                                                 for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
                                                                                     TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
                                                                                                                     datum.replace(hour=0, minute=0, second=0, microsecond=0),
+                                                                                                                    datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname + " - " + tw.travelwarrant_personal.vehicle_registration)
+                                                for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
+                                                                                    TravelWarrant.personal_vehicle_id!='').filter(TravelWarrant.start_datetime.between(
+                                                                                                                    datum.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                                     datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         print(drivers)
         
