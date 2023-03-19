@@ -22,19 +22,6 @@
                 {{ form.expenses_type(id="expenses_type", class="form-select form-select-lg") }}
             {% endif %}
         </div>
-        <div class="col form-group">
-            {{ form.expenses_date.label(class="form-control-label") }}
-            {% if form.expenses_date.errors %}
-                {{ form.expenses_date(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.expenses_date.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.expenses_date(class="form-control form-control-lg", type="datetime-local") }}
-            {% endif %}
-        </div>
       </div>
 
       <div class="form-group">
@@ -114,7 +101,6 @@
     <thead>
       <tr id="header">
         <th>Tip troška</th>
-        <th>Datum</th>
         <th>Opis</th>
         <th>Iznos</th>
       </tr>
@@ -123,7 +109,6 @@
       {% for trosak in troskovi %}
       <tr>
         <td class="align-middle"> {{ trosak.expenses_type }} </td>
-        <td class="align-middle"> 2022-10-09 </td>
         <td class="align-middle"> {{ trosak.description }} </td>
         <td class="align-middle"> {{ '{:,.2f}'.format(trosak.amount) }} {{ trosak.amount_currency }} </td>
       </tr>

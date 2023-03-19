@@ -124,7 +124,7 @@ class EditUserTravelWarrantForm(FlaskForm):
 class TravelWarrantExpensesForm(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
     expenses_date = DateTimeField('Datum: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
-    description = StringField('Opis troška: ', validators=[DataRequired()])
+    description = StringField('Opis troška: ')
     amount = DecimalField('Iznos: ', validators=[DataRequired(), NumberRange(min=0, message='Iznos troška mora biti veći od 0.')])
     amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
     submit = SubmitField('Dodajte trošak')
@@ -135,8 +135,7 @@ class TravelWarrantExpensesForm(FlaskForm):
 
 class EditTravelWarrantExpenses(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
-    expenses_date = DateTimeField('Datum: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
-    description = StringField('Opis troška: ', validators=[DataRequired()])
+    description = StringField('Opis troška: ')
     amount = DecimalField('Iznos: ', validators=[DataRequired(), NumberRange(min=0, message='Iznos troška mora biti veći od 0.')])
     amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])
     submit = SubmitField('Ažurirajte trošak')

@@ -70,6 +70,7 @@ class User(db.Model, UserMixin):
 
 class Vehicle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    vehicle_ownership = db.Column(db.String(50)) #! ideja je da imamo privatno i službeno vozilo (company, private)
     vehicle_type = db.Column(db.String(30), nullable = False)
     vehicle_brand = db.Column(db.String(30), nullable = False)
     vehicle_registration = db.Column(db.String(12), nullable = False)
@@ -126,7 +127,6 @@ class TravelWarrant(db.Model):
 class TravelWarrantExpenses(db.Model):
     expenses_id = db.Column(db.Integer, primary_key=True)
     expenses_type = db.Column(db.String(50), nullable = True) # možda false...?
-    expenses_date = db.Column(db.DateTime, nullable=True)
     description = db.Column(db.String(1000), nullable = True)
     amount = db.Column(db.Float, nullable=True)
     amount_currency = db.Column(db.String(5), nullable=False)

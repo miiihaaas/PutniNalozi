@@ -66,7 +66,8 @@ def register_tw(korisnik_id, datum):
     if current_user.authorization in ['c_admin', 's_admin', 'c_principal', 'c_founder']:
         user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         print(user_list)
-        vehicle_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+        vehicle_company_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='company').order_by('vehicle_type').all()]
+        vehicle_private_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='private').order_by('vehicle_type').all()]
         datum = datum.replace('%20', ' ') #na sevreu zimeđu datuma i vremena se nalazi '%20' zbog toga ima ovaj replace
 
 
@@ -111,7 +112,7 @@ def register_tw(korisnik_id, datum):
         global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
         # form.user_id.choices = user_list
         # form.user_id.data = str(korisnik_id)
-        form.vehicle_id.choices = vehicle_list
+        form.vehicle_id.choices = vehicle_company_list
         form.together_with.choices = drivers
         form.principal_id.choices = principal_list
         form.cashier_id.choices = cashier_list
@@ -307,8 +308,9 @@ def travel_warrant_profile(warrant_id):
         rod=["Radnik", "raspoređen"]
     elif warrant.travelwarrant_user.gender == "2":
         rod=["Radnica", "raspoređena"]
-    vehicle_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
-    print(f'{vehicle_list=}')
+    vehicle_company_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='company').order_by('vehicle_type').all()]
+    vehicle_private_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='private').order_by('vehicle_type').all()]
+    print(f'{vehicle_company_list=}')
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
@@ -333,7 +335,7 @@ def travel_warrant_profile(warrant_id):
             global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
             form.together_with.choices = drivers
             # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
-            form.vehicle_id.choices = vehicle_list
+            form.vehicle_id.choices = vehicle_company_list
             print(f'{form.vehicle_id.choices=}')
             form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
             form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
@@ -513,7 +515,7 @@ def travel_warrant_profile(warrant_id):
         form.together_with.choices = drivers
         global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
         # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
-        form.vehicle_id.choices = vehicle_list
+        form.vehicle_id.choices = vehicle_company_list
         print(f'{form.vehicle_id.choices=}')
         form.personal_type.choices = [('', '----------'), ('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')]
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat"), ("storniran", "storniran")]
@@ -768,7 +770,6 @@ def add_expenses(warrant_id):
     form = TravelWarrantExpensesForm()
     if form.validate_on_submit():
         expense = TravelWarrantExpenses(expenses_type = form.expenses_type.data,
-                expenses_date = form.expenses_date.data,
                 description = form.description.data,
                 amount = form.amount.data,
                 amount_currency = form.amount_currency.data,
@@ -799,7 +800,6 @@ def expenses_profile(warrant_id, expenses_id): #ovo je funkcija a editovnaje tro
     # form.expenses_type.choices=[('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')]
     if form.validate_on_submit():
         expense.expenses_type = form.expenses_type.data
-        expense.expenses_date = form.expenses_date.data
         expense.description = form.description.data
         expense.amount = form.amount.data
         expense.amount_currency = form.amount_currency.data
@@ -808,7 +808,6 @@ def expenses_profile(warrant_id, expenses_id): #ovo je funkcija a editovnaje tro
         return redirect(url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant_id))
     elif request.method == 'GET':
         form.expenses_type.data = str(expense.expenses_type)
-        form.expenses_date.data = expense.expenses_date
         form.description.data = expense.description
         form.amount.data = expense.amount
         form.amount_currency.data = expense.amount_currency

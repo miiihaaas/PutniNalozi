@@ -470,7 +470,6 @@
         <thead>
           <tr id="header">
             <th>Tip troška</th>
-            <th>Datum</th>
             <th>Opis</th>
             <th>Iznos</th>
           </tr>
@@ -486,7 +485,6 @@
                 >{{ trosak.expenses_type }}</a
               >
             </td>
-            <td class="align-middle">{{ trosak.expenses_date.date() }}</td>
             <td class="align-middle">{{ trosak.description }}</td>
             <td class="align-middle">{{ '{:,.2f}'.format(trosak.amount) }} {{ trosak.amount_currency }}</td>
           </tr>
@@ -590,6 +588,20 @@
       x.style.display = "none";
     }
   }
+</script>
+<script>
+  // Select the two date picker fields
+  const startDateField = $('#start_datetime');
+  const endDateField = $('#end_datetime');
+
+  // Attach an event listener to the start date field
+  startDateField.on('change', function() {
+    // Get the selected start date as a Date object
+    const startDate = new Date(startDateField.val());
+
+    // Set the min attribute of the end date field to the selected start date
+    endDateField.attr('min', formatDate(startDate));
+  });
 </script>
 <script>document.body.classList.add('travel-warrant');</script>
 {% endblock %}

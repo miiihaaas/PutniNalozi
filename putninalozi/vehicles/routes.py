@@ -28,7 +28,8 @@ def register_v():
     form.reset()
     if form.validate_on_submit():
         if current_user.authorization in ['c_admin', 'c_principal', 'c_founder']:
-            vehicle = Vehicle(vehicle_type=form.vehicle_type.data.upper(),
+            vehicle = Vehicle(vehicle_ownership=form.vehicle_ownership.data,
+                                vehicle_type=form.vehicle_type.data.upper(),
                                 vehicle_brand=form.vehicle_brand.data.upper(),
                                 vehicle_registration=form.vehicle_registration.data.upper(),
                                 company_id=int(current_user.company_id))
@@ -66,6 +67,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
     form.reset()
 
     if form.validate_on_submit():
+        vehicle.vehicle_ownership = form.vehicle_ownership.data
         vehicle.vehicle_type = form.vehicle_type.data.upper()
         vehicle.vehicle_brand = form.vehicle_brand.data.upper()
         vehicle.vehicle_registration = form.vehicle_registration.data.upper()
@@ -78,7 +80,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
         flash('Profil vozila je ažuriran.', 'success')
         return redirect(url_for('vehicles.vehicle_list')) #vidi da li je bolje na neko drugo mesto da ga prebaci
     elif request.method == 'GET':
-
+        form.vehicle_ownership.data = str(vehicle.vehicle_ownership)
         form.vehicle_type.data = str(vehicle.vehicle_type)
         form.vehicle_brand.data = vehicle.vehicle_brand
         form.vehicle_registration.data = vehicle.vehicle_registration

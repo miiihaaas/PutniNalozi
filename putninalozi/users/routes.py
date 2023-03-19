@@ -153,7 +153,7 @@ def login():
 def logout():
     logout_user()
     flash(f'Uspešno ste se odjavili iz softvera.', 'success')
-    return redirect(url_for('main.login'))
+    return redirect(url_for('users.login'))
 
 
 @users.route("/user/<int:user_id>/delete", methods=['POST'])

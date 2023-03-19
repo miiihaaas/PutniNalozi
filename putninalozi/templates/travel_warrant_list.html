@@ -29,32 +29,33 @@
           <div class="card-body">
             <div class="row">
               <div class="col form-group">
-                {{ form.user_id.label(class="form-control-label") }} {% if
-                form.user_id.errors %} {{ form.user_id(class="form-control
-                form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.user_id.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.user_id(class="form-select form-select-lg")
-                }} {% endif %}
+                {{ form.user_id.label(class="form-control-label") }} 
+                {% if form.user_id.errors %} 
+                  {{ form.user_id(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.user_id.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %} 
+                  {{ form.user_id(class="form-select form-select-lg") }} 
+                {% endif %}
               </div>
               <div class="col form-box start-time">
-                {{ form.start_datetime.label(class="form-control-label") }} {%
-                if form.start_datetime.errors %} {{
-                form.start_datetime(class="form-control form-control-lg
-                is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.start_datetime.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.start_datetime(class="form-control
-                form-control-lg", type="datetime-local") }} {% endif %}
+                {{ form.start_datetime.label(class="form-control-label") }} 
+                {% if form.start_datetime.errors %} 
+                  {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.start_datetime.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %} 
+                  {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local", readonly="readonly") }} 
+                {% endif %}
               </div>
               <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+                {{ form.submit(class="btn btn-outline-info", disabled="disabled") }}
               </div>
             </div>
           </div>
@@ -233,7 +234,9 @@
   </table>
 </form>
 
-{% endblock content%} {% block scripts %}
+{% endblock content%} 
+
+{% block scripts %}
 <script>
   $(document).ready(function () {
     $("#data").DataTable({
@@ -245,5 +248,32 @@
     });
   });
 </script>
+
+<script>
+  const selectUser = $('#user_id');
+  const selectDate = $('#start_datetime');
+  const buttonSubmit = $('#submit');
+  selectUser.on('change', function() {
+    console.log(selectUser.val());
+    if(parseInt(selectUser.val()) === 0){
+      selectDate.val('');
+      selectDate.prop('readonly', true);
+      buttonSubmit.prop('disabled', true);
+    } else {
+      selectDate.prop('readonly', false);
+      console.log('vrednost datuma je: ', selectDate.val());
+    }
+  })
+  selectDate.on('change', function(){
+    if(selectDate.val() === '') {
+      console.log('nije selektovan datum')
+      buttonSubmit.prop('disabled', true);
+    } else {
+      buttonSubmit.prop('disabled', false);
+    }
+  })
+  
+</script>
+
 <script>document.body.classList.add('tw-list');</script>
 {% endblock %}

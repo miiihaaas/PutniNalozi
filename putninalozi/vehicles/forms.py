@@ -6,6 +6,7 @@ from putninalozi.models import Company
 
 
 class RegistrationVehicleForm(FlaskForm):
+    vehicle_ownership = SelectField('Vlasništvo vozila', choices=[('company', 'Službeno vozilo'), ('private', 'Privatno vozilo')])
     vehicle_type = SelectField('Tip vozila', validators=[DataRequired()], choices=[('putničko - automobil', 'putničko - automobil'),('putničko - kombi', 'putničko - kombi'),('teretno - kombi', 'teretno - kombi'),('teretno', 'teretno'),('terensko', 'terensko')])
     vehicle_brand = StringField('Marka vozila', validators=[DataRequired(), Length(min=2, max=20)])
     vehicle_registration = StringField('Registraciona oznaka vozila', validators=[DataRequired(), Length(min=7, max=12)]) # GM 047-DD
@@ -17,6 +18,7 @@ class RegistrationVehicleForm(FlaskForm):
 
 
 class UpdateVehicleForm(FlaskForm):
+    vehicle_ownership = SelectField('Vlasništvo vozila', choices=[('company', 'Službeno vozilo'), ('private', 'Privatno vozilo')])
     vehicle_type = SelectField('Tip vozila', validators=[DataRequired()], choices=[('putničko - automobil', 'putničko - automobil'),('putničko - kombi', 'putničko - kombi'),('teretno - kombi', 'teretno - kombi'),('teretno', 'teretno'),('terensko', 'terensko')])
     vehicle_brand = StringField('Marka vozila', validators=[DataRequired(), Length(min=2, max=20)])
     vehicle_registration = StringField('Registraciona oznaka vozila', validators=[DataRequired(), Length(min=7, max=12)]) # GM 047-DD
