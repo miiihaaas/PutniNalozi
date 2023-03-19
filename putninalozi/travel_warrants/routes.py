@@ -250,6 +250,10 @@ def travel_warrant_profile(warrant_id):
                                                     for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
                                                                                         TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
                                                                                                                         warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
+                                                                                                                        warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
+                                                    for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
+                                                                                        TravelWarrant.personal_vehicle_id!='').filter(TravelWarrant.start_datetime.between(
+                                                                                                                        warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                                         warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
             global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
             form.together_with.choices = drivers
@@ -420,7 +424,11 @@ def travel_warrant_profile(warrant_id):
                                                 for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
                                                                                     TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
                                                                                                                     warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
-                                                                                                                    warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
+                                                                                                                    warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
+                                                    for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
+                                                                                        TravelWarrant.personal_vehicle_id!='').filter(TravelWarrant.start_datetime.between(
+                                                                                                                        warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
+                                                                                                                        warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         form.together_with.choices = drivers
         global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
         # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
