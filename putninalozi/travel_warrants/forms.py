@@ -25,9 +25,7 @@ class CreateTravelWarrantForm(FlaskForm):
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()], choices=[])
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
-    personal_type = SelectField('Tip vozila: ', choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
-    personal_brand = StringField('Brend vozila: ')
-    personal_registration = StringField('Registraciona oznaka ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
+    personal_vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()], choices=[])    
     other = StringField('Drugo: ')
 
     advance_payment = DecimalField('Akontacija: ', validators=[Optional('oriban'), NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
@@ -59,11 +57,9 @@ class EditAdminTravelWarrantForm(FlaskForm):
     contry_leaving = DateTimeField('Vrema napuštanja države: ', format='%Y-%m-%dT%H:%M', validators=[Optional()])
     contry_return = DateTimeField('Vreme vraćanja u državu: ', format='%Y-%m-%dT%H:%M', validators=[Optional()])
 
-    vehicle_id = SelectField('Službeno Vozilo: ', validators=[Optional()])
+    vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()])
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
-    personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
-    personal_brand = StringField('Brend vozila: ')
-    personal_registration = StringField('Registraciona oznaka ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
+    personal_vehicle_id = SelectField('Lično vozilo: ', validators=[Optional()])
     other = StringField('Drugo: ')
 
     advance_payment = DecimalField('Akontacija: ', validators=[NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
@@ -100,9 +96,7 @@ class EditUserTravelWarrantForm(FlaskForm):
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()])
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
-    personal_type = SelectField('Tip vozila: ', validators=[Optional()], choices=[('AUTOMOBIL', 'AUTOMOBIL'),('KOMBI', 'KOMBI'),('KAMION', 'KAMION')])
-    personal_brand = StringField('Brend vozila: ')
-    personal_registration = StringField('Registraciona oznaka ličnog vozila:', validators=[Optional(), Length(min=7, max=12)]) # GM 047-DD
+    personal_vehicle_id = SelectField('Lično vozilo: ', validators=[Optional()])
     other = StringField('Drugo: ')
 
     # advance_payment = IntegerField('Akontacija: ')
@@ -123,7 +117,6 @@ class EditUserTravelWarrantForm(FlaskForm):
 
 class TravelWarrantExpensesForm(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
-    expenses_date = DateTimeField('Datum: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     description = StringField('Opis troška: ')
     amount = DecimalField('Iznos: ', validators=[DataRequired(), NumberRange(min=0, message='Iznos troška mora biti veći od 0.')])
     amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('e', 'EUR'), ('usd', 'USD')])

@@ -348,47 +348,19 @@
           >
             <div class="card-body">
               <div class="form-box">
-                {{ form.personal_type.label(class="form-control-label") }} {% if
-                form.personal_type.errors %} {{
-                form.personal_type(class="form-control form-control-lg
-                is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.personal_type.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.personal_type(class="form-select
-                form-select-lg", placeholder="Uneti broj putnog naloga kolege
-                koji vozi službeno vozilo") }} {% endif %}
+                {{ form.personal_vehicle_id.label(class="form-control-label") }}
+                {% if form.personal_vehicle_id.errors %} 
+                  {{ form.personal_vehicle_id(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.personal_vehicle_id.errors %}
+                      <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                {% else %} 
+                  {{ form.personal_vehicle_id(class="form-select form-select-lg") }} 
+                {% endif %}
               </div>
-              <div class="form-box">
-                {{ form.personal_brand.label(class="form-control-label") }} {%
-                if form.personal_brand.errors %} {{
-                form.personal_brand(class="form-control form-control-lg
-                is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.personal_brand.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.personal_brand(class="form-control
-                form-control-lg", placeholder="Uneti brend ličnog vozila") }} {%
-                endif %}
-              </div>
-              <div class="form-box">
-                {{ form.personal_registration.label(class="form-control-label")
-                }} {% if form.personal_registration.errors %} {{
-                form.personal_registration(class="form-control form-control-lg
-                is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.personal_registration.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.personal_registration(class="form-control
-                form-control-lg", placeholder="Uneti registraciju ličnog
-                vozila") }} {% endif %}
-              </div>
+              
             </div>
           </div>
         </div>

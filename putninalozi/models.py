@@ -75,7 +75,8 @@ class Vehicle(db.Model):
     vehicle_brand = db.Column(db.String(30), nullable = False)
     vehicle_registration = db.Column(db.String(12), nullable = False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
-    travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_vehicle', lazy=True)
+    travelwarrants_vehicle = db.relationship('TravelWarrant', backref='travelwarrant_vehicle', lazy=True, foreign_keys='TravelWarrant.vehicle_id')
+    travelwarrants_personal = db.relationship('TravelWarrant', backref='travelwarrant_personal', lazy=True, foreign_keys='TravelWarrant.personal_vehicle_id')
 
     def __repr__(self):
         return f"Vehicle('{self.id}', '{self.vehicle_type}', '{self.vehicle_brand}'', '{self.vehicle_registration}', '{self.company_id}')"
@@ -98,9 +99,7 @@ class TravelWarrant(db.Model):
 
     vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=True)
     together_with = db.Column(db.String(50), nullable=True)
-    personal_type = db.Column(db.String(50), nullable=True)
-    personal_brand = db.Column(db.String(50), nullable=True)
-    personal_registration = db.Column(db.String(12), nullable=True)
+    personal_vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'), nullable=True)
     other = db.Column(db.String(50), nullable=True) #avion, bus, taksi...
 
     advance_payment = db.Column(db.Float, nullable=True)

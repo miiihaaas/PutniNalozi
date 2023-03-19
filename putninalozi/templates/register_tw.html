@@ -4,7 +4,8 @@
   <form method="POST" action="">
     {{ form.hidden_tag() }}
       <fieldset class="form-group">
-        <legend class="border-bottom mb-4">Zaposleni: {{ ime_prezime }} ({{ datum }})</legend>
+        <legend class=""> Zaposleni: <input type="text" class="form-control form-control-lg" value="{{ ime_prezime }} " disabled></legend>
+        <legend class="border-bottom mb-4"> <input class="form-control form-control-lg" type="datetime-local", value="{{ datum }}" disabled></legend>
         <div class="row">
           <div class=" col form-group">
             {{ form.with_task.label(class="form-control-label") }}
@@ -188,16 +189,16 @@
             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
               <div class="card-body">
                 <div class="form-box">
-                    {% if form.vehicle_id.errors %}
-                        {{ form.vehicle_id(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.vehicle_id.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.vehicle_id(class="form-select form-select-lg") }}
-                    {% endif %}
+                  {% if form.vehicle_id.errors %}
+                    {{ form.vehicle_id(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.vehicle_id.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form.vehicle_id(class="form-select form-select-lg") }}
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -238,46 +239,16 @@
             <div id="collapseThree" class="collapse inertop15" aria-labelledby="headingThree" data-parent="#accordion">
               <div class="card-body">
                 <div class="form-box">
-                  {{ form.personal_type.label(class="form-control-label") }}
-
-                    {% if form.personal_type.errors %}
-                        {{ form.personal_type(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.personal_type.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.personal_type(class="form-select form-select-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-box">
-                  {{ form.personal_brand.label(class="form-control-label") }}
-
-                    {% if form.personal_brand.errors %}
-                        {{ form.personal_brand(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.personal_brand.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.personal_brand(class="form-control form-control-lg", placeholder="Uneti brend ličnog vozila") }}
-                    {% endif %}
-                </div>
-                <div class="form-box">
-                  {{ form.personal_registration.label(class="form-control-label") }}
-
-                    {% if form.personal_registration.errors %}
-                        {{ form.personal_registration(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.personal_registration.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.personal_registration(class="form-control form-control-lg", placeholder="Uneti registracionu oznaku") }}
-                    {% endif %}
+                  {% if form.personal_vehicle_id.errors %}
+                    {{ form.personal_vehicle_id(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.personal_vehicle_id.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    {{ form.personal_vehicle_id(class="form-select form-select-lg") }}
+                  {% endif %}
                 </div>
               </div>
             </div>

@@ -98,8 +98,6 @@
           </div>
         </div>
       </div>
-      </div>
-      <br>
       <div class="row">
         <div class="col form-box">
           {{ form.with_task.label(class="form-control-label") }}
@@ -127,179 +125,152 @@
                 {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
             {% endif %}
         </div>
-
-      </div>
-      <div class="row">
-        <div class="col form-box">
-          {{ form.status.label(class="form-control-label") }}
-            {% if form.status.errors %}
-                {{ form.status(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.status.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.status(class="form-select form-select-lg") }}
-            {% endif %}
-        </div>
-        <div class="col form-box">
-          {{ form.end_datetime.label(class="form-control-label") }}
-            {% if form.end_datetime.errors %}
-                {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.end_datetime.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
-            {% endif %}
-        </div>
-      </div>
-
-
-
-
-      <br>
-
-
-      <br>
-      <div id="accordion">
-        <div class="accordion-item">
-          <div class="accordion-header" id="headingOne">
-            <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              {{ form.vehicle_id.label(class="form-control-label") }}
-            </button>
-          </div>
-
-          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body">
-              <div class="form-box">
-                {% if form.vehicle_id.errors %}
-                  {{ form.vehicle_id(class="form-control form-control-lg is-invalid") }}
+        <div class="row">
+          <div class="col form-box">
+            {{ form.status.label(class="form-control-label") }}
+              {% if form.status.errors %}
+                  {{ form.status(class="form-control form-control-lg is-invalid") }}
                   <div class="invalid-feedback">
-                    {% for error in form.vehicle_id.errors %}
-                      <span>{{ error }}</span>
-                    {% endfor %}
+                      {% for error in form.status.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
                   </div>
-                {% else %}
-                  {{ form.vehicle_id(class="form-select form-select-lg") }}
-                {% endif %}
-              </div>
-            </div>
+              {% else %}
+                  {{ form.status(class="form-select form-select-lg") }}
+              {% endif %}
+          </div>
+          <div class="col form-box">
+            {{ form.end_datetime.label(class="form-control-label") }}
+              {% if form.end_datetime.errors %}
+                  {{ form.end_datetime(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                      {% for error in form.end_datetime.errors %}
+                          <span>{{ error }}</span>
+                      {% endfor %}
+                  </div>
+              {% else %}
+                  {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local") }}
+              {% endif %}
           </div>
         </div>
-        <div class="accordion-item">
-          <div class="accordion-header" id="headingTwo">
-            <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              {{ form.together_with.label(class="form-control-label") }}
-            </button>
-          </div>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body">
-              <div class="form-box">
-                  {% if form.together_with.errors %}
-                      {{ form.together_with(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.together_with.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.together_with(class="form-select form-select-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
-                  {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <div class="accordion-header" id="headingThree">
-            <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              Lično Vozilo:
-            </button>
-          </div>
-          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-            <div class="card-body">
-              <div class="form-box">
-                {{ form.personal_type.label(class="form-control-label") }}
-
-                  {% if form.personal_type.errors %}
-                      {{ form.personal_type(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.personal_type.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.personal_type(class="form-select form-select-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
-                  {% endif %}
-              </div>
-              <div class="form-box">
-                {{ form.personal_brand.label(class="form-control-label") }}
-
-                  {% if form.personal_brand.errors %}
-                      {{ form.personal_brand(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.personal_brand.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.personal_brand(class="form-control form-control-lg", placeholder="Uneti brend ličnog vozila") }}
-                  {% endif %}
-              </div>
-              <div class="form-box">
-                {{ form.personal_registration.label(class="form-control-label") }}
-
-                  {% if form.personal_registration.errors %}
-                      {{ form.personal_registration(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.personal_registration.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
-                  {% else %}
-                      {{ form.personal_registration(class="form-control form-control-lg", placeholder="Uneti registraciju ličnog vozila") }}
-                  {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <div class="accordion-header" id="headingFour">
-            <h5 class="mb-0">
-              <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                {{ form.other.label(class="form-control-label") }}
-                <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
-                <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
-                <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
-                <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
-                <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
-                <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
-                <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
-                <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+        <div id="accordion">
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingOne">
+              <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                {{ form.vehicle_id.label(class="form-control-label") }}
               </button>
-            </h5>
-          </div>
-          <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-            <div class="card-body">
-              <div class="form-box">
-                  {% if form.other.errors %}
-                      {{ form.other(class="form-control form-control-lg is-invalid") }}
-                      <div class="invalid-feedback">
-                          {% for error in form.other.errors %}
-                              <span>{{ error }}</span>
-                          {% endfor %}
-                      </div>
+            </div>
+    
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body">
+                <div class="form-box">
+                  {% if form.vehicle_id.errors %}
+                    {{ form.vehicle_id(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.vehicle_id.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
                   {% else %}
-                      {{ form.other(class="form-control form-control-lg", placeholder="Avion, Autobus, Taxi ...") }}
+                    {{ form.vehicle_id(class="form-select form-select-lg") }}
                   {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingTwo">
+              <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                {{ form.together_with.label(class="form-control-label") }}
+              </button>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+              <div class="card-body">
+                <div class="form-box">
+                    {% if form.together_with.errors %}
+                        {{ form.together_with(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.together_with.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.together_with(class="form-select form-select-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingThree">
+              <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                Lično Vozilo:
+              </button>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+                <div class="form-box">
+                  {{ form.personal_vehicle_id.label(class="form-control-label") }}
+                  {% if form.personal_vehicle_id.errors %} 
+                    {{ form.personal_vehicle_id(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.personal_vehicle_id.errors %}
+                        <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  {% else %} 
+                    {{ form.personal_vehicle_id(class="form-select form-select-lg") }} 
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <div class="accordion-header" id="headingFour">
+              <h5 class="mb-0">
+                <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  {{ form.other.label(class="form-control-label") }}
+                  <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+                  <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+                  <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+                  <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+                  <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+                  <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+                  <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+                  <!-- https://getbootstrap.com/docs/5.2/components/accordion/#css -->
+                </button>
+              </h5>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+              <div class="card-body">
+                <div class="form-box">
+                    {% if form.other.errors %}
+                        {{ form.other(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.other.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.other(class="form-control form-control-lg", placeholder="Avion, Autobus, Taxi ...") }}
+                    {% endif %}
+                </div>
               </div>
             </div>
           </div>
         </div>
+  
       </div>
+    </div>
+      <br>
+
+
+
+
+      <br>
+
+
+      <br>
       <br>
       <br>
       <hr>

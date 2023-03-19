@@ -45,7 +45,7 @@ body.login main.container .content-section a { text-decoration: none; color: #10
 .btn:hover { color: #fff; /*background: #104e97 !important;*/background-image: linear-gradient(#104e97, #009dde); border-color: transparent; }
 input:-webkit-autofill, input:-webkit-autofill:focus { transition: background-color 600000s 0s, color 600000s 0s; }
 
-body.home .btn.btn-info { min-width: 140px; }
+body.home .btn.btn-info { min-width: 201px; }
 
 body.tw-list .btn.btn-info { min-width: 120px; }
 
