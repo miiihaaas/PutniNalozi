@@ -145,7 +145,7 @@ def register_tw(korisnik_id, datum):
             'end_datetime': form.end_datetime.data,
             'vehicle_id': None,
             'together_with': form.together_with.data,
-            'personal_vehicle_id': "",
+            'personal_vehicle_id': None,
             'other': "",
             'advance_payment': form.advance_payment.data,
             'advance_payment_currency': form.advance_payment_currency.data,
