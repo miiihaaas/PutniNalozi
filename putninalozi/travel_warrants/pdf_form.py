@@ -94,11 +94,11 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     company_mail = warrant.travelwarrant_company.company_mail
     company_site = warrant.travelwarrant_company.company_site
 
-    text_form = f'''{f'Osnivač {name} {surname}'if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime} {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
+    text_form = f'''{f'Osnivač {name} {surname}'if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime}. {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
-Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
+Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
 
-Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}{f' / {warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}' if warrant.abroad else ""}.
+Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage:.2f} {warrant.daily_wage_currency}{f' / {warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}' if warrant.abroad else ""}.
 
 Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolaska na posao, podneće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.
 
@@ -176,8 +176,8 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     pdf.set_fill_color(150, 150, 150)
     pdf.set_font('DejaVuSansCondensed','', 8)
     pdf.cell(56, 4, f'Dnevnice', border=1, ln=False, fill = True, align='L')
-    pdf.cell(20, 4, f'Br čas', border=1, ln=False, fill = True, align='L')
-    pdf.cell(20, 4, f'Br dnev', border=1, ln=False, fill = True, align='L')
+    pdf.cell(20, 4, f'Broj časova', border=1, ln=False, fill = True, align='L')
+    pdf.cell(20, 4, f'Broj dnevnica', border=1, ln=False, fill = True, align='L')
     pdf.cell(20, 4, f'', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Po', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
@@ -186,8 +186,8 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, n
     pdf.cell(20, 8, f'{round(br_casova)}', border=1, new_y='LAST', align='L')
     pdf.cell(20, 8, f'{br_dnevnica}', border=1, new_y='LAST', align='L')
     pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
-    pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
-    pdf.cell(35, 8, f'{float(warrant.daily_wage) * br_dnevnica} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
+    pdf.cell(35, 8, f'{warrant.daily_wage:.2f} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
+    pdf.cell(35, 8, f'{(float(warrant.daily_wage) * br_dnevnica):.2f} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
     if warrant.abroad:
         pdf.multi_cell(56, 4, f'''Izlazak iz države: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M") if warrant.contry_leaving != None else '-'}
 Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else '-'}''', border=1, new_y='TOP', align='L')
@@ -195,8 +195,8 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
         pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, new_y='LAST', align='L')
         pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
         pdf.cell(20, 8, f'', border=1, ln=False, align='L')
-        pdf.cell(35, 8, f'{warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}', border=1, ln=False, align='L')
-        pdf.cell(35, 8, f'{float(warrant.daily_wage_abroad) * br_dnevnica_ino} {warrant.daily_wage_abroad_currency}', border=1, ln=True, align='L')
+        pdf.cell(35, 8, f'{warrant.daily_wage_abroad:.2f} {warrant.daily_wage_abroad_currency}', border=1, ln=False, align='L')
+        pdf.cell(35, 8, f'{(float(warrant.daily_wage_abroad) * br_dnevnica_ino):.2f} {warrant.daily_wage_abroad_currency}', border=1, ln=True, align='L')
 
     pdf.cell(56, 4, f'Prevozni troškovi', border=1, ln=False, fill = True, align='L')
     pdf.cell(40, 8, f'Vrsta prevoza', border=1, ln=False, fill = True, align='C')
@@ -273,11 +273,11 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     company_mail = warrant.travelwarrant_company.company_mail
     company_site = warrant.travelwarrant_company.company_site
 
-    text_form = f'''{f'Osnivač {name} {surname}' if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime} u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
+    text_form = f'''{f'Osnivač {name} {surname}' if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime}. u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
-Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'registarske tablice: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
+Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
 
-Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage} {warrant.daily_wage_currency}{f' / {warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}' if warrant.abroad else ""}.
+Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage:.2f} {warrant.daily_wage_currency}{f' / {warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}' if warrant.abroad else ""}.
 
 Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolaska na posao, podneće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.
 
@@ -332,15 +332,15 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     pdf.multi_cell(0, 5, text_form, ln=True, border='B')
     # pdf.line(10, 132, 200, 132)
 
-    pdf.cell(0, 5, f'Na osnovu prednjeg naloga {rod[3]} sam sluzbeno putovanje i podnosim sledeći', ln=True, align='L')
+    pdf.cell(0, 5, f'Na osnovu prednjeg naloga {rod[3]} sam službeno putovanje i podnosim sledeći', ln=True, align='L')
     pdf.set_font('DejaVuSansCondensed','B', 16)
     pdf.cell(0, 20, f'PUTNI RAČUN', ln=True, align='C')
 
     pdf.set_fill_color(150, 150, 150)
     pdf.set_font('DejaVuSansCondensed','', 8)
     pdf.cell(60, 4, f'Dnevnice', border=1, ln=False, fill = True, align='L')
-    pdf.cell(20, 4, f'Br čas', border=1, ln=False, fill = True, align='L')
-    pdf.cell(20, 4, f'Br dnev', border=1, ln=False, fill = True, align='L')
+    pdf.cell(20, 4, f'Broj časova', border=1, ln=False, fill = True, align='L')
+    pdf.cell(20, 4, f'Broj dnevnica', border=1, ln=False, fill = True, align='L')
     pdf.cell(20, 4, f'', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Po', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
@@ -350,8 +350,8 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, n
     pdf.cell(20, 8, f'{round(br_casova)}', border=1, new_y='LAST', align='L')
     pdf.cell(20, 8, f'{br_dnevnica}', border=1, new_y='LAST', align='L')
     pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
-    pdf.cell(35, 8, f'{warrant.daily_wage} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
-    pdf.cell(35, 8, f'{float(warrant.daily_wage) * br_dnevnica} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
+    pdf.cell(35, 8, f'{warrant.daily_wage:.2f} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
+    pdf.cell(35, 8, f'{(float(warrant.daily_wage) * br_dnevnica):.2f} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
     if warrant.abroad:
         pdf.multi_cell(60, 4, f'''Izlazak iz države: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M") if warrant.contry_leaving != None else '-'}
 Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else '-'}''', border=1, new_y='TOP', align='L')
@@ -359,8 +359,8 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
         pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, new_y='LAST', align='L')
         pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
         pdf.cell(20, 8, f'', border=1, ln=False, align='L')
-        pdf.cell(35, 8, f'{warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}', border=1, ln=False, align='L')
-        pdf.cell(35, 8, f'{float(warrant.daily_wage_abroad) * br_dnevnica_ino} {warrant.daily_wage_abroad_currency}', border=1, ln=True, align='L')
+        pdf.cell(35, 8, f'{warrant.daily_wage_abroad:.2f} {warrant.daily_wage_abroad_currency}', border=1, ln=False, align='L')
+        pdf.cell(35, 8, f'{(float(warrant.daily_wage_abroad) * br_dnevnica_ino):.2f} {warrant.daily_wage_abroad_currency}', border=1, ln=True, align='L')
 
 
     pdf.cell(0, 8, f'Troškovi', border=1, ln=True, fill = True, align='C')
@@ -370,7 +370,6 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     ino_currency = '€'
     if troskovi != []:
         for trosak in troskovi:
-
             if trosak.amount_currency == 'rsd':
                 ukupni_trosak = ukupni_trosak + trosak.amount
                 print(ukupni_trosak)
@@ -378,7 +377,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
                 # pdf.cell(24,4, f'{trosak.expenses_date.strftime("%d/%m/%Y")}', border=1, ln=False, align='C')
                 pdf.cell(80,4, f'{trosak.expenses_type}', border=1, ln=False, align='L')
                 pdf.cell(75,4, f'{trosak.description}', border=1, ln=False, align='L')
-                pdf.cell(18,4, f'{trosak.amount} {trosak.amount_currency}', border=1, ln=False, align='R')
+                pdf.cell(18,4, f'{trosak.amount:.2f} {trosak.amount_currency}', border=1, ln=False, align='R')
                 pdf.cell(17,4, f'-', border=1, ln=True, align='C')
             else:
                 ino_currency = trosak.amount_currency
@@ -387,7 +386,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
                 pdf.cell(80,4, f'{trosak.expenses_type}', border=1, ln=False, align='L')
                 pdf.cell(75,4, f'{trosak.description}', border=1, ln=False, align='L')
                 pdf.cell(18,4, f'-', border=1, ln=False, align='C')
-                pdf.cell(17,4, f'{trosak.amount} {trosak.amount_currency}', border=1, ln=True, align='R')
+                pdf.cell(17,4, f'{trosak.amount:.2f} {trosak.amount_currency}', border=1, ln=True, align='R')
 
 
     ukupni_trosak = round(ukupni_trosak,2)
@@ -395,25 +394,25 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
 
     pdf.cell(155, 4, f'Svega', border=1, ln=False, align='R')
     if troskovi != []:
-        pdf.cell(18, 4, f'{ukupni_trosak} rsd', border=1, ln=False, align='R')
-        pdf.cell(17, 4, f'{ukupni_trosak_ino} {ino_currency}', border=1, ln=True, align='R')
+        pdf.cell(18, 4, f'{ukupni_trosak:.2f} rsd', border=1, ln=False, align='R')
+        pdf.cell(17, 4, f'{ukupni_trosak_ino:.2f} {ino_currency}', border=1, ln=True, align='R')
     else:
         pdf.cell(35, 4, f'', border=1, ln=True, align='R')
     pdf.cell(155, 4, f'Primljena akontacija', border=1, ln=False, align='R')
     if warrant.advance_payment_currency == 'rsd':
-        pdf.cell(18, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=False, align='R')
+        pdf.cell(18, 4, f'{warrant.advance_payment:.2f} {warrant.advance_payment_currency}', border=1, ln=False, align='R')
         pdf.cell(17, 4, f'-', border=1, ln=True, align='C')
     else:
         pdf.cell(18, 4, f'-', border=1, ln=False, align='C')
-        pdf.cell(17, 4, f'{warrant.advance_payment} {warrant.advance_payment_currency}', border=1, ln=True, align='R')
+        pdf.cell(17, 4, f'{warrant.advance_payment:.2f} {warrant.advance_payment_currency}', border=1, ln=True, align='R')
 
 
     saldo = round((float(warrant.daily_wage) * br_dnevnica - (warrant.advance_payment if warrant.advance_payment_currency == "rsd" else 0) + ukupni_trosak),2)
     saldo_ino = round((float(warrant.daily_wage_abroad) * br_dnevnica_ino - (warrant.advance_payment if warrant.advance_payment_currency != "rsd" else 0) + ukupni_trosak_ino),2)
 
     pdf.cell(155, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
-    pdf.cell(18, 4, f'{saldo} rsd', border=1, ln=False, align='R')
-    pdf.cell(17, 4, f"{saldo_ino} {ino_currency}", border=1, ln=True, align='R')
+    pdf.cell(18, 4, f'{saldo:.2f} rsd', border=1, ln=False, align='R')
+    pdf.cell(17, 4, f"{saldo_ino:.2f} {ino_currency}", border=1, ln=True, align='R')
 
 
     pdf.cell(0, 8, f'Prilog', border=1, ln=True, fill = True, align='C')
@@ -425,7 +424,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     saldo_ino_slovima = number_to_text(int(saldo_ino))
     
     
-    pdf.multi_cell(0, 4, f'''Potvrđujem da je putovanje izvršeno prema ovom nalogu i odobravam isplatu putnog računa od {saldo} ({saldo_slovima}) dinara {f'; {saldo_ino} ({saldo_ino_slovima}) {ino_currency}' if saldo_ino != 0 else ""} na teret {warrant.costs_pays}.
+    pdf.multi_cell(0, 4, f'''Potvrđujem da je putovanje izvršeno prema ovom nalogu i odobravam isplatu putnog računa od {saldo:.2f} ({saldo_slovima}) dinara{f'; {saldo_ino:.2f} ({saldo_ino_slovima}) {ino_currency}' if saldo_ino != 0 else ""} na teret {warrant.costs_pays}.
 U mestu {warrant.travelwarrant_company.company_city}, dana {warrant.end_datetime.strftime("%d/%m/%Y")}.''', ln=True, align='L')
     pdf.multi_cell(0, 4, f'''
 
