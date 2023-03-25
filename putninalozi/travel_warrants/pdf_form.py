@@ -74,12 +74,14 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     if warrant.together_with != '':
         try:
             regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_registration
+            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_brand
         except AttributeError:
             # If the 'vehicle_registration' attribute is not found, try getting the 'vehicle_registration' from the 'travelwarrant_personal' object
             regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_registration
-
+            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_brand
     else:
         regisrtacija_kolege_koji_vozi = ''
+        automobil_kolege_koji_vozi = ''
 
     #za footer
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
@@ -96,7 +98,7 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
 
     text_form = f'''{f'Osnivač {name} {surname}'if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime}. {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
-Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
+Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo  {warrant.other if warrant.other != "" else f'{warrant.travelwarrant_vehicle.vehicle_brand if warrant.vehicle_id != None else f"{automobil_kolege_koji_vozi}"} registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
 
 Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage:.2f} {warrant.daily_wage_currency}{f' / {warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}' if warrant.abroad else ""}.
 
@@ -164,7 +166,10 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     
     pdf.add_page()
     pdf.set_font('DejaVuSansCondensed','B', 16)
-    pdf.cell(0, 30, f'NALOG ZA SLUŽBENO PUTOVANJE: {warrant_number}', ln=True, align='C')
+    if warrant.abroad:
+        pdf.cell(0, 30, f'NALOG ZA SLUŽBENO PUTOVANJE U INOSTRANSTVU: {warrant_number}', ln=True, align='C')
+    else:
+        pdf.cell(0, 30, f'NALOG ZA SLUŽBENO PUTOVANJE U ZEMLJI: {warrant_number}', ln=True, align='C')
 
     pdf.set_font('DejaVuSansCondensed','', 12)
     pdf.multi_cell(0, 5, text_form, ln=True, border='B')
@@ -220,7 +225,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     pdf.cell(35, 4, f'', border=1, ln=True, align='C')
     pdf.cell(151, 4, f'Ostalo za isplatu - uplatu', border=1, ln=False, align='R')
     pdf.cell(35, 4, f'', border=1, ln=True, align='C')
-    pdf.cell(186, 4, f'Prilog', border=1, ln=True, fill = True, align='L')
+    pdf.cell(186, 4, f'', border=1, ln=True, fill = True, align='L')
     pdf.multi_cell(186, 4, f'''U mestu {warrant.travelwarrant_company.company_city}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}''', border=1, ln=True, align='C')
     pdf.multi_cell(0, 4, f'', ln=True, align='L')
 
@@ -254,11 +259,14 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     if warrant.together_with != '':
         try:
             regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_registration
+            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_brand
         except AttributeError:
             # If the 'vehicle_registration' attribute is not found, try getting the 'vehicle_registration' from the 'travelwarrant_personal' object
             regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_registration
+            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_brand
     else:
         regisrtacija_kolege_koji_vozi = ''
+        automobil_kolege_koji_vozi = ''
 
     #za footer
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
@@ -275,7 +283,7 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
 
     text_form = f'''{f'Osnivač {name} {surname}' if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime}. u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
-Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
+Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo  {warrant.other if warrant.other != "" else f'{warrant.travelwarrant_vehicle.vehicle_brand if warrant.vehicle_id != None else f"{automobil_kolege_koji_vozi}"} registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
 
 Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage:.2f} {warrant.daily_wage_currency}{f' / {warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}' if warrant.abroad else ""}.
 
@@ -326,7 +334,10 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     pdf.alias_nb_pages()
     pdf.add_page()
     pdf.set_font('DejaVuSansCondensed', 'B', 16)
-    pdf.cell(0, 30, f'NALOG ZA SLUŽBENO PUTOVANJE: {warrant_number}', ln=True, align='C')
+    if warrant.abroad:
+        pdf.cell(0, 30, f'NALOG ZA SLUŽBENO PUTOVANJE U INOSTRANSTVU: {warrant_number}', ln=True, align='C')
+    else:
+        pdf.cell(0, 30, f'NALOG ZA SLUŽBENO PUTOVANJE U ZEMLJI: {warrant_number}', ln=True, align='C')
 
     pdf.set_font('DejaVuSansCondensed','', 12)
     pdf.multi_cell(0, 5, text_form, ln=True, border='B')
@@ -415,7 +426,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     pdf.cell(17, 4, f"{saldo_ino:.2f} {ino_currency}", border=1, ln=True, align='R')
 
 
-    pdf.cell(0, 8, f'Prilog', border=1, ln=True, fill = True, align='C')
+    pdf.cell(0, 8, f'', border=1, ln=True, fill = True, align='C')
     pdf.multi_cell(0, 8, f'''U mestu {warrant.travelwarrant_company.company_city}, dana {warrant.end_datetime.strftime("%d/%m/%Y")}, {warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}''', border=1, ln=True, align='C')
     pdf.multi_cell(0, 4, f'', ln=True, align='L')
     
