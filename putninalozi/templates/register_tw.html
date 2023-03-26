@@ -30,7 +30,7 @@
                       {% endfor %}
                   </div>
               {% else %}
-                  {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local", min=datum) }}
+                  {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local", min=datum, max=end_datum) }}
               {% endif %}
           </div>
         </div>

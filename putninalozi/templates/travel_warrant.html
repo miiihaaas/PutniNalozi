@@ -67,7 +67,7 @@
               {% endfor %}
             </div>
           {% else %} 
-            {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local") }}
+            {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local", min=start_datetime_min, max=start_datetime_max) }}
           {% endif %}
         </div>
         <div class="col form-box col-md-3">
@@ -80,7 +80,7 @@
               {% endfor %}
             </div>
           {% else %} 
-            {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local", min=warrant.start_datetime) }} 
+            {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local", min=warrant.start_datetime, max=end_datum) }} 
           {% endif %}
         </div>
       </div>

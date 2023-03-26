@@ -5,7 +5,7 @@ from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpens
 from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm, EditTravelWarrantExpenses
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 travel_warrants = Blueprint('travel_warrants', __name__)
@@ -73,8 +73,7 @@ def register_tw(korisnik_id, datum):
 
         print(f'{korisnik_id=}, {datum=}')
         datum = datetime.strptime(datum, '%Y-%m-%d %H:%M:%S') #'2022-09-27 15:02:00'
-        print(type(datum))
-        print(datum)
+        end_datum = datum + timedelta(days=30) #'2022-10-27 15:02:00'
 
         drivers = [('', '----------')] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname + " - " + tw.travelwarrant_vehicle.vehicle_registration)
                                                 for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
@@ -214,7 +213,7 @@ def register_tw(korisnik_id, datum):
 
     return render_template('register_tw.html', title='Kreiranje putnog naloga',
                             legend='Kreiranje putnog naloga',
-                            form=form, ime_prezime=ime_prezime, datum=datum)
+                            form=form, ime_prezime=ime_prezime, datum=datum, end_datum=end_datum)
 
 
 @travel_warrants.route("/travel_warrant/<int:warrant_id>", methods=['GET', 'POST'])
@@ -411,11 +410,15 @@ def travel_warrant_profile(warrant_id):
                 form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
                 form.status.data = str(warrant.status)
 
-                # form.expenses.data = warrant.expenses
+                end_datum = warrant.start_datetime + timedelta(days=30)
+                start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
+                start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
 
             print(f'EditUser: {form.errors=}')
 
-            return render_template('travel_warrant_user.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled korisnika)', form=form, rod=rod, troskovi=troskovi)
+            return render_template('travel_warrant_user.html', title='Uređivanje putnog naloga', warrant=warrant, 
+                                    legend='Uređivanje putnog naloga (pregled korisnika)', form=form, rod=rod, 
+                                    troskovi=troskovi, end_datum=end_datum, start_datetime_min=start_datetime_min, start_datetime_max=start_datetime_max)
 
     else:
         form = EditAdminTravelWarrantForm()
@@ -657,11 +660,17 @@ def travel_warrant_profile(warrant_id):
             form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat") , ("storniran", "storniran")]
             form.status.data = str(warrant.status)
 
-            # form.expenses.data = "prazna lista za početak"
+            end_datum = warrant.start_datetime + timedelta(days=30)
+            start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
+            start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
 
         print(f'EditAdmin: {form.errors=}')
 
-        return render_template('travel_warrant.html', title='Uređivanje putnog naloga', warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', form=form, rod=rod, troskovi=troskovi)
+        return render_template('travel_warrant.html', 
+                                title='Uređivanje putnog naloga', 
+                                warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', 
+                                form=form, rod=rod, troskovi=troskovi, 
+                                end_datum=end_datum, start_datetime_min=start_datetime_min, start_datetime_max=start_datetime_max)
 
 
 @travel_warrants.route("/add_expenses/<int:warrant_id>", methods=['GET', 'POST'])
