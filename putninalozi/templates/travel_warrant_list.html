@@ -79,7 +79,7 @@
       {% for warrant in warrants %}
       <tr>
         <td class="align-middle">
-          <div class="btn-group blue-purple-group">
+          <div class="btn-group">
             <a
               class="btn btn-info"
               href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}"
@@ -100,17 +100,27 @@
         </td>
         <td class="align-middle">
           {% if warrant.together_with %} 
+            {% for w in warrants %}
+              {% if w.travel_warrant_number == warrant.together_with %}
+                {% if w.personal_vehicle_id %}
+                  <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+                {% else %}
+                  <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+                {% endif %}
+              {% endif %}
+            {% endfor %}
             Putuje sa: <br />
             <b>{{warrant.together_with}} </b>
           {% elif warrant.other %}
+            <img src="static/img/D - Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
             <b>{{ warrant.other }}</b>
           {% elif warrant.personal_vehicle_id %}
-            <img src="static/img/P.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+            <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
             {{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}
           {% else %} 
-            <img src="static/img/S.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+            <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
             {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}
@@ -159,17 +169,27 @@
         </td>
         <td class="align-middle">
           {% if warrant.together_with %} 
+            {% for w in warrants %}
+              {% if w.travel_warrant_number == warrant.together_with %}
+                {% if w.personal_vehicle_id %}
+                  <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+                {% else %}
+                  <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+                {% endif %}
+              {% endif %}
+            {% endfor %}
             Putuje sa: <br />
             <b>{{warrant.together_with}} </b>
           {% elif warrant.other %}
+            <img src="static/img/D - Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
             <b>{{ warrant.other }}</b>
           {% elif warrant.personal_vehicle_id %}
-            <img src="static/img/P.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+            <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
             {{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}
           {% else %} 
-            <img src="static/img/S.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+            <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
             {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}
@@ -216,17 +236,27 @@
         </td>
         <td class="align-middle">
           {% if warrant.together_with %} 
+            {% for w in warrants %}
+              {% if w.travel_warrant_number == warrant.together_with %}
+                {% if w.personal_vehicle_id %}
+                  <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+                {% else %}
+                  <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+                {% endif %}
+              {% endif %}
+            {% endfor %}
             Putuje sa: <br />
             <b>{{warrant.together_with}} </b> 
           {% elif warrant.other %}
+            <img src="static/img/D - Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
             <b>{{ warrant.other }}</b>
           {% elif warrant.personal_vehicle_id %}
-            <img src="static/img/P.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+            <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
             {{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}
           {% else %} 
-            <img src="static/img/S.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+            <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
             {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}
