@@ -6,6 +6,7 @@ from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, Create
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime, timedelta
+from sqlalchemy import or_, not_
 
 
 travel_warrants = Blueprint('travel_warrants', __name__)
@@ -49,7 +50,12 @@ def travel_warrant_list():
         return redirect(url_for('users.login'))
     warrants = TravelWarrant.query.all()
     form = PreCreateTravelWarrantForm()
-    form.user_id.choices = [(0, '----------')] + [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).filter(User.authorization != 'c_deleted').order_by('name').all()]
+    # form.user_id.choices = [(0, '----------')] + [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).filter(User.authorization != 'c_deleted').order_by('name').all()]
+
+    unfiltered_authorizations = ['c_deleted', 'o_cashier']
+    form.user_id.choices = [(0, '----------')] + [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).filter(not_(User.authorization.in_(unfiltered_authorizations))).order_by('name').all()]
+
+    
     if form.validate_on_submit():
         korisnik_id = form.user_id.data
         datum = form.start_datetime.data
@@ -63,7 +69,7 @@ def register_tw(korisnik_id, datum):
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
 
-    if current_user.authorization in ['c_admin', 's_admin', 'c_principal', 'c_founder']:
+    if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder']:
         user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         print(user_list)
         vehicle_company_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='company').order_by('vehicle_type').all()]
@@ -86,8 +92,13 @@ def register_tw(korisnik_id, datum):
                                                                                                                     datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         print(drivers)
         
-        principal_list = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_principal').all()]
-        cashier_list = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
+        principal_list = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).all()]
+        #! - obrisati ovaj red ako se ustanovi da je donji kod ok: cashier_list = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
+        #todo chashier_list (filter po: c_cashier + o_cashier)
+        #todo GPT rešenje:
+        
+        cashier_list = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter(or_(User.authorization == 'c_cashier', User.authorization == 'o_cashier')).all()]
+
         
         ime_prezime = User.query.filter_by(id=korisnik_id).first().name + " " + User.query.filter_by(id=korisnik_id).first().surname
         print(ime_prezime)
@@ -239,7 +250,7 @@ def travel_warrant_profile(warrant_id):
         flash('Nemate ovlašćenje da posetite ovu stranici.', 'danger')
         return render_template('403.html')
 
-    if current_user.authorization not in ['c_admin', 's_admin', 'c_principal', 'c_founder']:
+    if current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder']:
         if warrant.status == 'storniran' or warrant.status == 'obračunat':
             return render_template('read_travel_warrant_user.html', title='Pregled putnog naloga', warrant=warrant, legend='Pregled putnog naloga', rod=rod, troskovi=troskovi)
         else:
@@ -324,7 +335,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.vehicle_id=None
                     warrant.together_with=""
                     warrant.personal_vehicle_id=None
-                    warrant.other=form.other.data
+                    warrant.other=form.other.data.upper()
 
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
@@ -439,7 +450,8 @@ def travel_warrant_profile(warrant_id):
         form.personal_vehicle_id.choices = vehicle_personal_list
         print(f'{form.vehicle_id.choices=}')
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat"), ("storniran", "storniran")]
-        form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_principal').all()]
+        #! form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principial=True).all()]
+        form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).all()]
         form.cashier_id.choices = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
 
         if form.validate_on_submit():
@@ -535,7 +547,7 @@ def travel_warrant_profile(warrant_id):
                 warrant.vehicle_id=None
                 warrant.together_with=""
                 warrant.personal_vehicle_id=None
-                warrant.other=form.other.data
+                warrant.other=form.other.data.upper()
 
                 warrant.advance_payment = int(form.advance_payment.data)
                 warrant.advance_payment_currency = form.advance_payment_currency.data
@@ -760,10 +772,10 @@ def delete_travel_warrant(warrant_id):
         flash('Pogrešna lozinka!', 'danger')
         return render_template('403.html')
     else:
-        if current_user.authorization not in ['c_admin', 's_admin', 'c_principal', 'c_founder']:
+        if current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder']:
             flash('Nemate ovlašćenje da brišete putne naloge!', 'danger')
             return render_template('403.html')
-        elif current_user.authorization not in ['c_admin', 'c_principal', 'c_founder']:
+        elif current_user.authorization not in ['c_admin', 'c_functionary', 'c_founder']:
             if current_user.user_company.id != warrant.company_id: #ako putni nalog nije iz kompanije trenutno ulogovanok korisnika
                 flash('Nemate ovlašćenje da brišete putne naloge drugih kompanija', 'danger')
                 return render_template('403.html')

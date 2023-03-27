@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-{% if current_user.authorization not in ['c_user', 'c_member'] %}
+{% if current_user.authorization not in ['c_user', 'c_member', 'o_cashier'] %}
   <a class="btn btn-info btn-sm m-1" href="{{ url_for('users.register_u') }}">Registrujte novog korisnika</a>
   <hr>
 {% endif %}
@@ -25,7 +25,7 @@
         </tr>
       {% endfor %}
     </tbody>
-  {% elif current_user.authorization in ['c_admin', 'c_principal', 'c_founder']  %}
+  {% elif current_user.authorization in ['c_admin', 'c_functionary', 'c_founder']  %}
     <thead>
       <tr id="header">
         <th>Ime i prezime</th>

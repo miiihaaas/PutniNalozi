@@ -60,7 +60,6 @@
                     {% endif %}
                 </div>
             </div>
-
             <div class="row just-column">
                 <div class="col form-group">
                     {{ form.workplace.label(class="form-control-label") }}
@@ -88,8 +87,11 @@
                         {{ form.authorization(class="form-select form-select-lg") }}
                     {% endif %}
                 </div>
+                <div class="form-check form-switch">
+                    {{ form.principal(class="form-check-input") }} 
+                    {{ form.principal.label(class="form-check-label") }}
+                </div>
             </div>
-
             <div class="row just-column">
                 <div class="col form-group">
                     {{ form.default_vehicle.label(class="form-control-label") }}
@@ -127,7 +129,7 @@
         <div class="form-group">
             <a class="btn btn-info" href="{{url_for('users.user_list')}}">Nazad</a>
             {{ form.submit(class="btn btn-outline-info") }}
-            {% if current_user.authorization in ['c_admin', 's_admin', 'c_principal', 'c_founder'] %}
+            {% if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder'] %}
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Obrišite profil korisnika</button>
             {% endif %}
         </div>
@@ -159,3 +161,31 @@
 </div>
 <script>document.body.classList.add('user');</script>
 {% endblock content%}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        const authorizationSelect = $('#authorization');
+        const principalInput = $('#principal');
+
+        if (['c_admin', 'c_functionary', 'c_founder'].includes(authorizationSelect.val())) {
+            console.log('Može da bude nalogodavac');
+            principalInput.removeAttr('disabled');
+        } else {
+            console.log('NE može da bude nalogodavac');
+            principalInput.attr('disabled', true);
+        }
+
+        authorizationSelect.on('change', function() {
+            if (['c_admin', 'c_functionary', 'c_founder'].includes(authorizationSelect.val())) {
+                console.log('Može da bude nalogodavac');
+                principalInput.removeAttr('disabled');
+            } else {
+                console.log('NE može da bude nalogodavac');
+                principalInput.attr('disabled', true);
+            }
+        });
+    });
+</script>
+
+{% endblock %}

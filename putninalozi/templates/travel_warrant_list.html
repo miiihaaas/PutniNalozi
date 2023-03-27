@@ -3,7 +3,7 @@
   {{ form.hidden_tag() }}
   <fieldset class="form-group">
   </fieldset>
-  {% if current_user.authorization not in ['c_user', 'c_member'] %}
+  {% if current_user.authorization not in ['c_user', 'c_member', 'o_cashier'] %}
   <div id="accordionZero">
     <div class="accordion">
       <div class="accordion-item">
@@ -103,24 +103,24 @@
             {% for w in warrants %}
               {% if w.travel_warrant_number == warrant.together_with %}
                 {% if w.personal_vehicle_id %}
-                  <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+                  <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
                 {% else %}
-                  <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+                  <img src="../../static/img/S-Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
                 {% endif %}
               {% endif %}
             {% endfor %}
-            Putuje sa: <br />
+            PUTUJE SA: <br />
             <b>{{warrant.together_with}} </b>
           {% elif warrant.other %}
-            <img src="static/img/D - Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
-            <b>{{ warrant.other }}</b>
+            <img src="../../static/img/D-Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
+            {{ warrant.other }}
           {% elif warrant.personal_vehicle_id %}
-            <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+            <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
             {{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}
           {% else %} 
-            <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+            <img src="../../static/img/S-Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
             {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}
@@ -133,7 +133,7 @@
       </tr>
       {% endfor %}
     </tbody>
-    {% elif current_user.authorization in ['c_admin', 'c_principal', 'c_founder'] %}
+    {% elif current_user.authorization in ['c_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier'] %}
     <thead>
       <tr id="header">
         <th>Br.</th>
@@ -172,24 +172,24 @@
             {% for w in warrants %}
               {% if w.travel_warrant_number == warrant.together_with %}
                 {% if w.personal_vehicle_id %}
-                  <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+                  <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
                 {% else %}
-                  <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+                  <img src="../../static/img/S-Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
                 {% endif %}
               {% endif %}
             {% endfor %}
-            Putuje sa: <br />
+            PUTUJE SA: <br />
             <b>{{warrant.together_with}} </b>
           {% elif warrant.other %}
-            <img src="static/img/D - Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
-            <b>{{ warrant.other }}</b>
+            <img src="../../static/img/D-Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
+            {{ warrant.other }}
           {% elif warrant.personal_vehicle_id %}
-            <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+            <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
             {{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}
           {% else %} 
-            <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+            <img src="../../static/img/S-Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
             {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}
@@ -239,24 +239,24 @@
             {% for w in warrants %}
               {% if w.travel_warrant_number == warrant.together_with %}
                 {% if w.personal_vehicle_id %}
-                  <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+                  <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
                 {% else %}
-                  <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+                  <img src="../../static/img/S-Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
                 {% endif %}
               {% endif %}
             {% endfor %}
-            Putuje sa: <br />
+            PUTUJE SA: <br />
             <b>{{warrant.together_with}} </b> 
           {% elif warrant.other %}
-            <img src="static/img/D - Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
-            <b>{{ warrant.other }}</b>
+            <img src="../../static/img/D-Light.png" alt="(D)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Dugi tip prevoza">
+            {{ warrant.other }}
           {% elif warrant.personal_vehicle_id %}
-            <img src="static/img/P - Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
+            <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Privatno vozilo">
             {{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}
           {% else %} 
-            <img src="static/img/S - Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
+            <img src="../../static/img/S-Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 64px; height: 64px;" title="Službeno vozilo">
             {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}

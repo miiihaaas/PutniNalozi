@@ -88,7 +88,7 @@
                 </div>
                 <div class="row just-column">
                     <div class="col form-group">
-                        {{ form.authorization.label(class="form-control-label") }} <span title="Detaljniji opis: &#10;Zaposleni (firme): pregled liste svojih putnih naloga, izmena svojih putnih naloga, promena statusa svojih putnih naloga &#10;Član (uduženja): pregled liste svojih putnih naloga, izmena svojih putnih naloga, promena statusa svojih putnih naloga &#10;Knjigovođa/Blagajnik: opis krnjgovođe &#10;Nalogodavac: opis Nalogodavca &#10; ...">(i)</span>
+                        {{ form.authorization.label(class="form-control-label") }}
                         {% if form.authorization.errors %}
                             {{ form.authorization(class="form-control form-control-lg is-invalid") }}
                             <div class="invalid-feedback">
@@ -97,23 +97,12 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.authorization(class="form-select form-select-lg", title="Detaljniji opis: 
-Zaposleni (firme) // Član (uduženja):     
-    -pregled liste svojih putnih naloga, 
-    -izmena svojih putnih naloga, 
-    -promena statusa svojih putnih naloga
-Knjigovođa/Blagajnik // Admin:   
-    -pregled liste svih naloga u kompaniji, izmene svih putnih naloga u kompaniji, promena statusa svih putnih naloga, kreiranje novog putnog naloga;
-    -izmena podataka kompanije;
-    -pregled liste svih vozila u kompaniji, izmena svih vozila u kompanji, kreiranje novog vozila u kompaniji;
-    -pregled liste svih korisnika u kompanji, izmena svih korisnika u kompanji, kreiranje novog korisnika u kompanji;
-Nalogodavac // Osnivač:            
-    -pregled liste svih naloga u kompaniji, izmene svih putnih naloga u kompaniji, promena statusa svih putnih naloga, kreiranje novog putnog naloga;
-    -izmena podataka kompanije;
-    -pregled liste svih vozila u kompaniji, izmena svih vozila u kompanji, kreiranje novog vozila u kompaniji;
-    -pregled liste svih korisnika u kompanji, izmena svih korisnika u kompanji, kreiranje novog korisnika u kompanji;
-    -nalazi se u spisku nalogodavaca") }}
+                            {{ form.authorization(class="form-select form-select-lg") }}
                         {% endif %}
+                    </div>
+                    <div class="form-check form-switch">
+                        {{ form.principal(class="form-check-input", disabled=True) }} 
+                        {{ form.principal.label(class="form-check-label") }}
                     </div>
                 </div>
                 <div class="row just-column">
@@ -161,3 +150,21 @@ Nalogodavac // Osnivač:
     </div>
     <script>document.body.classList.add('register-u');</script>
 {% endblock content%}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        const authorizationSelect = $('#authorization');
+        const principalInput = $('#principal');
+        authorizationSelect.on('change', function() {
+            if (['c_admin', 'c_functionary', 'c_founder'].includes(authorizationSelect.val())) {
+                console.log('Može da bude nalogodavac');
+                principalInput.removeAttr('disabled');
+            } else {
+                console.log('NE može da bude nalogodavac');
+                principalInput.attr('disabled', true);
+            }
+        });
+    });
+</script>
+{% endblock %}

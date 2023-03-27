@@ -53,13 +53,6 @@ def replace_serbian_characters(string):
 
 
 def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino):
-    rod = []
-    if warrant.travelwarrant_user.gender == "1":
-        rod=["Radnik", "raspoređen", "Kolega", 'izvršio']
-    elif warrant.travelwarrant_user.gender == "2":
-        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila']
-
-    warrant_id = warrant.travel_warrant_id
     warrant_number = warrant.travel_warrant_number
     name = warrant.travelwarrant_user.name
     surname = warrant.travelwarrant_user.surname
@@ -82,6 +75,23 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     else:
         regisrtacija_kolege_koji_vozi = ''
         automobil_kolege_koji_vozi = ''
+        
+    rod = []
+    if warrant.travelwarrant_user.gender == "1":
+        rod=["Radnik", "raspoređen", "Kolega", 'izvršio']
+        pozicija = ["Zaposleni", "Član", "Funkcioner", "Osnivač"]
+    elif warrant.travelwarrant_user.gender == "2":
+        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila']
+        pozicija = ["Zaposlena", "Članica", "Funkcionerka", "Osnivačica"]
+        
+    if authorization in ["c_user", "c_admin", "c_cashier"]:
+        startna_recenica = f"{pozicija[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}"
+    elif authorization == 'c_member':
+        startna_recenica = f"{pozicija[1]} {name} {surname}"
+    elif authorization == 'c_functionary':
+        startna_recenica = f"{pozicija[2]} {name} {surname}"
+    elif authorization == 'c_founder':
+        startna_recenica = f"{pozicija[3]} {name} {surname}"
 
     #za footer
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
@@ -96,7 +106,7 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     company_mail = warrant.travelwarrant_company.company_mail
     company_site = warrant.travelwarrant_company.company_site
 
-    text_form = f'''{f'Osnivač {name} {surname}'if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime}. {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
+    text_form = f'''{startna_recenica} upućuje se na službeni put dana {start_datetime}. {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
 Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'{warrant.travelwarrant_vehicle.vehicle_brand if warrant.vehicle_id != None else f"{warrant.travelwarrant_personal.vehicle_brand if warrant.personal_vehicle_id !=None else automobil_kolege_koji_vozi}"} registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
 
@@ -238,13 +248,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
 
 
 def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi):
-    rod = []
-    if warrant.travelwarrant_user.gender == "1":
-        rod=["Radnik", "raspoređen", "Kolega", 'izvršio']
-    elif warrant.travelwarrant_user.gender == "2":
-        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila']
 
-    warrant_id = warrant.travel_warrant_id
     warrant_number = warrant.travel_warrant_number
     name = warrant.travelwarrant_user.name
     surname = warrant.travelwarrant_user.surname
@@ -267,7 +271,25 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     else:
         regisrtacija_kolege_koji_vozi = ''
         automobil_kolege_koji_vozi = ''
-
+    
+    rod = []
+    if warrant.travelwarrant_user.gender == "1":
+        rod=["Radnik", "raspoređen", "Kolega", 'izvršio']
+        pozicija = ["Zaposleni", "Član", "Funkcioner", "Osnivač"]
+    elif warrant.travelwarrant_user.gender == "2":
+        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila']
+        pozicija = ["Zaposlena", "Članica", "Funkcionerka", "Osnivačica"]
+        
+    if authorization in ["c_user", "c_admin", "c_cashier"]:
+        startna_recenica = f"{pozicija[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}"
+    elif authorization == 'c_member':
+        startna_recenica = f"{pozicija[1]} {name} {surname}"
+    elif authorization == 'c_functionary':
+        startna_recenica = f"{pozicija[2]} {name} {surname}"
+    elif authorization == 'c_founder':
+        startna_recenica = f"{pozicija[3]} {name} {surname}"
+    
+    
     #za footer
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
     company_name = warrant.travelwarrant_company.companyname
@@ -281,7 +303,7 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
     company_mail = warrant.travelwarrant_company.company_mail
     company_site = warrant.travelwarrant_company.company_site
 
-    text_form = f'''{f'Osnivač {name} {surname}' if authorization == 'c_founder' else f'{rod[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}'} upućuje se na službeni put dana {start_datetime}. u {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
+    text_form = f'''{startna_recenica} upućuje se na službeni put dana {start_datetime}. {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.
 
 Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'{warrant.travelwarrant_vehicle.vehicle_brand if warrant.vehicle_id != None else f"{warrant.travelwarrant_personal.vehicle_brand if warrant.personal_vehicle_id !=None else automobil_kolege_koji_vozi}"} registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.
 
