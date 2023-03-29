@@ -38,7 +38,7 @@ class CreateTravelWarrantForm(FlaskForm):
     principal_id = SelectField('Nalogodavac: ', validators=[Optional()], choices=[])
     cashier_id = SelectField('Blagajnik: ', validators=[Optional()], choices=[])
 
-    submit = SubmitField('Kreiraj putni nalog')
+    submit = SubmitField('Kreirajte putni nalog')
     #nastaviti
 
     def reset(self):

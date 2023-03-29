@@ -16,7 +16,7 @@ class RegistrationCompanyForm(FlaskForm):
     company_site = StringField('Veb sajt', validators=[Optional(), Length(min=5, max=50)])
     company_mail = StringField('Email', validators=[DataRequired(), Email()])
     company_phone = StringField('Telefonski broj', validators=[DataRequired(), Length(min=9, max=13)])
-    company_logo = FileField('Promeni logo', validators=[FileAllowed(['jpg', 'png'])]) #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
+    company_logo = FileField('Promenite logo', validators=[FileAllowed(['jpg', 'png'])]) #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
     submit = SubmitField('Kreiraj kompaniju')
 
     def validate_companyname(self, companyname):

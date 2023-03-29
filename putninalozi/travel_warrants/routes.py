@@ -69,7 +69,7 @@ def register_tw(korisnik_id, datum):
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
 
-    if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder']:
+    if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier']:
         user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         print(user_list)
         vehicle_company_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='company').order_by('vehicle_type').all()]
@@ -412,9 +412,10 @@ def travel_warrant_profile(warrant_id):
                 form.end_datetime.data = warrant.end_datetime
                 form.contry_leaving.data = warrant.contry_leaving
                 form.contry_return.data = warrant.contry_return
-                form.vehicle_id.choices =[('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
+                form.vehicle_id.choices =[('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='company').order_by('vehicle_type').all()]
                 form.vehicle_id.data = str(warrant.vehicle_id)
                 form.together_with.data = warrant.together_with
+                form.personal_vehicle_id.choices = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='private').order_by('vehicle_type').all()]
                 form.personal_vehicle_id.data = str(warrant.personal_vehicle_id)
                 form.other.data = warrant.other
 
