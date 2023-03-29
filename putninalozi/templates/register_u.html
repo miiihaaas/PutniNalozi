@@ -156,13 +156,23 @@
     $(document).ready(function() {
         const authorizationSelect = $('#authorization');
         const principalInput = $('#principal');
+        const workplaceInput = $('#workplace');
         authorizationSelect.on('change', function() {
             if (['c_admin', 'c_functionary', 'c_founder'].includes(authorizationSelect.val())) {
                 console.log('Može da bude nalogodavac');
                 principalInput.removeAttr('disabled');
             } else {
                 console.log('NE može da bude nalogodavac');
+                principalInput.prop('checked', false);
                 principalInput.attr('disabled', true);
+            }
+            if (['c_member', 'c_functionary', 'c_founder', 'o_cashier'].includes(authorizationSelect.val())) {
+                workplaceInput.val(' ');
+                workplaceInput.attr('readonly', true);
+                workplaceInput.removeAttr('required');
+            } else {
+                workplaceInput.removeAttr('readonly');
+                workplaceInput.attr('required', true);
             }
         });
     });

@@ -150,7 +150,7 @@ def register_tw(korisnik_id, datum):
             'company_id': User.query.filter_by(id=korisnik_id).first().user_company.id,
             'abroad': form.abroad.data,
             'abroad_contry': form.abroad_contry.data.upper(),
-            'relation': form.relation.data,
+            'relation': form.relation.data.title(),
             'start_datetime': datum,
             'end_datetime': form.end_datetime.data,
             'vehicle_id': None,
@@ -279,7 +279,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.with_task = form.with_task.data
                     warrant.abroad = form.abroad.data
                     warrant.abroad_contry = form.abroad_contry.data
-                    warrant.relation = form.relation.data
+                    warrant.relation = form.relation.data.title()
 
                     warrant.start_datetime = form.start_datetime.data
                     warrant.end_datetime = form.end_datetime.data
@@ -302,7 +302,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.with_task = form.with_task.data
                     warrant.abroad = form.abroad.data
                     warrant.abroad_contry = form.abroad_contry.data
-                    warrant.relation = form.relation.data
+                    warrant.relation = form.relation.data.title()
 
                     warrant.start_datetime = form.start_datetime.data
                     warrant.end_datetime = form.end_datetime.data
@@ -325,7 +325,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.with_task = form.with_task.data
                     warrant.abroad = form.abroad.data
                     warrant.abroad_contry = form.abroad_contry.data
-                    warrant.relation = form.relation.data
+                    warrant.relation = form.relation.data.title()
 
                     warrant.start_datetime = form.start_datetime.data
                     warrant.end_datetime = form.end_datetime.data
@@ -352,7 +352,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.with_task = form.with_task.data
                     warrant.abroad = form.abroad.data
                     warrant.abroad_contry = form.abroad_contry.data
-                    warrant.relation = form.relation.data
+                    warrant.relation = form.relation.data.title()
 
                     warrant.start_datetime = form.start_datetime.data
                     warrant.end_datetime = form.end_datetime.data
@@ -461,7 +461,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.company_id = int(form.company_id.data)
                 warrant.abroad = form.abroad.data
                 warrant.abroad_contry = form.abroad_contry.data
-                warrant.relation = form.relation.data
+                warrant.relation = form.relation.data.title()
 
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
@@ -499,7 +499,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.company_id = int(form.company_id.data)
                 warrant.abroad = form.abroad.data
                 warrant.abroad_contry = form.abroad_contry.data
-                warrant.relation = form.relation.data
+                warrant.relation = form.relation.data.title()
 
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
@@ -537,7 +537,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.company_id = int(form.company_id.data)
                 warrant.abroad = form.abroad.data
                 warrant.abroad_contry = form.abroad_contry.data
-                warrant.relation = form.relation.data
+                warrant.relation = form.relation.data.title()
 
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data
@@ -578,7 +578,7 @@ def travel_warrant_profile(warrant_id):
                 # warrant.company_id = int(form.company_id.data)
                 warrant.abroad = form.abroad.data
                 warrant.abroad_contry = form.abroad_contry.data
-                warrant.relation = form.relation.data
+                warrant.relation = form.relation.data.title()
 
                 warrant.start_datetime = form.start_datetime.data
                 warrant.end_datetime = form.end_datetime.data

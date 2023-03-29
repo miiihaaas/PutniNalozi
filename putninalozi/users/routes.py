@@ -86,7 +86,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     if form.validate_on_submit():
         user.name = form.name.data.title()
         user.surname = form.surname.data.title()
-        if form.authorization.data not in ['c_member', 'c_founder']:
+        if form.authorization.data not in ['c_member', 'c_functionary', 'c_founder', 'o_character']:
             user.workplace = form.workplace.data
         else:
             user.workplace = ""

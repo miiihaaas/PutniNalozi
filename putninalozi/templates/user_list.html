@@ -18,7 +18,7 @@
     <tbody>
       {% for user in users %}
         <tr>
-          <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> </td>
+          <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %}</td>
           <td>{{ user.user_company.companyname }}</td>
           <td>{{ user.authorization }}</td>
           <td>{{ user.email }}</td>
@@ -37,7 +37,7 @@
         {% if user.user_company.id == current_user.user_company.id %}
           {% if user.authorization != 'c_deleted' %}
             <tr>
-              <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> </td>
+              <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %} </td>
               <td>{{ user.email }}</td>
             </tr>
           {% endif %}
@@ -55,7 +55,7 @@
       {% for user in users %}
         {% if user.id == current_user.id %}
           <tr>
-            <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> </td>
+            <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %} </td>
             <td>{{ user.email }}</td>
           </tr>
         {% endif %}

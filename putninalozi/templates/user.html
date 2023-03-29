@@ -182,6 +182,7 @@
                 principalInput.removeAttr('disabled');
             } else {
                 console.log('NE može da bude nalogodavac');
+                principalInput.prop('checked', false);
                 principalInput.attr('disabled', true);
             }
         });

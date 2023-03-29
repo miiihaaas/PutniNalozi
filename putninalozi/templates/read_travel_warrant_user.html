@@ -42,7 +42,6 @@
           <thead>
             <tr id="header">
               <th>Tip troška</th>
-              <th>Datum</th>
               <th>Opis</th>
               <th>Iznos</th>
             </tr>
@@ -51,7 +50,6 @@
             {% for trosak in troskovi %}
             <tr>
               <td class="align-middle"> {{ trosak.expenses_type }} </td>
-              <td class="align-middle"> {{ trosak.expenses_date.date() }} </td>
               <td class="align-middle"> {{ trosak.description }} </td>
               <td class="align-middle"> {{ trosak.amount }} {{ trosak.amount_currency }} </td>
             </tr>

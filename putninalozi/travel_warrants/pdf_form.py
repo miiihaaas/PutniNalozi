@@ -8,51 +8,23 @@ from putninalozi.models import TravelWarrant
 
 
 def replace_serbian_characters(string):
-    # breakpoint()
-    try:
-        string = string.replace("č", "c")
-    except:
-        pass
-    try:
-        string = string.replace("ć", "c")
-    except:
-        pass
-    try:
-        string = string.replace("đ", "dj")
-    except:
-        pass
-    try:
-        string = string.replace("ž", "z")
-    except:
-        pass
-    try:
-        string = string.replace("š", "s")
-    except:
-        pass
-    try:
-        string = string.replace("Č", "C")
-    except:
-        pass
-    try:
-        string = string.replace("Ć", "C")
-    except:
-        pass
-    try:
-        string = string.replace("Đ", "Dj")
-    except:
-        pass
-    try:
-        string = string.replace("Ž", "Z")
-    except:
-        pass
-    try:
-        string = string.replace("Š", "S")
-    except:
-        pass
+    replacements = {
+        "č": "c",
+        "ć": "c",
+        "đ": "dj",
+        "ž": "z",
+        "š": "s",
+        "Č": "C",
+        "Ć": "C",
+        "Đ": "Dj",
+        "Ž": "Z",
+        "Š": "S"
+    }
+    for key, value in replacements.items():
+        string = string.replace(key, value)
     return string
 
-
-def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino):
+def get_warrant_details(warrant):
     warrant_number = warrant.travel_warrant_number
     name = warrant.travelwarrant_user.name
     surname = warrant.travelwarrant_user.surname
@@ -92,6 +64,10 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_
         startna_recenica = f"{pozicija[2]} {name} {surname}"
     elif authorization == 'c_founder':
         startna_recenica = f"{pozicija[3]} {name} {surname}"
+    return warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica
+
+def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino):
+    warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
 
     #za footer
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
@@ -157,22 +133,6 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
 
     pdf = PDF()
     pdf.alias_nb_pages()
-    #todo (2.0) pdf.add_page()
-    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
-    #todo (2.0) pdf.set_font('DejaVuSansCondensed','B', 16)
-    #todo (2.0) pdf.cell(0, 10, f'ODLUKA' , ln=True, align='C')
-    #todo (2.0) pdf.cell(0, 10, f'o upućivanju na službeni put' , ln=True, align='C')
-    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
-    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
-    #todo (2.0) pdf.set_font('DejaVuSansCondensed','', 12)
-    #todo (2.0) pdf.multi_cell(0, 4, f'''Upućuje se na službeni put u {warrant.relation} {warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}. Upućeni će krenuti na put dana {warrant.start_datetime.strftime("%d/%m/%Y")} sa ciljem {warrant.with_task}. Upućeni će posao obaviti bez naknade.''', border=0, ln=True, align='L')
-    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
-    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
-    #todo (2.0) pdf.cell(0, 30, f'' , ln=True, align='C')
-    #todo (2.0) pdf.cell(0, 8, f'U {company_city}, {warrant.start_datetime.strftime("%d/%m/%Y")}' , ln=True, align='L')
-    #todo (2.0) pdf.cell(0, 8, f'Ovlašćeno lice' , ln=True, align='L')
-    #todo (2.0) pdf.cell(0, 6, f'_________________________' , ln=True, align='L')
-    #todo (2.0) pdf.cell(0, 4, f'{warrant.principal_user.name} {warrant.principal_user.surname}' , ln=True, align='L')
     
     pdf.add_page()
     pdf.set_font('DejaVuSansCondensed','B', 16)
@@ -248,48 +208,8 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
 
 
 def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi):
+    warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
 
-    warrant_number = warrant.travel_warrant_number
-    name = warrant.travelwarrant_user.name
-    surname = warrant.travelwarrant_user.surname
-    authorization = warrant.travelwarrant_user.authorization #!
-    workplace = warrant.travelwarrant_user.workplace
-    with_task = warrant.with_task
-    relation = warrant.relation
-    abroad_contry = warrant.abroad_contry
-    costs_pays = warrant.costs_pays
-    start_datetime = warrant.start_datetime.strftime('%d.%m.%Y')
-    end_datetime = warrant.end_datetime.strftime('%d.%m.%Y')
-    if warrant.together_with != '':
-        try:
-            regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_registration
-            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_brand
-        except AttributeError:
-            # If the 'vehicle_registration' attribute is not found, try getting the 'vehicle_registration' from the 'travelwarrant_personal' object
-            regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_registration
-            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_brand
-    else:
-        regisrtacija_kolege_koji_vozi = ''
-        automobil_kolege_koji_vozi = ''
-    
-    rod = []
-    if warrant.travelwarrant_user.gender == "1":
-        rod=["Radnik", "raspoređen", "Kolega", 'izvršio']
-        pozicija = ["Zaposleni", "Član", "Funkcioner", "Osnivač"]
-    elif warrant.travelwarrant_user.gender == "2":
-        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila']
-        pozicija = ["Zaposlena", "Članica", "Funkcionerka", "Osnivačica"]
-        
-    if authorization in ["c_user", "c_admin", "c_cashier"]:
-        startna_recenica = f"{pozicija[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}"
-    elif authorization == 'c_member':
-        startna_recenica = f"{pozicija[1]} {name} {surname}"
-    elif authorization == 'c_functionary':
-        startna_recenica = f"{pozicija[2]} {name} {surname}"
-    elif authorization == 'c_founder':
-        startna_recenica = f"{pozicija[3]} {name} {surname}"
-    
-    
     #za footer
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
     company_name = warrant.travelwarrant_company.companyname
