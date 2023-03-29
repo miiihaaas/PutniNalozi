@@ -26,7 +26,7 @@ def register_u():
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    elif current_user.is_authenticated and (current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder']):
+    elif current_user.is_authenticated and (current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier']):
         flash('Nemate autorizaciju da posetite ovu stranicu.', 'danger')
         return redirect(url_for('main.home'))
     form = RegistrationUserForm()
@@ -72,7 +72,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
-    elif current_user.authorization not in ['s_admin', 'c_admin', 'c_functionary', 'c_founder']:
+    elif current_user.authorization not in ['s_admin', 'c_admin', 'c_functionary', 'c_founder', 'c_cashier']:
         flash('Nemate ovlašćenje da pristupite ovoj stranici.', 'danger')
         return render_template('403.html')
     elif current_user.authorization == 's_admin':
@@ -86,7 +86,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
     if form.validate_on_submit():
         user.name = form.name.data.title()
         user.surname = form.surname.data.title()
-        if form.authorization.data not in ['c_member', 'c_functionary', 'c_founder', 'o_character']:
+        if form.authorization.data not in ['c_member', 'c_functionary', 'c_founder', 'c_cashier']:
             user.workplace = form.workplace.data
         else:
             user.workplace = ""

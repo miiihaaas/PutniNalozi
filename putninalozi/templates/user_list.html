@@ -25,11 +25,12 @@
         </tr>
       {% endfor %}
     </tbody>
-  {% elif current_user.authorization in ['c_admin', 'c_functionary', 'c_founder']  %}
+  {% elif current_user.authorization in ['c_admin', 'c_functionary', 'c_founder', 'c_cashier']  %}
     <thead>
       <tr id="header">
         <th>Ime i prezime</th>
         <th>email</th>
+        <th>Autorizacija</th>
       </tr>
     </thead>
     <tbody>
@@ -39,6 +40,7 @@
             <tr>
               <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %} </td>
               <td>{{ user.email }}</td>
+              <th>{{ user.authorization }}</th>
             </tr>
           {% endif %}
         {% endif %}
@@ -49,6 +51,7 @@
       <tr id="header">
         <th>Ime i prezime</th>
         <th>email</th>
+        <th>Autorizacija</th>
       </tr>
     </thead>
     <tbody>
@@ -57,6 +60,7 @@
           <tr>
             <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %} </td>
             <td>{{ user.email }}</td>
+            <th>{{ user.authorization }}</th>
           </tr>
         {% endif %}
       {% endfor %}

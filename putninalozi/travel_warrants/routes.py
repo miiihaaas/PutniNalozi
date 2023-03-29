@@ -250,7 +250,7 @@ def travel_warrant_profile(warrant_id):
         flash('Nemate ovlašćenje da posetite ovu stranici.', 'danger')
         return render_template('403.html')
 
-    if current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder']:
+    if current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier']:
         if warrant.status == 'storniran' or warrant.status == 'obračunat':
             return render_template('read_travel_warrant_user.html', title='Pregled putnog naloga', warrant=warrant, legend='Pregled putnog naloga', rod=rod, troskovi=troskovi)
         else:
