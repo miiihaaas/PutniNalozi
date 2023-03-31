@@ -4,10 +4,9 @@
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
       {% if form.errors %} debag line: {{ form.errors }} {% endif %}
-      <h3><strong>Broj putnog naloga: {{ warrant.travel_warrant_number }}</strong></h3>
-      Zaposleni: 
-      <input type="text" class="form-control form-control-lg" value="{{ warrant.travelwarrant_user.name }}  {{ warrant.travelwarrant_user.surname }}" disabled>
-      <input class="form-control form-control-lg" type="datetime-local", value="{{ warrant.start_datetime }}" disabled>
+      <legend class="border-bottom mb-4">Broj putnog naloga: {{ warrant.travel_warrant_number }}</legend>
+      <legend class=""> Zaposleni: <input type="text" class="form-control form-control-lg" value="{{ warrant.travelwarrant_user.name }}  {{ warrant.travelwarrant_user.surname }}" disabled></legend>
+      <legend class="border-bottom mb-4"> <input class="form-control form-control-lg" type="datetime-local", value="{{ warrant.start_datetime }}" disabled></legend>
       <div class="accordion nothere" id="accordionZero">
         <div class="accordion-item">
           <div class="accordion-header" id="headingZero">

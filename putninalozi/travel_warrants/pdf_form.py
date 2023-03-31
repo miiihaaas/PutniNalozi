@@ -2,7 +2,7 @@ from fpdf import FPDF
 from flask import url_for
 from flask_mail import Message
 from putninalozi import app, mail
-from putninalozi.broj_slovima import number_to_text
+from num2words import num2words
 import datetime
 from putninalozi.models import TravelWarrant
 
@@ -373,8 +373,10 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     pdf.multi_cell(0, 4, f'', ln=True, align='L')
     
     saldo = int(saldo)
-    saldo_slovima = number_to_text(int(saldo))
-    saldo_ino_slovima = number_to_text(int(saldo_ino))
+    # saldo_slovima = number_to_text(int(saldo))
+    saldo_slovima = num2words(saldo, lang="sr")
+    saldo_ino_slovima = num2words(int(saldo_ino))
+    # saldo_ino_slovima = num2words(saldo_ino, lang="sr")
     
     
     pdf.multi_cell(0, 4, f'''Potvrđujem da je putovanje izvršeno prema ovom nalogu i odobravam isplatu putnog računa od {saldo:.2f} ({saldo_slovima}) dinara{f'; {saldo_ino:.2f} ({saldo_ino_slovima}) {ino_currency}' if saldo_ino != 0 else ""} na teret {warrant.costs_pays}.

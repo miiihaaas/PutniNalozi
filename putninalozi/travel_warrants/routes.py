@@ -92,7 +92,7 @@ def register_tw(korisnik_id, datum):
                                                                                                                     datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         print(drivers)
         
-        principal_list = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).all()]
+        principal_list = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).filter(User.authorization != "c_deleted").all()]
         #! - obrisati ovaj red ako se ustanovi da je donji kod ok: cashier_list = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
         #todo chashier_list (filter po: c_cashier + o_cashier)
         #todo GPT rešenje:
@@ -133,6 +133,7 @@ def register_tw(korisnik_id, datum):
         form.cashier_id.choices = cashier_list
         if request.method == 'GET':
             form.vehicle_id.data  = str(podrazumevano_vozilo)
+            form.personal_vehicle_id.data  = str(podrazumevano_vozilo)
             form.costs_pays.data = 'poslodavca'
             form.daily_wage.data = global_settings.daily_wage_domestic
             form.daily_wage_abroad.data = global_settings.daily_wage_abroad
@@ -452,7 +453,7 @@ def travel_warrant_profile(warrant_id):
         print(f'{form.vehicle_id.choices=}')
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat"), ("storniran", "storniran")]
         #! form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principial=True).all()]
-        form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).all()]
+        form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).filter(User.authorization != "c_deleted").all()]
         form.cashier_id.choices = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
 
         if form.validate_on_submit():
