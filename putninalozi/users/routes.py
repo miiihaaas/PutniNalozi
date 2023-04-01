@@ -34,7 +34,7 @@ def register_u():
     form.default_vehicle.choices = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        if current_user.authorization in ['c_admin', 'c_functionary', 'c_founder']:
+        if current_user.authorization in ['c_admin', 'c_functionary', 'c_founder', 'c_cashier']:
             user = User(email=form.email.data,
                         password=hashed_password,
                         name=form.name.data.title(),

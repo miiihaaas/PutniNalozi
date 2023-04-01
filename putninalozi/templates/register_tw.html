@@ -198,6 +198,9 @@
                     {{ form.vehicle_id(class="form-select form-select-lg") }}
                   {% endif %}
                 </div>
+                <small class="text-muted ml-2">
+                  <a href="{{ url_for('vehicles.register_v') }}">Registrujte novo vozilo </a>
+                </small>
               </div>
             </div>
           </div>
@@ -230,7 +233,7 @@
             <div class="accordion-header" id="headingThree">
               <h5 class="mb-0">
                 <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                  Lično vozilo:
+                  Privatno vozilo:
                 </button>
               </h5>
             </div>
@@ -248,6 +251,9 @@
                     {{ form.personal_vehicle_id(class="form-select form-select-lg") }}
                   {% endif %}
                 </div>
+                <small class="text-muted ml-2">
+                  <a href="{{ url_for('vehicles.register_v') }}">Registrujte novo vozilo </a>
+                </small>
               </div>
             </div>
           </div>

@@ -18,27 +18,14 @@
                 Broj putnog naloga: {{ warrant.travel_warrant_number }}
               </button>
             </div>
-
             <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
               <div class="card-body">
-                <p>{{ rod[0] }} {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }} {{ rod[1] }} na poslove radnog mesta {{ warrant.travelwarrant_user.workplace }} upućuje se na službeni put dana {{warrant.start_datetime.strftime('%d.%m.%Y')}} u {{ warrant.relation }} sa zadatkom: {{ warrant.with_task }}</p>
-                <br>
-                <p>Na službenom putu koristi prevozno sredstvo registarske tablice: {{ warrant.travelwarrant_vehicle.vehicle_registration }} {{ warrant.personal_registration }}</p>
-                <br>
-                <p>Dnevnica za ovo služebno putovanje pripada u iznosu od: {{ warrant.daily_wage }} {{ warrant.daily_wage_currency }}</p>
-                <p>Na službenom putu će se zadržati najdalje do {{ warrant.end_datetime.strftime('%d.%m.%Y') }}, a u roku od 48h po povratku sa službenog puta i dolask na posao, podneće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana</p>
-                <br>
-                <p>Putni troškovi padaju na teret: {{ warrant.costs_pays }}</p>
-                <br>
-                {% if warrant.advance_payment > 0  %}
-                  <p>Odobravam isplatu akontacije u iznosu od: {{ warrant.advance_payment }} {{ warrant.advance_payment_currency }}</p>
-                {% endif %}
+                {{ warrant.text_form | safe }}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <br>
       <div class="form-check form-switch" onload="myFunction()">
         {{ form.abroad(class="form-check-input", onclick="myFunction()", id="abroad_id") }} 
         {{ form.abroad.label(class="form-check-label") }}
@@ -206,7 +193,7 @@
           <div class="accordion-item">
             <div class="accordion-header" id="headingThree">
               <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                Lično Vozilo:
+                Privatno Vozilo:
               </button>
             </div>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">

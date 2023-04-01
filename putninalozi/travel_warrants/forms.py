@@ -25,7 +25,7 @@ class CreateTravelWarrantForm(FlaskForm):
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()], choices=[])
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
-    personal_vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()], choices=[])    
+    personal_vehicle_id = SelectField('Privatno vozilo: ', validators=[Optional()], choices=[])    
     other = StringField('Drugo: ')
 
     advance_payment = DecimalField('Akontacija: ', validators=[Optional('oriban'), NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
@@ -59,7 +59,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()])
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
-    personal_vehicle_id = SelectField('Lično vozilo: ', validators=[Optional()])
+    personal_vehicle_id = SelectField('Privatno vozilo: ', validators=[Optional()])
     other = StringField('Drugo: ')
 
     advance_payment = DecimalField('Akontacija: ', validators=[NumberRange(min=0, message='Iznos dnevnice mora biti veći od 0.')])
@@ -96,7 +96,7 @@ class EditUserTravelWarrantForm(FlaskForm):
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()])
     together_with = SelectField('Zajedno sa: ', validators=[Optional()], choices=[])
-    personal_vehicle_id = SelectField('Lično vozilo: ', validators=[Optional()])
+    personal_vehicle_id = SelectField('Privatno vozilo: ', validators=[Optional()])
     other = StringField('Drugo: ')
 
     # advance_payment = IntegerField('Akontacija: ')

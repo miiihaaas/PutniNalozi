@@ -37,7 +37,7 @@
             data-parent="#accordionZero"
           >
             <div class="card-body">
-              <p>{{ warrant.text_form }}</p>
+              {{ warrant.text_form | safe }}
             </div>
           </div>
         </div>
@@ -339,7 +339,7 @@
               aria-expanded="false"
               aria-controls="collapseThree"
             >
-              Lično Vozilo:
+              Privatno Vozilo:
             </button>
           </div>
           <div

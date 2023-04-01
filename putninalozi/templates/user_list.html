@@ -40,7 +40,22 @@
             <tr>
               <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %} </td>
               <td>{{ user.email }}</td>
-              <th>{{ user.authorization }}</th>
+              <td>
+                {% if user.authorization == 'c_user' %}
+                  <i class="fas fa-user" title="Korisnik"></i>  ZAPOSLENI
+                {% elif user.authorization == 'c_member' %}
+                  <i class="fas fa-user" title="Korisnik"></i>  ČLAN BEZ ZAPOSLENJA U PRAVNOM LICU
+                {% elif user.authorization == 'c_admin' %}
+                  <i class="fa-solid fa-lock" title="Admin"></i>  ZAPOSLENI
+                {% elif user.authorization == 'c_functionary' %}
+                  <i class="fa-solid fa-lock" title="Admin"></i>  FUNKCIONER BEZ ZAPOSLENJA U PRAVNOM LICU
+                {% elif user.authorization == 'c_founder' %}
+                  <i class="fa-solid fa-lock" title="Admin"></i>  OSNIVAČ BEZ ZAPOSLENJA U PRAVNOM LICU
+                {% elif user.authorization == 'c_cashier' %}
+                  <i class="fa-solid fa-lock" title="Admin"></i>  KNJIGOVOĐA/BLAGAJNIK
+                {% elif user.authorization == 'o_cashier' %}
+                  <i class="fa-solid fa-lock" title="Admin"></i>  KNJIGOVOĐA BEZ ZAPOSLENJA U PRAVNOM LICU
+                {% endif %}</td>
             </tr>
           {% endif %}
         {% endif %}

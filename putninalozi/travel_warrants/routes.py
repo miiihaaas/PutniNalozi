@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, Markup
 from flask import  render_template, url_for, flash, redirect, abort, request, send_file
 from putninalozi import db, bcrypt
 from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses, Settings
@@ -93,20 +93,10 @@ def register_tw(korisnik_id, datum):
         print(drivers)
         
         principal_list = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).filter(User.authorization != "c_deleted").all()]
-        #! - obrisati ovaj red ako se ustanovi da je donji kod ok: cashier_list = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
-        #todo chashier_list (filter po: c_cashier + o_cashier)
-        #todo GPT rešenje:
-        
         cashier_list = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter(or_(User.authorization == 'c_cashier', User.authorization == 'o_cashier')).all()]
-
         
         ime_prezime = User.query.filter_by(id=korisnik_id).first().name + " " + User.query.filter_by(id=korisnik_id).first().surname
         print(ime_prezime)
-        # #todo promeniti logiku kreiranja brojača: da izlista sve naloge tog dana, pa da izabere najveći broj brojača i na to da +1
-        # brojac = len(TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
-        #                                                                                                     datum.replace(hour=0, minute=0, second=0, microsecond=0),
-        #                                                                                                     datum.replace(hour=23, minute=59, second=59, microsecond=9))).all())
-        #todo preimenuj max_brojac u brojac kada se usvoji nova nomenklatura, izbrisati stari kod iznad
         brojac = max([0] + [int(b.travel_warrant_number[-2:]) for b in TravelWarrant.query.filter_by(company_id=current_user.user_company.id).filter(TravelWarrant.start_datetime.between(
                                                                                                             datum.replace(hour=0, minute=0, second=0, microsecond=0),
                                                                                                             datum.replace(hour=23, minute=59, second=59, microsecond=9))).all()])
@@ -209,7 +199,7 @@ def register_tw(korisnik_id, datum):
 
         file_name, text_form = create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino)
         warrant.file_name = file_name
-        warrant.text_form = text_form
+        warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
         db.session.commit()
         print(text_form)
         print(file_name)
@@ -391,8 +381,9 @@ def travel_warrant_profile(warrant_id):
                 print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
                 file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
+                print(f'update naloga: {text_form=}')
                 warrant.file_name = file_name
-                warrant.text_form = text_form
+                warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
                 print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
                 db.session.commit()
@@ -452,9 +443,9 @@ def travel_warrant_profile(warrant_id):
         form.personal_vehicle_id.choices = vehicle_personal_list
         print(f'{form.vehicle_id.choices=}')
         form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat"), ("storniran", "storniran")]
-        #! form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principial=True).all()]
+
         form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).filter(User.authorization != "c_deleted").all()]
-        form.cashier_id.choices = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter_by(authorization='c_cashier').all()]
+        form.cashier_id.choices = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter(or_(User.authorization == 'c_cashier', User.authorization == 'o_cashier')).all()]
 
         if form.validate_on_submit():
             if form.together_with.data != '':
@@ -532,7 +523,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = form.status.data
 
                 # warrant.expenses = form.expenses.data
-                print('lično vozilo')
+                print('Privatno vozilo')
             elif form.other.data != "":
                 # warrant.user_id = form.user_id.data
                 warrant.with_task = form.with_task.data
@@ -633,7 +624,10 @@ def travel_warrant_profile(warrant_id):
 
             file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
             warrant.file_name = file_name
-            warrant.text_form = text_form
+            warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
+            #! pomoću GPT:
+            #! U HTML fajlu koristili smo Jinju-ovu sintaksu kako bismo renderovali tekst iz promenljive warrant.text_form. Kada smo stavili safe na kraju, to je značilo da prikazujemo HTML koji se nalazi u toj promenljivoj, a ne da ga Jinja renderuje kao plain tekst.
+            #! U routes.py fajlu smo zamenili svaki newline karakter u warrant.text_form sa HTML tagom <br> pomoću metode replace(). Zatim smo promenljivu konvertorvali u Markup objekat, kako bismo osigurali da Jinja ne pokuša da escapuje HTML kod prilikom renderovanja u HTML fajlu.
             print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
 
