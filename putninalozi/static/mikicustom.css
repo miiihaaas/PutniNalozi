@@ -21,8 +21,7 @@ header { background-color: #104e97; padding-bottom: 40px; }
 .bg-implicit-deepblue { background-color: #104e97; }
 .bg-implicit-skyblue { background-color: #009dde; }
 .bg-implicit-purple { background-color: #940052; }
-/* mihascustom */
-form .invalid-feedback { display: block !important; color: red !important; }
+
 
 a.btn.btn-outline-info { background-image: linear-gradient(#bd0077, #7c004e) !important; }
 a.btn.btn-outline-info:hover { color: #fff; background-image: linear-gradient(#7c004e, #bd0077) !important; border-color: transparent; }
@@ -242,3 +241,5 @@ form > div.form-group { text-align: center; }
 	.top15mob { padding-top: 15px; }
 	body.login .container form > div.form-group { align-items: start; }
 }
+/* mihascustom */
+form .invalid-feedback { display: block !important; color: red !important; }
