@@ -108,7 +108,7 @@
         class="collapse"
         aria-labelledby="headingAbrod"
         >
-          <div class="card-body">
+          <div class="card-body paddingall">
             {{ form.abroad_contry.label(class="form-control-label") }} 
             {% if form.abroad_contry.errors %} 
             {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
@@ -120,7 +120,7 @@
             {% else %} {{ form.abroad_contry(class="form-control
             form-control-lg") }} {% endif %}
           </div>
-          <div class="card-body">
+          <div class="card-body paddingall">
             {{ form.daily_wage_abroad.label(class="form-control-label") }} 
             {% if form.daily_wage_abroad.errors %} 
               {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
@@ -133,7 +133,7 @@
               {{ form.daily_wage_abroad(class="form-control form-control-lg") }} 
             {% endif %}
           </div>
-          <div class="card-body">
+          <div class="card-body paddingall">
             {{ form.daily_wage_abroad_currency.label(class="form-control-label") }} 
             {% if form.daily_wage_abroad_currency.errors %} 
               {{ form.daily_wage_abroad_currency(class="form-control form-control-lg is-invalid") }}
@@ -146,7 +146,7 @@
               {{ form.daily_wage_abroad_currency(class="form-select form-select-lg") }} 
             {% endif %}
           </div>
-          <div class="col form-box">
+          <div class="col form-box paddingall">
             {{ form.contry_leaving.label(class="form-control-label") }} 
             {% if form.contry_leaving.errors %} 
               {{ form.contry_leaving(class="form-control form-control-lg is-invalid") }}
@@ -159,7 +159,7 @@
               {{ form.contry_leaving(class="form-control form-control-lg", type="datetime-local") }}
             {% endif %}
           </div>
-          <div class="col form-box">
+          <div class="col form-box paddingall">
             {{ form.contry_return.label(class="form-control-label") }} 
             {% if form.contry_return.errors %} 
               {{ form.contry_return(class="form-control form-control-lg is-invalid") }}

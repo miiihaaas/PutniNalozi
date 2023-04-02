@@ -45,19 +45,19 @@
                   <i class="fa fa-pencil" title="Nalogodavac"></i>
                 {% endif %}
                 {% if user.authorization == 'c_user' %}
-                  <img src="../../static/img/K-Light.png" alt="(K)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Korisnik">  ZAPOSLENI
+                  <img src="../../static/img/K-Light.png" alt="(K)" class="tableiconimg" title="Korisnik">  ZAPOSLENI
                 {% elif user.authorization == 'c_member' %}
-                  <img src="../../static/img/K-Light.png" alt="(K)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Korisnik"></i>  ČLAN BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="../../static/img/K-Light.png" alt="(K)" class="tableiconimg" title="Korisnik"></i>  ČLAN BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_admin' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  ZAPOSLENI
+                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  ZAPOSLENI
                 {% elif user.authorization == 'c_functionary' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  FUNKCIONER BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  FUNKCIONER BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_founder' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  OSNIVAČ BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  OSNIVAČ BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_cashier' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  KNJIGOVOĐA/BLAGAJNIK
+                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  KNJIGOVOĐA/BLAGAJNIK
                 {% elif user.authorization == 'o_cashier' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  KNJIGOVOĐA BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  KNJIGOVOĐA BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% endif %}</td>
             </tr>
           {% endif %}

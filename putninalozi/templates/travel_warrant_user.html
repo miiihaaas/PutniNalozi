@@ -14,8 +14,8 @@
         <div class="accordion" id="accordionZero">
           <div class="accordion-item">
             <div class="accordion-header" id="headingZero">
-              <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
-                Broj putnog naloga: {{ warrant.travel_warrant_number }}
+              <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
+                Detalji
               </button>
             </div>
             <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
@@ -46,7 +46,7 @@
       </div>
       <div class="row">
         <div id="collapseAbrod" class="collapse" aria-labelledby="headingAbrod" data-parent="#accordionAbrod">
-          <div class="card-body">
+          <div class="card-body paddingall">
             {{ form.abroad_contry.label(class="form-control-label") }}
             {% if form.abroad_contry.errors %}
               {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
@@ -59,7 +59,7 @@
                 {{ form.abroad_contry(class="form-control form-control-lg") }}
             {% endif %}
           </div>
-          <div class="col form-box">
+          <div class="col form-box paddingall">
             {{ form.contry_leaving.label(class="form-control-label") }}
             {% if form.contry_leaving.errors %}
               {{ form.contry_leaving(class="form-control form-control-lg is-invalid") }}
@@ -72,7 +72,7 @@
               {{ form.contry_leaving(class="form-control form-control-lg", type="datetime-local") }}
             {% endif %}
           </div>
-          <div class="col form-box">
+          <div class="col form-box paddingall">
             {{ form.contry_return.label(class="form-control-label") }}
             {% if form.contry_return.errors %}
               {{ form.contry_return(class="form-control form-control-lg is-invalid") }}

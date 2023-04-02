@@ -20,9 +20,9 @@
           <td><a class="mr-2 btn btn-info" href="{{ url_for('vehicles.vehicle_profile', vehicle_id=vehicle.id) }}" title="Uređivanje vozila">{{ vehicle.vehicle_type }}</a></td>
           <td>
             {% if vehicle.vehicle_ownership == 'company' %}
-              <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Privatno vozilo">
+              <img src="../../static/img/P-Light.png" alt="(P)" class="tableiconimg" title="Privatno vozilo">
             {% else %}
-              <img src="../../static/img/S-Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Službeno vozilo">
+              <img src="../../static/img/S-Light.png" alt="(S)" class="tableiconimg" title="Službeno vozilo">
             {% endif %}
               {{ vehicle.vehicle_brand }}</td>
           <td>{{ vehicle.vehicle_registration }}</td>
@@ -45,9 +45,9 @@
             <td><a class="mr-2 btn btn-info" href="{{ url_for('vehicles.vehicle_profile', vehicle_id=vehicle.id) }}" title="Uređivanje vozila">{{ vehicle.vehicle_type }}</a></td>
             <td class="tableflexcell">
               {% if vehicle.vehicle_ownership == 'company' %}
-                <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Privatno vozilo">
+                <img src="../../static/img/P-Light.png" alt="(P)" class="tableiconimg" title="Privatno vozilo">
               {% else %}
-                <img src="../../static/img/S-Light.png" alt="(S)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Službeno vozilo">
+                <img src="../../static/img/S-Light.png" alt="(S)" class="tableiconimg" title="Službeno vozilo">
               {% endif %}
               {{ vehicle.vehicle_brand }}</td>
             <td>{{ vehicle.vehicle_registration }}</td>
