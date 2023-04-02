@@ -40,7 +40,7 @@
             <tr>
               <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a></td>
               <td>{{ user.email }}</td>
-              <td>
+              <td class="tableflexcell">
                 {% if user.principal %}
                   <i class="fa fa-pencil" title="Nalogodavac"></i>
                 {% endif %}

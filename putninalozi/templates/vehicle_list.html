@@ -43,7 +43,7 @@
         {% if vehicle.vehicle_company.id == current_user.user_company.id %}
           <tr>
             <td><a class="mr-2 btn btn-info" href="{{ url_for('vehicles.vehicle_profile', vehicle_id=vehicle.id) }}" title="Uređivanje vozila">{{ vehicle.vehicle_type }}</a></td>
-            <td>
+            <td class="tableflexcell">
               {% if vehicle.vehicle_ownership == 'company' %}
                 <img src="../../static/img/P-Light.png" alt="(P)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Privatno vozilo">
               {% else %}

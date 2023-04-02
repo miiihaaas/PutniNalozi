@@ -3,8 +3,14 @@ body.login h1 { font-size: 1.6rem; color: #999; font-weight: 700; padding: 30px 
 h2 { font-size: 1.4rem; }
 h3 { font-size: 1.2rem; }
 header { background-color: #104e97; padding-bottom: 40px; }
-.bg-steel .dropdown-menu { background-color: #104e97; }
-.alert { display: inline-block; padding: 5px 20px 3px 40px !important; margin-top: 20px; }
+.navbar-dark .navbar-nav .nav-link { border-bottom: 3px solid transparent; }
+.nav-link:hover + .dropdown-menu, .dropdown-menu.dropdown-menu-right:hover { display: block; }
+.dropdown-menu-right { right: auto; left: auto; }
+.dropdown-menu.dropdown-menu-right a:hover { background-color: #009dde; color: #fff !important; }
+.bg-steel .dropdown-menu { background-color: #eee; padding: 0; overflow: hidden; }
+a.dropdown-item { color: #104e96 !important; border-bottom: 1px solid #fff; }
+a.dropdown-item:last-child { border-bottom: 0; }
+.alert { /*display: inline-block;*/ padding: 5px 20px 3px 40px !important; margin-top: 20px; width: fit-content; }
 .alert-success { color: #009cdb; background-color: transparent;  border: 1px solid #009cdb; font-weight: 700; font-size: 16px; text-align: left; border-radius: 50px;}
 .alert-success:before { position: absolute; content: '\f058'; font-family: "Font Awesome 6 Free"; left: 0; top: -8px; font-size: 32px; }
 .alert-danger { color: #92004f !important; background-color: transparent !important; border: 1px solid #92004f !important; font-weight: 700; font-size: 16px; text-align: left; border-radius: 50px !important;}
@@ -95,6 +101,9 @@ select.form-select.form-select-sm { min-height: 38px; }
 .start-time label { min-width: 140px; }
 .top15, .inertop15 .form-box:not(:first-child) { padding-top: 15px; }
 .top50 { padding-top: 50px; }
+.padright0 { padding-right: 0; }
+.centerall { text-align: center; }
+.width100 { width: 100%; }
 table#data { border: 0; width: 100% !important; margin-top: 20px; }
 .table>:not(caption)>*>* { padding: 6px; box-shadow: none; border: 0; border-right: 1px solid #fff; border-bottom: 1px solid #fff; }
 .table>thead { background-color: #ddd; font-size: 12px; }
@@ -147,6 +156,7 @@ form > div.form-group { text-align: center; }
 	legend.border-bottom.mb-3 { margin: 50px 0 30px 0 !important; }
 	.form-switch { padding-left: 50px !important; }
 	.content-section { padding-left: 10px; }
+	.tableflexcell { display: flex; align-items: center; min-height: 40px; }
 }
 @media (max-width: 991px) {
 	table.dataTable { max-width: 100% !important; width: 100% !important; }
