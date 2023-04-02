@@ -18,7 +18,7 @@
     <tbody>
       {% for user in users %}
         <tr>
-          <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %}</td>
+          <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} <i class="fa fa-pencil" title="Nalogodavac"></i> {% endif %}</td>
           <td>{{ user.user_company.companyname }}</td>
           <td>{{ user.authorization }}</td>
           <td>{{ user.email }}</td>
@@ -38,23 +38,26 @@
         {% if user.user_company.id == current_user.user_company.id %}
           {% if user.authorization != 'c_deleted' %}
             <tr>
-              <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %} </td>
+              <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a></td>
               <td>{{ user.email }}</td>
               <td>
+                {% if user.principal %}
+                  <i class="fa fa-pencil" title="Nalogodavac"></i>
+                {% endif %}
                 {% if user.authorization == 'c_user' %}
-                  <i class="fas fa-user" title="Korisnik"></i>  ZAPOSLENI
+                  <img src="../../static/img/K-Light.png" alt="(K)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Korisnik">  ZAPOSLENI
                 {% elif user.authorization == 'c_member' %}
-                  <i class="fas fa-user" title="Korisnik"></i>  ČLAN BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="../../static/img/K-Light.png" alt="(K)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Korisnik"></i>  ČLAN BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_admin' %}
-                  <i class="fa-solid fa-lock" title="Admin"></i>  ZAPOSLENI
+                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  ZAPOSLENI
                 {% elif user.authorization == 'c_functionary' %}
-                  <i class="fa-solid fa-lock" title="Admin"></i>  FUNKCIONER BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  FUNKCIONER BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_founder' %}
-                  <i class="fa-solid fa-lock" title="Admin"></i>  OSNIVAČ BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  OSNIVAČ BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_cashier' %}
-                  <i class="fa-solid fa-lock" title="Admin"></i>  KNJIGOVOĐA/BLAGAJNIK
+                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  KNJIGOVOĐA/BLAGAJNIK
                 {% elif user.authorization == 'o_cashier' %}
-                  <i class="fa-solid fa-lock" title="Admin"></i>  KNJIGOVOĐA BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="../../static/img/A-Light.png" alt="(A)" style="float: left; margin-right: 10px; width: 32px; height: 32px;" title="Admin">  KNJIGOVOĐA BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% endif %}</td>
             </tr>
           {% endif %}
@@ -73,7 +76,7 @@
       {% for user in users %}
         {% if user.id == current_user.id %}
           <tr>
-            <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} * {% endif %} </td>
+            <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} <i class="fa fa-pencil" title="Nalogodavac"></i> {% endif %} </td>
             <td>{{ user.email }}</td>
             <th>{{ user.authorization }}</th>
           </tr>

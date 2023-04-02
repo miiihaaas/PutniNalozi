@@ -40,6 +40,9 @@
                 {% else %} 
                   {{ form.user_id(class="form-select form-select-lg") }} 
                 {% endif %}
+                <small class="text-muted ml-2">
+                  <a href="{{ url_for('users.register_u') }}">Registrujte novog zaposlenog </a>
+                </small>
               </div>
               <div class="col form-box start-time">
                 {{ form.start_datetime.label(class="form-control-label") }} 

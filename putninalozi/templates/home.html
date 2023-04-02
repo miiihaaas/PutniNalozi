@@ -10,6 +10,10 @@
   <tbody>
     {% if current_user.authorization not in ['c_user', 'c_member', 'o_cashier'] %}
     <tr>
+      <td> <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni nalozi</a> </td>
+      <td>Kreiranje i administriranje putnih naloga</td>
+    </tr>
+    <tr>
       <td> <a class="btn btn-info" href="{{ url_for('main.settings', company_id=current_user.user_company.id) }}">Osnovna podešavanja</a> </td>
       <td>Podešavanja - razna</td>
     </tr>
@@ -24,10 +28,6 @@
     <tr>
       <td> <a class="btn btn-info" href="{{ url_for('users.user_list') }}">Korisnici</a> </td>
       <td>Kreiranje i izmena korisničkih naloga</td>
-    </tr>
-    <tr>
-      <td> <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni nalozi</a> </td>
-      <td>Kreiranje i administriranje putnih naloga</td>
     </tr>
     {% else %}
     <tr>

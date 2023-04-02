@@ -97,7 +97,7 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.authorization(class="form-select form-select-lg") }}
+                            {{ form.authorization(class="form-select form-select-lg" | safe ) }}
                         {% endif %}
                     </div>
                     <div class="form-check form-switch">

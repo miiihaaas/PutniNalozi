@@ -40,7 +40,7 @@
             <div class="col form-group">
             {{ form.company_address.label(class="form-control-label") }} 
             {% if form.company_address.errors %} 
-                {{ form.company_address(class="form-control form-control-lg is-invalid") }}
+                {{ form.company_address(class="form-control form-control-lg is-invalid", style="display: block; color: red;") }}
                 <div class="invalid-feedback">
                     {% for error in form.company_address.errors %}
                     <span>{{ error }}</span>
@@ -65,19 +65,6 @@
             </div>
         </div>
         <div class="row just-column">
-            <div class="col form-group">
-                {{ form.company_zip_code.label(class="form-control-label") }} 
-                {% if form.company_zip_code.errors %} 
-                    {{ form.company_zip_code(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.company_zip_code.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %} 
-                    {{ form.company_zip_code(class="form-control form-control-lg") }} 
-                {% endif %}
-            </div>
             <div class="col form-group">
                 {{ form.company_city.label(class="form-control-label") }} 
                 {% if form.company_city.errors %} 
@@ -107,6 +94,35 @@
         </div>
         <div class="row just-column">
             <div class="col form-group">
+                {{ form.company_zip_code.label(class="form-control-label") }} 
+                {% if form.company_zip_code.errors %} 
+                    {{ form.company_zip_code(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.company_zip_code.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %} 
+                    {{ form.company_zip_code(class="form-control form-control-lg") }} 
+                {% endif %}
+            </div>
+            <div class="col form-group">
+                {{ form.company_phone.label(class="form-control-label") }} 
+                {% if form.company_phone.errors %} 
+                    {{ form.company_phone(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.company_phone.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %} 
+                    {{ form.company_phone(class="form-control form-control-lg") }} 
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="row just-column">
+            <div class="col form-group">
                 {{ form.company_site.label(class="form-control-label") }} 
                 {% if form.company_site.errors %} 
                     {{ form.company_site(class="form-control form-control-lg is-invalid") }}
@@ -130,19 +146,6 @@
                     </div>
                 {% else %} 
                     {{ form.company_mail(class="form-control form-control-lg") }} 
-                {% endif %}
-            </div>
-            <div class="col form-group">
-                {{ form.company_phone.label(class="form-control-label") }} 
-                {% if form.company_phone.errors %} 
-                    {{ form.company_phone(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.company_phone.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %} 
-                    {{ form.company_phone(class="form-control form-control-lg") }} 
                 {% endif %}
             </div>
         </div>

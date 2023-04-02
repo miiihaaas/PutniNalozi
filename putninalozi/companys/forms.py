@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, Length, Email, ValidationError, Reg
 from putninalozi.models import Company
 
 class RegistrationCompanyForm(FlaskForm):
-    companyname = StringField('Ime kompanije ', validators=[DataRequired(), Length(min=2, max=50)])
+    companyname = StringField('Naziv kompanije ', validators=[DataRequired(), Length(min=2, max=50)])
     company_address = StringField('Adresa', validators=[DataRequired(), Length(min=2, max=50)])
     company_address_number = StringField('Broj', validators=[DataRequired(), Length(min=1, max=5)])
     company_zip_code = StringField('Poštanski broj', validators=[DataRequired(), Length(min=5, max=5)])
@@ -25,7 +25,7 @@ class RegistrationCompanyForm(FlaskForm):
             raise ValidationError('Takva kompanija je već kreirana, molim Vas kreirajte novu kompaniju.')
 
 class EditCompanyForm(FlaskForm):
-    companyname = StringField('Ime kompanije', validators=[DataRequired(), Length(min=2, max=50)])
+    companyname = StringField('Naziv kompanije', validators=[DataRequired(), Length(min=2, max=50)])
     company_address = StringField('Adresa', validators=[DataRequired(), Length(min=2, max=50)])
     company_address_number = StringField('Broj', validators=[DataRequired(), Length(min=1, max=5)])
     company_zip_code = StringField('Poštanski broj', validators=[DataRequired(), Length(min=5, max=5)])
@@ -36,5 +36,5 @@ class EditCompanyForm(FlaskForm):
     company_site = StringField('Veb sajt', validators=[Optional(), Length(min=5, max=50)])
     company_mail = StringField('Email', validators=[DataRequired(), Email()])
     company_phone = StringField('Telefonski broj', validators=[DataRequired(), Length(min=9, max=13)])
-    company_logo = FileField('Promeni logo', validators=[FileAllowed(['jpg', 'png'])]) #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
+    company_logo = FileField('Promenite logo', validators=[FileAllowed(['jpg', 'png'])]) #na ovom poraditi --->> https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer <<--- :)
     submit = SubmitField('Ažurirajte podatke')

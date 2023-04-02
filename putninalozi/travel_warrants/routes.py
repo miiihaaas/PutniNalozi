@@ -243,6 +243,7 @@ def travel_warrant_profile(warrant_id):
 
     if current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier']:
         if warrant.status == 'storniran' or warrant.status == 'obračunat':
+            # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
             return render_template('read_travel_warrant_user.html', title='Pregled putnog naloga', warrant=warrant, legend='Pregled putnog naloga', rod=rod, troskovi=troskovi)
         else:
             form = EditUserTravelWarrantForm()
