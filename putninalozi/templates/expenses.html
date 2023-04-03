@@ -10,60 +10,58 @@
       {% endif %}
       <div class="row">
         <div class="col form-group">
-            {{ form.expenses_type.label(class="form-control-label") }}
-            {% if form.expenses_type.errors %}
-                {{ form.expenses_type(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.expenses_type.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.expenses_type(id="expenses_type", class="form-select form-select-lg") }}
-            {% endif %}
+          {{ form.expenses_type.label(class="form-control-label") }}
+          {% if form.expenses_type.errors %}
+            {{ form.expenses_type(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.expenses_type.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.expenses_type(id="expenses_type", class="form-select form-select-lg") }}
+          {% endif %}
         </div>
       </div>
-
       <div class="form-group">
-          {{ form.description.label(class="form-control-label") }}
-          {% if form.description.errors %}
-              {{ form.description(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.description.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
-          {% else %}
-              {{ form.description(id="description", class="form-control form-control-lg", readonly=false) }}
-          {% endif %}
+        {{ form.description.label(class="form-control-label") }}
+        {% if form.description.errors %}
+          {{ form.description(class="form-control form-control-lg is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.description.errors %}
+              <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ form.description(id="description", class="form-control form-control-lg", readonly=false) }}
+        {% endif %}
       </div>
-
       <div class="row">
         <div class="col form-group">
-            {{ form.amount.label(class="form-control-label") }}
-            {% if form.amount.errors %}
-                {{ form.amount(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.amount.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.amount(id="amount", class="form-control form-control-lg") }}
-            {% endif %}
+          {{ form.amount.label(class="form-control-label") }}
+          {% if form.amount.errors %}
+            {{ form.amount(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.amount.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.amount(id="amount", class="form-control form-control-lg") }}
+          {% endif %}
         </div>
         <div class="col form-group">
-            {{ form.amount_currency.label(class="form-control-label") }}
-            {% if form.amount_currency.errors %}
-                {{ form.amount_currency(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.amount_currency.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.amount_currency(class="form-select form-select-lg") }}
-            {% endif %}
+          {{ form.amount_currency.label(class="form-control-label") }}
+          {% if form.amount_currency.errors %}
+            {{ form.amount_currency(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.amount_currency.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.amount_currency(class="form-select form-select-lg") }}
+          {% endif %}
         </div>
       </div>
     </fieldset>
@@ -138,7 +136,8 @@
     if (selectField.value === "Troškovi amortizacije privatnog vozila") {
       inputField.value = "30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
       inputField.readOnly = true;
-      inputField2.placeholder = "uneti vrednost koja predstavlja 30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
+      // inputField2.placeholder = "uneti vrednost koja predstavlja 30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
+      inputField2.placeholder = "30% vrednosti goriva";
     } 
   };
 
@@ -147,7 +146,8 @@
     if (this.value === "Troškovi amortizacije privatnog vozila") {
       inputField.value = "30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
       inputField.readOnly = true;
-      inputField2.placeholder = "uneti vrednost koja predstavlja 30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
+      // inputField2.placeholder = "uneti vrednost koja predstavlja 30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
+      inputField2.placeholder = "30% vrednosti goriva";
     } else {
       inputField.readOnly = false;
       inputField.value = "";

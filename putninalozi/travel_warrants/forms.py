@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, FloatField, DecimalField, SelectField, DateField, TimeField, DateTimeField, IntegerField, SubmitField
+from wtforms import StringField, BooleanField, FloatField, DecimalField, SelectField, DateField, TimeField, DateTimeField, IntegerField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Optional, Length, InputRequired, NumberRange
 from putninalozi.models import Company, User, Vehicle
 from flask_login import current_user
@@ -117,7 +117,7 @@ class EditUserTravelWarrantForm(FlaskForm):
 
 class TravelWarrantExpensesForm(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
-    description = StringField('Opis troška: ')
+    description = TextAreaField('Opis troška: ')
     amount = DecimalField('Iznos: ', validators=[DataRequired(), NumberRange(min=0, message='Iznos troška mora biti veći od 0.')])
     amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     submit = SubmitField('Dodajte trošak')
@@ -128,7 +128,7 @@ class TravelWarrantExpensesForm(FlaskForm):
 
 class EditTravelWarrantExpenses(FlaskForm):
     expenses_type = SelectField('Tip troška', choices=[('Ostali troškovi na službenom putu', 'Ostali troškovi na službenom putu'), ('Parkiranje', 'Parkiranje'), ('Putarine', 'Putarine'), ('Troškovi amortizacije privatnog vozila', 'Troškovi amortizacije privatnog vozila'), ('Troškovi noćenja', 'Troškovi noćenja'), ('Troškovi prevoza', 'Troškovi prevoza'), ('Troškovi smeštaja i ishrane', 'Troškovi smeštaja i ishrane')] )
-    description = StringField('Opis troška: ')
+    description = TextAreaField('Opis troška: ')
     amount = DecimalField('Iznos: ', validators=[DataRequired(), NumberRange(min=0, message='Iznos troška mora biti veći od 0.')])
     amount_currency =  SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     submit = SubmitField('Ažurirajte trošak')

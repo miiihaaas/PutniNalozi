@@ -38,12 +38,16 @@
         {% if user.user_company.id == current_user.user_company.id %}
           {% if user.authorization != 'c_deleted' %}
             <tr>
-              <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a></td>
+              <td> 
+                <div class="btn-group">
+                <a class="btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a>
+                {% if user.principal %}
+                <a class="btn btn-outline-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" class="fa fa-pencil" title="Nalogodavac">N</a>
+                {% endif %}
+                </div>
+              </td>
               <td>{{ user.email }}</td>
               <td class="tableflexcell">
-                {% if user.principal %}
-                  <i class="fa fa-pencil" title="Nalogodavac"></i>
-                {% endif %}
                 {% if user.authorization == 'c_user' %}
                   <img src="../../static/img/K-Light.png" alt="(K)" class="tableiconimg" title="Korisnik">  ZAPOSLENI
                 {% elif user.authorization == 'c_member' %}
