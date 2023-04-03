@@ -2,28 +2,27 @@
 {% block content %}
 <div class="content-section">
     <fieldset class="form-group">
-      <legend class="border-bottom mb-3">{{ legend }}</legend>
+      <legend class="border-bottom mb-3">{{ legend }} {{ warrant.travel_warrant_number }}</legend>
 
       <div class="accordion" id="accordionZero">
         <div class="accordion-item">
           <div class="accordion-header" id="headingZero">
-            <button type="button" class="accordion-button" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
-              Broj putnog naloga: {{ warrant.travel_warrant_number }}
+            <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
+              Detalji
             </button>
           </div>
 
           <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
             <div class="card-body">
-              {{ warrant.text_form | safe }}
+              {{ detalji }}
             </div>
           </div>
         </div>
       </div>
       <div class="">
-        <br>
         <h2>Status putnog naloga: {{warrant.status}}</h2>
+        <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">Nazad</a>
         <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzmite dokument</a>
-
       </div>
       <hr>
       <table id="data" border="1" class="table table-striped">

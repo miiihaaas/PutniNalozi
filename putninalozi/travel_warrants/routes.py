@@ -199,7 +199,8 @@ def register_tw(korisnik_id, datum):
 
         file_name, text_form = create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino)
         warrant.file_name = file_name
-        warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
+        # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
+        warrant.text_form = text_form
         db.session.commit()
         print(text_form)
         print(file_name)
@@ -244,7 +245,9 @@ def travel_warrant_profile(warrant_id):
     if current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier']:
         if warrant.status == 'storniran' or warrant.status == 'obračunat':
             # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
-            return render_template('read_travel_warrant_user.html', title='Pregled putnog naloga', warrant=warrant, legend='Pregled putnog naloga', rod=rod, troskovi=troskovi)
+            return render_template('read_travel_warrant_user.html', title='Pregled putnog naloga', 
+                                    warrant=warrant, legend='Pregled putnog naloga', 
+                                    detalji=Markup(warrant.text_form.replace('\n', '<br>')), rod=rod, troskovi=troskovi)
         else:
             form = EditUserTravelWarrantForm()
             form.reset()
@@ -384,7 +387,8 @@ def travel_warrant_profile(warrant_id):
                 file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
                 print(f'update naloga: {text_form=}')
                 warrant.file_name = file_name
-                warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
+                # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
+                warrant.text_form = text_form
                 print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
                 db.session.commit()
@@ -422,7 +426,7 @@ def travel_warrant_profile(warrant_id):
             print(f'EditUser: {form.errors=}')
 
             return render_template('travel_warrant_user.html', title='Uređivanje putnog naloga', warrant=warrant, 
-                                    legend='Uređivanje putnog naloga (pregled korisnika)', form=form, rod=rod, 
+                                    legend='Uređivanje putnog naloga (pregled korisnika)', detalji=Markup(warrant.text_form.replace('\n', '<br>')), form=form, rod=rod, 
                                     troskovi=troskovi, end_datum=end_datum, start_datetime_min=start_datetime_min, start_datetime_max=start_datetime_max)
 
     else:
@@ -625,7 +629,8 @@ def travel_warrant_profile(warrant_id):
 
             file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
             warrant.file_name = file_name
-            warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
+            # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
+            warrant.text_form = text_form
             #! pomoću GPT:
             #! U HTML fajlu koristili smo Jinju-ovu sintaksu kako bismo renderovali tekst iz promenljive warrant.text_form. Kada smo stavili safe na kraju, to je značilo da prikazujemo HTML koji se nalazi u toj promenljivoj, a ne da ga Jinja renderuje kao plain tekst.
             #! U routes.py fajlu smo zamenili svaki newline karakter u warrant.text_form sa HTML tagom <br> pomoću metode replace(). Zatim smo promenljivu konvertorvali u Markup objekat, kako bismo osigurali da Jinja ne pokuša da escapuje HTML kod prilikom renderovanja u HTML fajlu.
@@ -677,7 +682,7 @@ def travel_warrant_profile(warrant_id):
 
         return render_template('travel_warrant.html', 
                                 title='Uređivanje putnog naloga', 
-                                warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', 
+                                warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', detalji=Markup(warrant.text_form.replace('\n', '<br>')), 
                                 form=form, rod=rod, troskovi=troskovi, 
                                 end_datum=end_datum, start_datetime_min=start_datetime_min, start_datetime_max=start_datetime_max)
 
