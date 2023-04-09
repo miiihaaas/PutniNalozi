@@ -380,46 +380,51 @@ Blagajnik: _____________________________________          Podnosilac računa: __
 
 
 
-def send_email(warrant, current_user, file_name):
-    rod = []
-    if warrant.travelwarrant_user.gender == "1":
-        rod=["Radnik", "raspoređen", "Kolega"]
-    elif warrant.travelwarrant_user.gender == "2":
-        rod=["Radnica", "raspoređena", "Koleginice"]
-    #dodaj if blok za različita slanja
-    # ako je kreiran nalog: korisniku i nalogodavcu
+def send_email(warrant, current_user, file_name, global_settings):
+    subject = ""
+    recipients = []
+    cc = []
     if warrant.status == 'kreiran':
         subject = f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}'
-        recipients = [warrant.travelwarrant_user.email, warrant.principal_user.email] #dodaj kod za nalogodavca!!!
-        text_body = f'''{rod[2]},
+        text_body = f'''Poštovani,
 Odobren je putni nalog {warrant.travel_warrant_number}.
 Detaljije informacije o putnom nalogu mogu se videti u prilogu ili klikom na link:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
 Pozdrav,
-{current_user.name} {current_user.surname}
-        '''
-    # ako je završen nalog: adminu
+{current_user.name} {current_user.surname}'''
+        if global_settings.send_email_kreiran and global_settings.send_email_kreiran_principial:
+            recipients = [warrant.travelwarrant_user.email]
+            cc = [warrant.principal_user.email]
+        elif global_settings.send_email_kreiran:
+            recipients = [warrant.travelwarrant_user.email]
+        elif global_settings.send_email_kreiran_principial:
+            recipients = [warrant.principal_user.email]
+    # ako je završen nalog: adminu / nalogodavcu
     elif warrant.status == 'završen':
         subject = f'Završen je putni nalog broj: {warrant.travel_warrant_number}'
-        recipients = [] #todo dodaj kod za admina kompanije za dati putni nalog!!!
         text_body = f'''Poštovani,
 Završen je putni nalog {warrant.travel_warrant_number}. Klikom na donji link možete obračunati putni nalog:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
 Pozdrav.'''
+        if global_settings.send_email_zavrsen:
+            recipients = [warrant.principal_user.email]
     # ako je obračunat nalog: blagajniku i korisniku
     elif warrant.status == 'obračunat':
         subject = f'Obračunat je putni nalog broj: {warrant.travel_warrant_number}'
-        recipients = [warrant.travelwarrant_user.email] #todo dodaj kod za blagajnika
         text_body = f'''Poštovani,
 Obračunat je putni nalog {warrant.travel_warrant_number}. Možete izvršiti uplatu dnevnica prema podacima iz priloga.
 
 Pozdrav.'''
+        if global_settings.send_email_obracunat_cashier:
+            recipients = [warrant.travelwarrant_user.email]
+    else:
+        return
     # ako je storniran nalog: da li treba nekoga da obaveštava?
     msg = Message(subject,
                     sender='no_replay@putninalozi.online',
-                    recipients=recipients)
+                    recipients=recipients, cc=cc)
     msg.body = text_body
     path = 'static/pdf_forms/'
     file_name = file_name

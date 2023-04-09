@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
@@ -51,3 +51,8 @@ app.register_blueprint(travel_warrants)
 app.register_blueprint(users)
 app.register_blueprint(vehicles)
 app.register_blueprint(main)
+
+
+@app.errorhandler(500)
+def page_not_found(e):
+    return render_template('404.html'), 404

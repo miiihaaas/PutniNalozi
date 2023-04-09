@@ -1,7 +1,7 @@
 from flask import Blueprint, Markup
 from flask import  render_template, url_for, flash, redirect, abort, request, send_file
 from putninalozi import db, bcrypt
-from putninalozi.models import TravelWarrant, User, Vehicle, TravelWarrantExpenses, Settings
+from putninalozi.models import TravelWarrant, Company, User, Vehicle, TravelWarrantExpenses, Settings
 from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm, EditTravelWarrantExpenses
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_form, send_email
 from flask_login import login_user, login_required, logout_user, current_user
@@ -65,12 +65,22 @@ def travel_warrant_list():
 
 @travel_warrants.route("/register_tw/<int:korisnik_id>/<datum>", methods=['GET', 'POST'])
 def register_tw(korisnik_id, datum):
+    premium = Company.query.filter_by(id=current_user.user_company.id).first()
+    number_of_warrants = TravelWarrant.query.filter_by(company_id=current_user.company_id).count()
+    now = datetime.now().date()
+    expiration_date = datetime.strptime(premium.premium_expiration_date, '%Y-%m-%d').date()
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
+    elif number_of_warrants >= premium.premium_warrants:
+        flash(f'Dostigi ste limit od {premium.premium_warrants} putnih naloga.', 'danger')
+        return render_template('premium.html', title='Premium licenca', legend='Premium licenca')
+    elif now >= expiration_date:
+        flash(f'Vaša licenca je istekla {premium.premium_expiration_date}.', 'danger')
+        return render_template('premium.html', title='Premium licenca', legend='Premium licenca')
 
     if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier']:
-        user_list = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
+        user_list = [(u.id, u.name + " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         print(user_list)
         vehicle_company_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='company').order_by('vehicle_type').all()]
         vehicle_personal_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='private').order_by('vehicle_type').all()]
@@ -210,7 +220,7 @@ def register_tw(korisnik_id, datum):
 
         flash(f'Putni nalog broj: {warrant.travel_warrant_number} je uspešno kreiran!', 'success')
         if global_settings.send_email_kreiran:
-            send_email(warrant, current_user, file_name)
+            send_email(warrant, current_user, file_name, global_settings)
             flash(f'{warrant.travelwarrant_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa detaljima putnog naloga.', 'success')
         return redirect(url_for('travel_warrants.travel_warrant_list'))
 
@@ -288,6 +298,10 @@ def travel_warrant_profile(warrant_id):
 
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
+                        #todo send email nalogodavcu
+                        if global_settings.send_email_zavrsen:
+                            send_email(warrant, current_user, file_name, global_settings)
+                            flash(f'Nalogodavac je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                     else:
                         warrant.status = form.status.data
 
@@ -311,6 +325,10 @@ def travel_warrant_profile(warrant_id):
 
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
+                        #todo send email nalogodavcu
+                        if global_settings.send_email_zavrsen:
+                            send_email(warrant, current_user, file_name, global_settings)
+                            flash(f'Nalogodavac je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                     else:
                         warrant.status = form.status.data
 
@@ -334,6 +352,10 @@ def travel_warrant_profile(warrant_id):
 
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
+                        #todo send email nalogodavcu
+                        if global_settings.send_email_zavrsen:
+                            send_email(warrant, current_user, file_name, global_settings)
+                            flash(f'Nalogodavac je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                     else:
                         warrant.status = form.status.data
 
@@ -361,6 +383,10 @@ def travel_warrant_profile(warrant_id):
 
                     if request.form.get('dugme') == 'Završi':
                         warrant.status = 'završen'
+                        #todo send email nalogodavcu
+                        if global_settings.send_email_zavrsen:
+                            send_email(warrant, current_user, file_name, global_settings)
+                            flash(f'Nalogodavac je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                     else:
                         warrant.status = form.status.data
 
@@ -396,9 +422,9 @@ def travel_warrant_profile(warrant_id):
     ##########################################################################################
 
                 flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
-                if global_settings.send_email_zavrsen:
-                    send_email(warrant, current_user, file_name)
-                    flash(f'admin je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
+                # if global_settings.send_email_zavrsen:
+                #     send_email(warrant, current_user, file_name)
+                #     flash(f'Nalogodavac je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 return redirect(url_for('travel_warrants.travel_warrant_list'))
             elif request.method == 'GET':
                 form.with_task.data = warrant.with_task
@@ -486,6 +512,10 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = 'završen'
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
+                    #todo send email zaposlenom, blagajniku
+                    if global_settings.send_email_obracunat or global_settings.send_email_obracunat_cashier:
+                        send_email(warrant, current_user, file_name, global_settings)
+                        flash(f'Blagajnik je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 else:
                     warrant.status = form.status.data
 
@@ -524,6 +554,10 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = 'završen'
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
+                    #todo send email zaposlenom, blagajniku
+                    if global_settings.send_email_obracunat or global_settings.send_email_obracunat_cashier:
+                        send_email(warrant, current_user, file_name, global_settings)
+                        flash(f'Blagajnik je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 else:
                     warrant.status = form.status.data
 
@@ -562,6 +596,10 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = 'završen'
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
+                    #todo send email zaposlenom, blagajniku
+                    if global_settings.send_email_obracunat or global_settings.send_email_obracunat_cashier:
+                        send_email(warrant, current_user, file_name, global_settings)
+                        flash(f'Blagajnik je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 else:
                     warrant.status = form.status.data
 
@@ -603,6 +641,10 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = 'završen'
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
+                    #todo send email zaposlenom, blagajniku
+                    if global_settings.send_email_obracunat or global_settings.send_email_obracunat_cashier:
+                        send_email(warrant, current_user, file_name, global_settings)
+                        flash(f'Blagajnik je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 else:
                     warrant.status = form.status.data
 

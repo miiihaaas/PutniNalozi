@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2> Pretplatite se na premium licencu kako bi ste mogli da  koristite sve mogućnosti našeg softvera </h2>
+<p>Slanje mejla blagajniku za isplatu obračunatih putnih naloga</p>
+<p>+10 korisnika aplikacije</p>
+<p>Neograničen broj putnih naloga</p>
+<div>
+    <a class="btn btn-info" href="{{ url_for('main.home') }}">Početna</a>
+    <button class="btn btn-info" onclick="history.back()">Nazad</button>
+</div>
+<hr>
+<p class="emphasized">Softver putninalozi.online omogućava izradu, evidenciju i štampu putnih naloga za službena putovanja u zemlji i inostranstvu. On umrežava korisnike koji zajednički mogu da rade na generisanju, popunjavanju i knjiženju putnih naloga. Softver je razvio Studio Implicit, firma sa bogatim iskustvom u razvoju poslovnih rešenja.</p>
+<br>
+<div class="content-section">
+    <h3>Zašto da koristite naš softver?</h3>
+    <p class='text-muted'>
+        <ul class="list-group">
+        <li class="list-group-item list-group-item-light"><small> - Softver je jednostavan za korišćenje</small></li>
+        <li class="list-group-item list-group-item-light"><small> - Pristup softveru je moguć u bilo kom trenutku i odakle god da radite</small></li>
+        <li class="list-group-item list-group-item-light"><small> - Automatsko generisanje popunjenog putnog naloga i putnog računa</small></li>
+        <li class="list-group-item list-group-item-light"><small> - Automatski obračun dnevnica i troškova nastalih na službenom putovanju</small></li>
+        <li class="list-group-item list-group-item-light"><small> - Automatsko prosleđivanje odobrenog putnog naloga računovodstvu</small></li>
+        <li class="list-group-item list-group-item-light"><small> - Jednostavan odabir vozila kojim se ide na službeno putovanje iz prethodno kreirane baze vozila</small></li>
+        <li class="list-group-item list-group-item-light"><small> - Ukoliko više osoba putuje jednim vozilom na službeni put, softver olakšava izradu putnih naloga za svaku od njih</small></li>
+        <li class="list-group-item list-group-item-light"><small> - Brza pretraga po različitim kriterijumima</small></li>
+        <li class="list-group-item list-group-item-light"><small> - Softver radi u cloud-u, nije potrebno instaliranje</small></li>
+        </ul>
+    </p>
+</div>
+
+<h2>Uz naš softver, svaki put je srećan put!</h2>
+<script>document.body.classList.add('about');</script>
+{% endblock content%}

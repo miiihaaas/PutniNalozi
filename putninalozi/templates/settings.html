@@ -39,18 +39,26 @@
           {{ form.send_email_kreiran.label(class="form-check-label") }}
         </div>
         <div class="form-check form-switch">
+          {{ form.send_email_kreiran_principial(class="form-check-input") }} 
+          {{ form.send_email_kreiran_principial.label(class="form-check-label") }}
+        </div>
+        <div class="form-check form-switch">
           {{ form.send_email_zavrsen(class="form-check-input") }} 
           {{ form.send_email_zavrsen.label(class="form-check-label") }}
         </div>
-        <div class="form-check form-switch">
-          {{ form.send_email_obracunat(class="form-check-input") }} 
-          {{ form.send_email_obracunat.label(class="form-check-label") }}
-        </div>
-        <!--<legend class="border-bottom mb-3">Buduće nadogradnje softvera:</legend>-->
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-          <label class="form-check-label" for="flexSwitchCheckDefault">Slanje mejla blagajniku</label>
-        </div>
+        <!-- dodaj if blok -->
+        {% if premium %}
+          <div class="form-check form-switch">
+            {{ form.send_email_obracunat_cashier(class="form-check-input") }} 
+            {{ form.send_email_obracunat_cashier.label(class="form-check-label") }}
+          </div>
+        {% else %}
+          <legend class="border-bottom mb-3">Podešavanje opcija za premijum paket:</legend>
+          <div class="form-check form-switch">
+            {{ form.send_email_obracunat_cashier(class="form-check-input", readonly=True, disabled=True) }} 
+            {{ form.send_email_obracunat_cashier.label(class="form-check-label") }}
+          </div>
+        {% endif %}
         <div class="button-group">
           <br>
           <a class="btn btn-info" href="{{url_for('main.home')}}">Nazad</a>

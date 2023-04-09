@@ -23,12 +23,19 @@ def user_list():
 @users.route("/register_u", methods=['GET', 'POST'])
 # @login_required
 def register_u():
+    premium = Company.query.filter_by(id=current_user.user_company.id).first()
+    number_of_users = User.query.filter_by(company_id=current_user.company_id).count()
+    print(f'broj korisnika u kompaniji je: {number_of_users}')
+    print(f'max broj korisnika: {premium.premium_users}')
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.is_authenticated and (current_user.authorization not in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier']):
         flash('Nemate autorizaciju da posetite ovu stranicu.', 'danger')
         return redirect(url_for('main.home'))
+    elif number_of_users >= premium.premium_users:
+        flash(f'Dostigi ste limit od {premium.premium_users} korisničkih profila', 'danger')
+        return render_template('premium.html', title='Premium licenca', legend='Premium licenca')
     form = RegistrationUserForm()
     form.reset()
     form.default_vehicle.choices = [(0, "----")] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).order_by('vehicle_type').all()]

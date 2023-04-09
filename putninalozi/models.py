@@ -22,6 +22,9 @@ class Company(db.Model):
     company_mail = db.Column(db.String(120), unique=True, nullable=False)
     company_phone = db.Column(db.String(20), nullable=False)
     company_logo = db.Column(db.String(60), nullable=False)
+    premium_expiration_date = db.Column() #! datum isticanja licence
+    premium_users = db.Column(db.Integer, nullable=False) #! max broj korisnika
+    premium_warrants = db.Column(db.Integer, nullable=False) #! max broj putnih naloga
     users = db.relationship('User', backref='user_company', lazy=True)
     vehicles = db.relationship('Vehicle', backref='vehicle_company', lazy=True)
     travelwarrants = db.relationship('TravelWarrant', backref='travelwarrant_company', lazy=True)
@@ -142,8 +145,9 @@ class Settings(db.Model):
     daily_wage_domestic = db.Column(db.Float, nullable=False)
     daily_wage_abroad = db.Column(db.Float, nullable=False)
     send_email_kreiran = db.Column(db.Boolean, nullable=False)
+    send_email_kreiran_principial = db.Column(db.Boolean, nullable=False)
     send_email_zavrsen = db.Column(db.Boolean, nullable=False)
-    send_email_obracunat = db.Column(db.Boolean, nullable=False)
+    send_email_obracunat_cashier = db.Column(db.Boolean, nullable=False)
 
 
 db.create_all()
