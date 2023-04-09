@@ -68,7 +68,7 @@ def register_tw(korisnik_id, datum):
     premium = Company.query.filter_by(id=current_user.user_company.id).first()
     number_of_warrants = TravelWarrant.query.filter_by(company_id=current_user.company_id).count()
     now = datetime.now().date()
-    expiration_date = datetime.strptime(premium.premium_expiration_date, '%Y-%m-%d').date()
+    expiration_date = premium.premium_expiration_date.date()
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))

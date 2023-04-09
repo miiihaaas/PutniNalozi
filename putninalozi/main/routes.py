@@ -29,8 +29,10 @@ def settings(company_id):
     now_plus_one_year = now + timedelta(days=365) 
     premium = Company.query.filter_by(id=company_id).first()
     print(f'{now_plus_one_year=}')
-    end_of_premium=datetime.strptime(premium.premium_expiration_date, '%Y-%m-%d').date()
+    # end_of_premium=datetime.strptime(premium.premium_expiration_date, '%Y-%m-%d').date()
+    end_of_premium=premium.premium_expiration_date.date()
     print(f'{end_of_premium=}')
+    print(type(end_of_premium))
     if now_plus_one_year > end_of_premium:
         premium = True
     else:

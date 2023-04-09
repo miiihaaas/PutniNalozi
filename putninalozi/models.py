@@ -22,7 +22,7 @@ class Company(db.Model):
     company_mail = db.Column(db.String(120), unique=True, nullable=False)
     company_phone = db.Column(db.String(20), nullable=False)
     company_logo = db.Column(db.String(60), nullable=False)
-    premium_expiration_date = db.Column() #! datum isticanja licence
+    premium_expiration_date = db.Column(db.DateTime) #! datum isticanja licence
     premium_users = db.Column(db.Integer, nullable=False) #! max broj korisnika
     premium_warrants = db.Column(db.Integer, nullable=False) #! max broj putnih naloga
     users = db.relationship('User', backref='user_company', lazy=True)
