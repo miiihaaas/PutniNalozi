@@ -63,3 +63,4 @@ def settings(company_id):
     return render_template('settings.html', title='Podešavanja', 
                             legend='Podešavanja', global_settings=global_settings, 
                             form=form, premium=premium)
+    

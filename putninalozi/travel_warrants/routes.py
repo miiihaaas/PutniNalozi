@@ -513,7 +513,7 @@ def travel_warrant_profile(warrant_id):
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
                     #todo send email zaposlenom, blagajniku
-                    if global_settings.send_email_obracunat or global_settings.send_email_obracunat_cashier:
+                    if global_settings.send_email_obracunat_cashier:
                         send_email(warrant, current_user, file_name, global_settings)
                         flash(f'Blagajnik je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 else:
@@ -555,7 +555,7 @@ def travel_warrant_profile(warrant_id):
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
                     #todo send email zaposlenom, blagajniku
-                    if global_settings.send_email_obracunat or global_settings.send_email_obracunat_cashier:
+                    if global_settings.send_email_obracunat_cashier:
                         send_email(warrant, current_user, file_name, global_settings)
                         flash(f'Blagajnik je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 else:
@@ -597,7 +597,7 @@ def travel_warrant_profile(warrant_id):
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
                     #todo send email zaposlenom, blagajniku
-                    if global_settings.send_email_obracunat or global_settings.send_email_obracunat_cashier:
+                    if global_settings.send_email_obracunat_cashier:
                         send_email(warrant, current_user, file_name, global_settings)
                         flash(f'Blagajnik je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 else:
@@ -642,7 +642,7 @@ def travel_warrant_profile(warrant_id):
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
                     #todo send email zaposlenom, blagajniku
-                    if global_settings.send_email_obracunat or global_settings.send_email_obracunat_cashier:
+                    if global_settings.send_email_obracunat_cashier:
                         send_email(warrant, current_user, file_name, global_settings)
                         flash(f'Blagajnik je dobio informaciju da je putni nalog završen - napiši lepše tekst', 'success')
                 else:
@@ -683,7 +683,7 @@ def travel_warrant_profile(warrant_id):
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
-            if global_settings.send_email_obracunat:
+            if global_settings.send_email_obracunat_cashier:
                 send_email(warrant, current_user, file_name)
                 flash(f'mejl je poslat blagajniku i korisniku - napiši lepše tekst', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
