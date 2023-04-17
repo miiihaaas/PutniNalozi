@@ -306,7 +306,7 @@ def travel_warrant_profile(warrant_id):
                         #todo send email nalogodavcu
                         if global_settings.send_email_zavrsen:
                             send_email(warrant, current_user, warrant.file_name, global_settings)
-                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
                     else:
                         warrant.status = form.status.data
 
@@ -333,7 +333,7 @@ def travel_warrant_profile(warrant_id):
                         #todo send email nalogodavcu
                         if global_settings.send_email_zavrsen:
                             send_email(warrant, current_user, warrant.file_name, global_settings)
-                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
                     else:
                         warrant.status = form.status.data
 
@@ -360,7 +360,7 @@ def travel_warrant_profile(warrant_id):
                         #todo send email nalogodavcu
                         if global_settings.send_email_zavrsen:
                             send_email(warrant, current_user, warrant.file_name, global_settings)
-                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
                     else:
                         warrant.status = form.status.data
 
@@ -391,7 +391,7 @@ def travel_warrant_profile(warrant_id):
                         #todo send email nalogodavcu
                         if global_settings.send_email_zavrsen:
                             send_email(warrant, current_user, warrant.file_name, global_settings)
-                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
                     else:
                         warrant.status = form.status.data
 
@@ -514,7 +514,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = 'završen'
                     if global_settings.send_email_zavrsen:
                         send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
                     #todo send email zaposlenom, blagajniku
@@ -559,7 +559,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = 'završen'
                     if global_settings.send_email_zavrsen:
                         send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
                     #todo send email zaposlenom, blagajniku
@@ -604,7 +604,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = 'završen'
                     if global_settings.send_email_zavrsen:
                         send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
                     #todo send email zaposlenom, blagajniku
@@ -652,7 +652,7 @@ def travel_warrant_profile(warrant_id):
                     warrant.status = 'završen'
                     if global_settings.send_email_zavrsen:
                         send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.travelwarrant_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
                 elif request.form.get('dugme') == 'Obračunajte':
                     warrant.status = 'obračunat'
                     #todo send email zaposlenom, blagajniku
