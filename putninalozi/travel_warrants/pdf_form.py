@@ -418,7 +418,7 @@ Obračunat je putni nalog {warrant.travel_warrant_number}. Možete izvršiti upl
 
 Pozdrav.'''
         if global_settings.send_email_obracunat_cashier:
-            recipients = [warrant.travelwarrant_user.email]
+            recipients = [warrant.cashier_user.email]
     else:
         return
     # ako je storniran nalog: da li treba nekoga da obaveštava?
