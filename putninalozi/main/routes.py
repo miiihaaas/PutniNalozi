@@ -46,7 +46,7 @@ def settings(company_id):
         global_settings.daily_wage_domestic = form.daily_wage_domestic.data
         global_settings.daily_wage_abroad = form.daily_wage_abroad.data
         global_settings.send_email_kreiran = form.send_email_kreiran.data
-        global_settings.send_email_kreiran_principial = form.send_email_kreiran_principial.data
+        global_settings.send_email_kreiran_principal = form.send_email_kreiran_principal.data
         global_settings.send_email_zavrsen = form.send_email_zavrsen.data
         global_settings.send_email_obracunat_cashier = form.send_email_obracunat_cashier.data
         db.session.commit()
@@ -56,7 +56,7 @@ def settings(company_id):
         form.daily_wage_domestic.data = global_settings.daily_wage_domestic
         form.daily_wage_abroad.data = global_settings.daily_wage_abroad
         form.send_email_kreiran.data = global_settings.send_email_kreiran
-        form.send_email_kreiran_principial.data = global_settings.send_email_kreiran_principial
+        form.send_email_kreiran_principal.data = global_settings.send_email_kreiran_principal
         form.send_email_zavrsen.data = global_settings.send_email_zavrsen
         form.send_email_obracunat_cashier.data = global_settings.send_email_obracunat_cashier
 

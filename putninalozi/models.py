@@ -145,7 +145,7 @@ class Settings(db.Model):
     daily_wage_domestic = db.Column(db.Float, nullable=False)
     daily_wage_abroad = db.Column(db.Float, nullable=False)
     send_email_kreiran = db.Column(db.Boolean, nullable=False)
-    send_email_kreiran_principial = db.Column(db.Boolean, nullable=False)
+    send_email_kreiran_principal = db.Column(db.Boolean, nullable=False)
     send_email_zavrsen = db.Column(db.Boolean, nullable=False)
     send_email_obracunat_cashier = db.Column(db.Boolean, nullable=False)
 

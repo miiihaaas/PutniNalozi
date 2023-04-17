@@ -393,12 +393,12 @@ Detaljnije informacije o putnom nalogu mogu se videti u dokumentu u prilogu ili 
 
 S poštovanjem,
 {current_user.name} {current_user.surname}'''
-        if global_settings.send_email_kreiran and global_settings.send_email_kreiran_principial:
+        if global_settings.send_email_kreiran and global_settings.send_email_kreiran_principal:
             recipients = [warrant.travelwarrant_user.email]
             cc = [warrant.principal_user.email]
         elif global_settings.send_email_kreiran:
             recipients = [warrant.travelwarrant_user.email]
-        elif global_settings.send_email_kreiran_principial:
+        elif global_settings.send_email_kreiran_principal:
             recipients = [warrant.principal_user.email]
     # ako je završen nalog: adminu / nalogodavcu
     elif warrant.status == 'završen':
