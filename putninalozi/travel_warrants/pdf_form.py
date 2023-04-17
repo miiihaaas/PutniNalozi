@@ -406,18 +406,11 @@ S poštovanjem,
         subject = f'Završen je putni nalog broj: {warrant.travel_warrant_number}'
         text_body = f'''Poštovani,
 
-Završen je putni nalog broj {warrant.travel_warrant_number}. Klikom na link u nastavku, možete <a href="{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}">obračunati putni nalog</a>.
+Završen je putni nalog broj {warrant.travel_warrant_number}. Klikom na link u nastavku, možete obračunati putni nalog:
+{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
 S poštovanjem,
 {warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}'''
-
-#         text_body = f'''Poštovani,
-
-# Završen je putni nalog broj {warrant.travel_warrant_number}. Klikom na link u nastavku, možete obračunati putni nalog:
-# {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
-
-# S poštovanjem,
-# {warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}'''
         if global_settings.send_email_zavrsen:
             recipients = [warrant.principal_user.email]
     # ako je obračunat nalog: blagajniku i korisniku
