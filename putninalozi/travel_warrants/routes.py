@@ -4,6 +4,7 @@ from putninalozi import db, bcrypt
 from putninalozi.models import TravelWarrant, Company, User, Vehicle, TravelWarrantExpenses, Settings
 from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm, EditTravelWarrantExpenses
 from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_form, send_email
+from putninalozi.travel_warrants.functions import proracun_broja_dnevnica
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime, timedelta
 from sqlalchemy import or_, not_
@@ -11,30 +12,6 @@ from sqlalchemy import or_, not_
 
 travel_warrants = Blueprint('travel_warrants', __name__)
 
-def proracun_broja_dnevnica(br_casova):
-    if br_casova < 8:
-        br_dnevnica = 0.0
-        print(f'ispod 8h: {br_dnevnica=}')
-    elif br_casova < 12:
-        br_dnevnica = 0.5
-        print(f'od 8h do 12h: {br_dnevnica=}')
-    else:
-        br_dnevnica = br_casova / 24
-        print(f'proračun: {br_dnevnica=}')
-        if br_dnevnica % 1 <= (8/24): #zaokruživanje na 0.5 (da li je 0-12h ili 8-12h)
-            #zaokruži na x.0
-            br_dnevnica = br_dnevnica // 1
-            print(f'zaokruživanje na pola dnevnice: {br_dnevnica=}')
-        elif br_dnevnica % 1 <= (12/24): #zaokruživanje na 0.5 (da li je 0-12h ili 8-12h)
-            #zaokruži na x.5
-            br_dnevnica = br_dnevnica // 1 + 0.5
-            print(f'zaokruživanje na pola dnevnice: {br_dnevnica=}')
-        else:
-            #zaokruži na x+1
-            br_dnevnica = br_dnevnica // 1 + 1
-            print(f'zaokruživanje na celu dnevnicu: {br_dnevnica=}')
-    br_dnevnica = br_dnevnica * 1.0
-    return br_dnevnica
 
 @travel_warrants.route("/download/<string:file_name>")
 def download_file(file_name):
@@ -247,6 +224,7 @@ def travel_warrant_profile(warrant_id):
     vehicle_personal_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='private').order_by('vehicle_type').all()]
     print(f'{vehicle_company_list=}')
     print(f'{vehicle_personal_list=}')
+    
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
@@ -697,6 +675,7 @@ def travel_warrant_profile(warrant_id):
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
+            return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
             # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
             # form.user_id.data = warrant.user_id
