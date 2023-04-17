@@ -387,7 +387,8 @@ def send_email(warrant, current_user, file_name, global_settings):
     if warrant.status == 'kreiran':
         subject = f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}'
         text_body = f'''Poštovani,
-Kreiran je putni nalog {warrant.travel_warrant_number}.
+
+Kreiran je putni nalog broj{warrant.travel_warrant_number}.
 Detaljnije informacije o putnom nalogu mogu se videti u dokumentu u prilogu ili klikom na link:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
@@ -404,10 +405,11 @@ S poštovanjem,
     elif warrant.status == 'završen':
         subject = f'Završen je putni nalog broj: {warrant.travel_warrant_number}'
         text_body = f'''Poštovani,
-Završen je putni nalog {warrant.travel_warrant_number}. Klikom na link u nastavku, možete obračunati putni nalog:
+
+Završen je putni nalog btoj {warrant.travel_warrant_number}. Klikom na link u nastavku, možete obračunati putni nalog:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
-S poštovanjem.
+S poštovanjem,
 {warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}'''
         if global_settings.send_email_zavrsen:
             recipients = [warrant.principal_user.email]
@@ -415,7 +417,8 @@ S poštovanjem.
     elif warrant.status == 'obračunat':
         subject = f'Obračunat je putni nalog broj: {warrant.travel_warrant_number}'
         text_body = f'''Poštovani,
-Obračunat je putni nalog {warrant.travel_warrant_number}. Možete izvršiti isplatu dnevnica prema podacima iz dokumenta iz priloga.'''
+        
+Obračunat je putni nalog broj {warrant.travel_warrant_number}. Možete izvršiti isplatu dnevnica prema podacima iz dokumenta u prilogu.'''
         if global_settings.send_email_obracunat_cashier:
             recipients = [warrant.cashier_user.email]
     else:
