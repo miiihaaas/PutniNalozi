@@ -64,3 +64,6 @@ def settings(company_id):
                             legend='Podešavanja', global_settings=global_settings, 
                             form=form, premium=premium)
     
+@main.route("/standards")
+def standards():
+    return render_template('standards.html', title='Sdandardi', legend='Sdandardi')
