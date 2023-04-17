@@ -388,7 +388,7 @@ def send_email(warrant, current_user, file_name, global_settings):
         subject = f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}'
         text_body = f'''Poštovani,
 
-Kreiran je putni nalog broj{warrant.travel_warrant_number}.
+Kreiran je putni nalog broj {warrant.travel_warrant_number}.
 Detaljnije informacije o putnom nalogu mogu se videti u dokumentu u prilogu ili klikom na link:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
@@ -406,7 +406,7 @@ S poštovanjem,
         subject = f'Završen je putni nalog broj: {warrant.travel_warrant_number}'
         text_body = f'''Poštovani,
 
-Završen je putni nalog btoj {warrant.travel_warrant_number}. Klikom na link u nastavku, možete obračunati putni nalog:
+Završen je putni nalog broj {warrant.travel_warrant_number}. Klikom na link u nastavku, možete obračunati putni nalog:
 {url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
 
 S poštovanjem,
