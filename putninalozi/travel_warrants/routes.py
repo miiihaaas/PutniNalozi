@@ -684,7 +684,7 @@ def travel_warrant_profile(warrant_id):
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
             if global_settings.send_email_obracunat_cashier:
-                send_email(warrant, current_user, file_name)
+                send_email(warrant, current_user, file_name, global_settings)
                 flash(f'mejl je poslat blagajniku i korisniku - napiši lepše tekst', 'success')
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
