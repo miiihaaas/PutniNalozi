@@ -447,9 +447,9 @@ def travel_warrant_profile(warrant_id):
                 form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
                 form.status.data = str(warrant.status)
 
-            end_datum = warrant.start_datetime + timedelta(days=30)
-            start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
-            start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
+                end_datum = warrant.start_datetime + timedelta(days=30)
+                start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
+                start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
 
             print(f'EditUser: {form.errors=}')
 
@@ -726,9 +726,9 @@ def travel_warrant_profile(warrant_id):
             form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat") , ("storniran", "storniran")]
             form.status.data = str(warrant.status)
 
-        end_datum = warrant.start_datetime + timedelta(days=30)
-        start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
-        start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
+            end_datum = warrant.start_datetime + timedelta(days=30)
+            start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
+            start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
 
         print(f'EditAdmin: {form.errors=}')
 
