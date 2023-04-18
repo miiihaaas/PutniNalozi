@@ -90,8 +90,8 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     pdf.cell(20, 4, f'', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Po', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
-    pdf.multi_cell(56, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
+    pdf.multi_cell(56, 4, f'''Vreme odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+Vreme povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
     pdf.cell(20, 8, f'{round(br_casova)}', border=1, new_y='LAST', align='L')
     pdf.cell(20, 8, f'{br_dnevnica}', border=1, new_y='LAST', align='L')
     pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
@@ -109,7 +109,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
 
     pdf.cell(56, 4, f'Prevozni troškovi', border=1, ln=False, fill = True, align='L')
     pdf.cell(40, 8, f'Vrsta prevoza', border=1, ln=False, fill = True, align='C')
-    pdf.cell(20, 8, f'km.', border=1, ln=False, fill = True, align='C')
+    pdf.cell(20, 8, f'km', border=1, ln=False, fill = True, align='C')
     pdf.cell(35, 8, f'dinara', border=1, ln=True, fill = True, align='C')
     pdf.cell(28, -4, f'od', border=1, ln=False, fill = True, align='C')
     pdf.cell(28, -4, f'do', border=1, ln=True, fill = True, align='C')
@@ -229,7 +229,7 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
 
     if warrant.abroad:
-        pdf.multi_cell(60, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+        pdf.multi_cell(60, 4, f'''Vreme odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
 Izlazak iz države: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
         pdf.cell(20, 8, f'{round(br_casova_start)}', border=1, new_y='LAST', align='L')
         pdf.cell(20, 8, f'{br_dnevnica_start}', border=1, new_y='LAST', align='L')
@@ -247,15 +247,15 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
         pdf.cell(35, 8, f'{(float(warrant.daily_wage_abroad) * br_dnevnica_ino):.2f} {warrant.daily_wage_abroad_currency}', border=1, ln=True, align='L')
 
         pdf.multi_cell(60, 4, f'''Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M")}
-Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
+Vreme povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
         pdf.cell(20, 8, f'{round(br_casova_end)}', border=1, new_y='LAST', align='L')
         pdf.cell(20, 8, f'{br_dnevnica_end}', border=1, new_y='LAST', align='L')
         pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
         pdf.cell(35, 8, f'{warrant.daily_wage:.2f} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
         pdf.cell(35, 8, f'{(float(warrant.daily_wage) * br_dnevnica_end):.2f} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
     else:
-        pdf.multi_cell(60, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
+        pdf.multi_cell(60, 4, f'''Vreme odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+Vreme povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
         # pdf.set_xy(70, 166)
         pdf.cell(20, 8, f'{round(br_casova)}', border=1, new_y='LAST', align='L')
         pdf.cell(20, 8, f'{br_dnevnica}', border=1, new_y='LAST', align='L')
@@ -322,7 +322,7 @@ Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, n
     saldo = int(saldo)
     # saldo_slovima = number_to_text(int(saldo))
     saldo_slovima = num2words(saldo, lang="sr")
-    saldo_ino_slovima = num2words(int(saldo_ino))
+    saldo_ino_slovima = num2words(int(saldo_ino, lang="sr")) #! dodaj srpski jezik, vidi zašto je int...
     # saldo_ino_slovima = num2words(saldo_ino, lang="sr")
     
     
@@ -384,7 +384,7 @@ Obračunat je putni nalog broj {warrant.travel_warrant_number}. Možete izvršit
         return
     # ako je storniran nalog: da li treba nekoga da obaveštava?
     msg = Message(subject,
-                    sender='no_replay@putninalozi.online',
+                    sender='noreply@putninalozi.online',
                     recipients=recipients, cc=cc)
     msg.body = text_body
     path = 'static/pdf_forms/'
