@@ -322,7 +322,7 @@ Vreme povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1,
     saldo = int(saldo)
     # saldo_slovima = number_to_text(int(saldo))
     saldo_slovima = num2words(saldo, lang="sr")
-    saldo_ino_slovima = num2words(int(saldo_ino, lang="sr")) #! dodaj srpski jezik, vidi zašto je int...
+    saldo_ino_slovima = num2words(int(saldo_ino), lang="sr") #! dodaj srpski jezik, vidi zašto je int...
     # saldo_ino_slovima = num2words(saldo_ino, lang="sr")
     
     
