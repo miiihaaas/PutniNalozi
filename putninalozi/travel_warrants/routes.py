@@ -167,24 +167,29 @@ def register_tw(korisnik_id, datum):
         db.session.add(warrant)
         db.session.commit()
 
-        br_casova = warrant.end_datetime - warrant.start_datetime
-        print(f'razlika u vremenu {br_casova}')
-        br_casova = br_casova.total_seconds() / 3600
-        print(f'razlika u vremenu {br_casova} u satima')
-
-        if warrant.contry_return != None or warrant.contry_leaving != None:
-            br_casova_ino = warrant.contry_return - warrant.contry_leaving
-            br_casova_ino = br_casova_ino.total_seconds() / 3600
+        if warrant.abroad:
+            br_casova = form.end_datetime.data - datum
+            br_casova = br_casova.total_seconds() / 3600
+            br_casova_ino = 0                                                           #! vreme provedeno u inostranstvu
+            br_casova_start = 0                                                         #! vreme provedeno u zemlji pre izlaska iz zemlje
+            br_casova_end = 0                                                           #! vreme provedeno u zemlji po povratku iz inostranstva
+            br_dnevnica_start = 0
+            br_dnevnica_end = 0
+            br_dnevnica_ino = 0
+            br_dnevnica = proracun_broja_dnevnica(br_casova)
         else:
-            br_casova_ino = 0.0
-
-        br_casova = br_casova - br_casova_ino
-
-        br_dnevnica = proracun_broja_dnevnica(br_casova)
-        br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
+            br_casova = form.end_datetime.data - datum
+            br_casova = br_casova.total_seconds() / 3600  
+            br_casova_ino = 0
+            br_casova_start = 0
+            br_casova_end = 0
+            br_dnevnica = proracun_broja_dnevnica(br_casova)
+            br_dnevnica_start = 0
+            br_dnevnica_end = 0
+            br_dnevnica_ino = 0
         print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
-        file_name, text_form = create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino)
+        file_name, text_form = create_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino)
         warrant.file_name = file_name
         # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
         warrant.text_form = text_form
@@ -377,23 +382,31 @@ def travel_warrant_profile(warrant_id):
                     print('službeno vozilo - c_user')
     ##########################################################################################
 
-                br_casova = form.end_datetime.data - form.start_datetime.data
-                print(f'razlika u vremenu {br_casova}')
-                br_casova = br_casova.total_seconds() / 3600
-                print(f'razlika u vremenu {br_casova} u satima')
                 if warrant.abroad:
+                    br_casova = 0
                     br_casova_ino = warrant.contry_return - warrant.contry_leaving
-                    br_casova_ino = br_casova_ino.total_seconds() / 3600
+                    br_casova_ino = br_casova_ino.total_seconds() / 3600                        #! vreme provedeno u inostranstvu
+                    br_casova_start = warrant.contry_leaving - form.start_datetime.data
+                    br_casova_start = br_casova_start.total_seconds() / 3600                    #! vreme provedeno u zemlji pre izlaska iz zemlje
+                    br_casova_end = form.end_datetime.data - warrant.contry_return
+                    br_casova_end = br_casova_end.total_seconds() / 3600                        #! vreme provedeno u zemlji po povratku iz inostranstva
+                    br_dnevnica_start = proracun_broja_dnevnica(br_casova_start)
+                    br_dnevnica_end = proracun_broja_dnevnica(br_casova_end)
+                    br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
+                    br_dnevnica = br_dnevnica_start + br_dnevnica_end
                 else:
+                    br_casova = form.end_datetime.data - form.start_datetime.data
+                    br_casova = br_casova.total_seconds() / 3600  
                     br_casova_ino = 0
-
-                br_casova = br_casova - br_casova_ino
-
-                br_dnevnica = proracun_broja_dnevnica(br_casova)
-                br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
+                    br_casova_start = 0
+                    br_casova_end = 0
+                    br_dnevnica = proracun_broja_dnevnica(br_casova)
+                    br_dnevnica_start = 0
+                    br_dnevnica_end = 0
+                    br_dnevnica_ino = 0
                 print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
-                file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
+                file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino, troskovi)
                 print(f'update naloga: {text_form=}')
                 warrant.file_name = file_name
                 # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
@@ -644,24 +657,31 @@ def travel_warrant_profile(warrant_id):
                 print('službeno vozilo')
 
                 ##########################################################################################
-            br_casova = form.end_datetime.data - form.start_datetime.data
-            print(f'razlika u vremenu {br_casova}')
-            br_casova = br_casova.total_seconds() / 3600
-            print(f'razlika u vremenu {br_casova} u satima')
-
-            if warrant.contry_return != None or warrant.contry_leaving != None:
+            if warrant.abroad:
+                br_casova = 0
                 br_casova_ino = warrant.contry_return - warrant.contry_leaving
-                br_casova_ino = br_casova_ino.total_seconds() / 3600
+                br_casova_ino = br_casova_ino.total_seconds() / 3600                        #! vreme provedeno u inostranstvu
+                br_casova_start = warrant.contry_leaving - form.start_datetime.data
+                br_casova_start = br_casova_start.total_seconds() / 3600                    #! vreme provedeno u zemlji pre izlaska iz zemlje
+                br_casova_end = form.end_datetime.data - warrant.contry_return
+                br_casova_end = br_casova_end.total_seconds() / 3600                        #! vreme provedeno u zemlji po povratku iz inostranstva
+                br_dnevnica_start = proracun_broja_dnevnica(br_casova_start)
+                br_dnevnica_end = proracun_broja_dnevnica(br_casova_end)
+                br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
+                br_dnevnica = br_dnevnica_start + br_dnevnica_end
             else:
-                br_casova_ino = 0.0
-
-            br_casova = br_casova - br_casova_ino
-
-            br_dnevnica = proracun_broja_dnevnica(br_casova)
-            br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
+                br_casova = form.end_datetime.data - form.start_datetime.data
+                br_casova = br_casova.total_seconds() / 3600  
+                br_casova_ino = 0
+                br_casova_start = 0
+                br_casova_end = 0
+                br_dnevnica = proracun_broja_dnevnica(br_casova)
+                br_dnevnica_start = 0
+                br_dnevnica_end = 0
+                br_dnevnica_ino = 0
             print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
-            file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi)
+            file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino, troskovi)
             warrant.file_name = file_name
             # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
             warrant.text_form = text_form

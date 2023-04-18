@@ -3,73 +3,13 @@ from flask import url_for
 from flask_mail import Message
 from putninalozi import app, mail
 from num2words import num2words
-import datetime
-from putninalozi.models import TravelWarrant
+from putninalozi.travel_warrants.functions import replace_serbian_characters, get_warrant_details
 
 
-def replace_serbian_characters(string):
-    replacements = {
-        "č": "c",
-        "ć": "c",
-        "đ": "dj",
-        "ž": "z",
-        "š": "s",
-        "Č": "C",
-        "Ć": "C",
-        "Đ": "Dj",
-        "Ž": "Z",
-        "Š": "S"
-    }
-    for key, value in replacements.items():
-        string = string.replace(key, value)
-    return string
-
-def get_warrant_details(warrant):
-    warrant_number = warrant.travel_warrant_number
-    name = warrant.travelwarrant_user.name
-    surname = warrant.travelwarrant_user.surname
-    authorization = warrant.travelwarrant_user.authorization #!
-    workplace = warrant.travelwarrant_user.workplace
-    with_task = warrant.with_task
-    relation = warrant.relation
-    abroad_contry = warrant.abroad_contry
-    costs_pays = warrant.costs_pays
-    start_datetime = warrant.start_datetime.strftime('%d.%m.%Y')
-    end_datetime = warrant.end_datetime.strftime('%d.%m.%Y')
-    if warrant.together_with != '':
-        try:
-            regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_registration
-            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_brand
-        except AttributeError:
-            # If the 'vehicle_registration' attribute is not found, try getting the 'vehicle_registration' from the 'travelwarrant_personal' object
-            regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_registration
-            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_brand
-    else:
-        regisrtacija_kolege_koji_vozi = ''
-        automobil_kolege_koji_vozi = ''
-        
-    rod = []
-    if warrant.travelwarrant_user.gender == "1":
-        rod=["Radnik", "raspoređen", "Kolega", 'izvršio']
-        pozicija = ["Zaposleni", "Član", "Funkcioner", "Osnivač"]
-    elif warrant.travelwarrant_user.gender == "2":
-        rod=["Radnica", "raspoređena", "Koleginice", 'izvršila']
-        pozicija = ["Zaposlena", "Članica", "Funkcionerka", "Osnivačica"]
-        
-    if authorization in ["c_user", "c_admin", "c_cashier"]:
-        startna_recenica = f"{pozicija[0]} {name} {surname} {rod[1]} na poslove radnog mesta {workplace}"
-    elif authorization == 'c_member':
-        startna_recenica = f"{pozicija[1]} {name} {surname}"
-    elif authorization == 'c_functionary':
-        startna_recenica = f"{pozicija[2]} {name} {surname}"
-    elif authorization == 'c_founder':
-        startna_recenica = f"{pozicija[3]} {name} {surname}"
-    return warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica
-
-def create_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino):
+def create_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino):
     warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
 
-    #za footer
+    #za header
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
     company_name = warrant.travelwarrant_company.companyname
     company_address = warrant.travelwarrant_company.company_address + f" {warrant.travelwarrant_company.company_address_number}"
@@ -192,6 +132,8 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     pdf.cell(186, 4, f'', border=1, ln=True, fill = True, align='L')
     pdf.multi_cell(186, 4, f'''U mestu {warrant.travelwarrant_company.company_city}, dana {warrant.start_datetime.strftime("%d/%m/%Y")}, {warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}''', border=1, ln=True, align='C')
     pdf.multi_cell(0, 4, f'', ln=True, align='L')
+    pdf.set_line_width(0.2)
+    pdf.line(196,174,196,240)
 
 
 
@@ -201,10 +143,10 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     return file_name, text_form
 
 
-def update_pdf_form(warrant, br_casova, br_casova_ino, br_dnevnica, br_dnevnica_ino, troskovi):
+def update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino, troskovi):
     warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
 
-    #za footer
+    #za header
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
     company_name = warrant.travelwarrant_company.companyname
     company_address = warrant.travelwarrant_company.company_address + f" {warrant.travelwarrant_company.company_address_number}"
@@ -285,24 +227,41 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     pdf.cell(20, 4, f'', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Po', border=1, ln=False, fill = True, align='L')
     pdf.cell(35, 4, f'Svega', border=1, ln=True, fill = True, align='L')
-    pdf.multi_cell(60, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
-Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
-    # pdf.set_xy(70, 166)
-    pdf.cell(20, 8, f'{round(br_casova)}', border=1, new_y='LAST', align='L')
-    pdf.cell(20, 8, f'{br_dnevnica}', border=1, new_y='LAST', align='L')
-    pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
-    pdf.cell(35, 8, f'{warrant.daily_wage:.2f} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
-    pdf.cell(35, 8, f'{(float(warrant.daily_wage) * br_dnevnica):.2f} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
+
     if warrant.abroad:
+        pdf.multi_cell(60, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+Izlazak iz države: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
+        pdf.cell(20, 8, f'{round(br_casova_start)}', border=1, new_y='LAST', align='L')
+        pdf.cell(20, 8, f'{br_dnevnica_start}', border=1, new_y='LAST', align='L')
+        pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
+        pdf.cell(35, 8, f'{warrant.daily_wage:.2f} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
+        pdf.cell(35, 8, f'{(float(warrant.daily_wage) * br_dnevnica_start):.2f} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
+        
         pdf.multi_cell(60, 4, f'''Izlazak iz države: {warrant.contry_leaving.strftime("%d/%m/%Y, %H:%M") if warrant.contry_leaving != None else '-'}
 Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warrant.contry_return != None else '-'}''', border=1, new_y='TOP', align='L')
-        # pdf.set_xy(70, 174)
+        
         pdf.cell(20, 8, f'{round(br_casova_ino)}', border=1, new_y='LAST', align='L')
         pdf.cell(20, 8, f'{br_dnevnica_ino}', border=1, ln=False, align='L')
         pdf.cell(20, 8, f'', border=1, ln=False, align='L')
         pdf.cell(35, 8, f'{warrant.daily_wage_abroad:.2f} {warrant.daily_wage_abroad_currency}', border=1, ln=False, align='L')
         pdf.cell(35, 8, f'{(float(warrant.daily_wage_abroad) * br_dnevnica_ino):.2f} {warrant.daily_wage_abroad_currency}', border=1, ln=True, align='L')
 
+        pdf.multi_cell(60, 4, f'''Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M")}
+Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
+        pdf.cell(20, 8, f'{round(br_casova_end)}', border=1, new_y='LAST', align='L')
+        pdf.cell(20, 8, f'{br_dnevnica_end}', border=1, new_y='LAST', align='L')
+        pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
+        pdf.cell(35, 8, f'{warrant.daily_wage:.2f} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
+        pdf.cell(35, 8, f'{(float(warrant.daily_wage) * br_dnevnica_end):.2f} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
+    else:
+        pdf.multi_cell(60, 4, f'''Dan odlaska: {warrant.start_datetime.strftime("%d/%m/%Y, %H:%M")}
+Dan povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1, new_y='TOP', align='L')
+        # pdf.set_xy(70, 166)
+        pdf.cell(20, 8, f'{round(br_casova)}', border=1, new_y='LAST', align='L')
+        pdf.cell(20, 8, f'{br_dnevnica}', border=1, new_y='LAST', align='L')
+        pdf.cell(20, 8, f'', border=1, new_y='LAST', align='L')
+        pdf.cell(35, 8, f'{warrant.daily_wage:.2f} {warrant.daily_wage_currency}', border=1, new_y='LAST', align='L')
+        pdf.cell(35, 8, f'{(float(warrant.daily_wage) * br_dnevnica):.2f} {warrant.daily_wage_currency}', border=1, new_x='LMARGIN', new_y='NEXT', align='L')
 
     pdf.cell(0, 8, f'Troškovi', border=1, ln=True, fill = True, align='C')
 
