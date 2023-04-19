@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <div class="content-section" onload="myFunction()">
-  <form action="" method="POST">
+  <form id="myForm" action="" method="POST">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
       {% if form.errors %} debag line: {{ form.errors }} {% endif %}
@@ -421,11 +421,7 @@
       <br />
       <hr />
       <div class="form-group">
-        <a
-          class="btn btn-info btn-block"
-          href="{{ url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id) }}"
-          >Dodajte trošak</a
-        >
+        <input type="submit" name="dugme" class="btn btn-info btn-block" href="#" value="Dodajte trošak">
       </div>
       <br />
       <table id="data" border="1" class="table table-striped twtable">
@@ -493,7 +489,7 @@
   <div class="modal-dialog" role="document">
   <div class="modal-content">
       <div class="modal-header">
-      <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želiite da trajno izbišete putninalog {{warrant.travel_warrant_number}}?</h5>
+      <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želite da trajno izbrišete putni nalog {{warrant.travel_warrant_number}}?</h5>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
       </button>
@@ -503,7 +499,7 @@
         <br>Sa zadatkom: {{ warrant.with_task }}
         <br>Relacija: {{ warrant.relation }}
         <br>
-        <br> Da biste izbrisali putni nalog potrebno je uneti svoju šifru.
+        <br> Da biste izbrisali putni nalog potrebno je uneti svoju lozinku.
       </label>
       </div>
       <div class="modal-footer">
@@ -511,7 +507,7 @@
           <input class="form-control" type="password" id="input_password" name="input_password" value="" placeholder="potvrdite lozinkom">
           <br>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
-          <input class="btn btn-danger" type="submit" value="Izbrišite putni nlaog">
+          <input class="btn btn-danger" type="submit" value="Izbrišite putni nalog">
       </form>
       </div>
   </div>

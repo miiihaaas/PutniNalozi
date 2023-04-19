@@ -267,7 +267,7 @@ Vreme povratka: {warrant.end_datetime.strftime("%d/%m/%Y, %H:%M")}''', border=1,
 
     ukupni_trosak = 0.0
     ukupni_trosak_ino = 0.0
-    ino_currency = '€'
+    ino_currency = warrant.daily_wage_abroad_currency #'€'
     if troskovi != []:
         for trosak in troskovi:
             if trosak.amount_currency == 'rsd':

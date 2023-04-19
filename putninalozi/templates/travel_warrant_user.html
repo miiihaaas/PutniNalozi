@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="content-section">
-  <form  action="" method="POST">
+  <form id="myForm" action="" method="POST">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
       {% if form.errors %}
@@ -257,39 +257,39 @@
         </div>
         <hr>
         <div class="form-group">
-          <a class="btn btn-info btn-block" href="{{ url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id) }}">Dodajte trošak</a>
+          <input type="submit" name="dugme" class="btn btn-info btn-block" href="#" value="Dodajte trošak">
         </div>
         <br>
         <table id="data" border="1" class="table table-striped">
-            <thead>
-              <tr id="header">
-                <th>Tip troška</th>
-                <th>Opis</th>
-                <th>Iznos</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for trosak in troskovi %}
-              <tr>
-                <td class="align-middle"> <a class="mr-2 btn btn-info width100" href="{{ url_for('travel_warrants.expenses_profile', warrant_id=warrant.travel_warrant_id, expenses_id=trosak.expenses_id) }}" title="Uređivanje Troška">{{ trosak.expenses_type }}</a></td>
-                <td class="align-middle"> {{ trosak.description }} </td>
-                <td class="align-middle"> {{ '{:,.2f}'.format(trosak.amount) }} {{ trosak.amount_currency }} </td>
-              </tr>
-              {% endfor %}
-            </tbody>
+          <thead>
+            <tr id="header">
+              <th>Tip troška</th>
+              <th>Opis</th>
+              <th>Iznos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for trosak in troskovi %}
+            <tr>
+              <td class="align-middle"> <a class="mr-2 btn btn-info width100" href="{{ url_for('travel_warrants.expenses_profile', warrant_id=warrant.travel_warrant_id, expenses_id=trosak.expenses_id) }}" title="Uređivanje Troška">{{ trosak.expenses_type }}</a></td>
+              <td class="align-middle"> {{ trosak.description }} </td>
+              <td class="align-middle"> {{ '{:,.2f}'.format(trosak.amount) }} {{ trosak.amount_currency }} </td>
+            </tr>
+            {% endfor %}
+          </tbody>
         </table>
         <hr>
       </div>
     </div>
-  </fieldset>
-  <div class="form-group centerall">
-    <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">Nazad</a>
-    {% if warrant.status == 'kreiran' %}
-      <input class="btn btn-primary" type="submit" name="dugme" value="Završi">
-    {% endif %}
-    {{ form.submit(class="btn btn-outline-primary") }}
-      <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzmite dokument</a>
-  </div>
+    </fieldset>
+    <div class="form-group centerall">
+      <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_list')}}">Nazad</a>
+      {% if warrant.status == 'kreiran' %}
+        <input class="btn btn-primary" type="submit" name="dugme" value="Završi">
+      {% endif %}
+      {{ form.submit(class="btn btn-outline-primary") }}
+        <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}">Preuzmite dokument</a>
+    </div>
   </form>
 </div>
 {% endblock content%}

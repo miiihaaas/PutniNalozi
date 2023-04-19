@@ -418,6 +418,8 @@ def travel_warrant_profile(warrant_id):
     ##########################################################################################
 
                 flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
+                if request.form.get('dugme') == 'Dodajte trošak':
+                    return redirect(url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id))
                 return redirect(url_for('travel_warrants.travel_warrant_list'))
             elif request.method == 'GET':
                 form.with_task.data = warrant.with_task
@@ -695,6 +697,8 @@ def travel_warrant_profile(warrant_id):
 
             db.session.commit()
             flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
+            if request.form.get('dugme') == 'Dodajte trošak':
+                return redirect(url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id))
             return redirect(url_for('travel_warrants.travel_warrant_list'))
         elif request.method == 'GET':
             # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
