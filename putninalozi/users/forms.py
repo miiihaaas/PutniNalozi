@@ -23,7 +23,7 @@ class RegistrationUserForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
-            raise ValidationError('Taj email je već zauzet, izaberide drugi email')
+            raise ValidationError('Taj email je već zauzet, izaberite drugi email')
 
     def reset(self):
         self.__init__()

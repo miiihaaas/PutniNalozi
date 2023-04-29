@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, BooleanField, FloatField, DecimalField, SelectField, DateField, TimeField, DateTimeField, IntegerField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Optional, Length, InputRequired, NumberRange
+from wtforms.validators import DataRequired, Optional, Length, InputRequired, NumberRange, ValidationError
 from putninalozi.models import Company, User, Vehicle
 from flask_login import current_user
 from putninalozi import db
@@ -14,13 +14,11 @@ class PreCreateTravelWarrantForm(FlaskForm):
 
 
 class CreateTravelWarrantForm(FlaskForm):
-    # user_id = SelectField('Zaposleni:', validators=[DataRequired()], choices=[]) #[(u.id, u.name+" " + u.surname) for u in db.session.query(User.id,User.name,User.surname).all()]) #umesto users: db.session.query(User.id,User.name,User.surname).all()
     with_task = StringField('Sa zadatkom: ', validators=[DataRequired()])
     company_id = SelectField('Kompanija: ', validators=[DataRequired()], choices=[(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).all()])
     abroad = BooleanField('Putovanje u inostranstvo')
     abroad_contry = StringField('Država: ')
     relation = StringField('Relacija: ', validators=[DataRequired()])
-    # start_datetime = DateTimeField('Polazno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
     end_datetime = DateTimeField('Završno vreme: ', format='%Y-%m-%dT%H:%M', validators=[DataRequired()])
 
     vehicle_id = SelectField('Službeno vozilo: ', validators=[Optional()], choices=[])
@@ -39,7 +37,11 @@ class CreateTravelWarrantForm(FlaskForm):
     cashier_id = SelectField('Blagajnik: ', validators=[Optional()], choices=[])
 
     submit = SubmitField('Kreirajte putni nalog')
-    #nastaviti
+    
+    def validate_form(self, with_task):
+        print(len(f'dužina stringa: {with_task.data=}'))
+        if not with_task.data:
+            raise ValidationError('Polje je obavezno')
 
     def reset(self):
         self.__init__()
@@ -72,7 +74,7 @@ class EditAdminTravelWarrantForm(FlaskForm):
     principal_id = SelectField('Nalogodavac:', validators=[Optional()], choices=[])
     cashier_id = SelectField('Blagajnik: ', validators=[Optional()], choices=[])
 
-    status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
+    status = SelectField('Status: ', choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat") , ("storniran", "storniran")]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
     # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
     add_expenses = SubmitField('Dofaj trošak')
@@ -105,7 +107,7 @@ class EditUserTravelWarrantForm(FlaskForm):
     # daily_wage_currency = SelectField('Valuta: ', choices=[('rsd', 'RSD'), ('€', 'EUR'), ('usd', 'USD')])
     # costs_pays = StringField('Putni troškovi padaju na teret: ')
 
-    status = SelectField('Status: ', choices=[]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
+    status = SelectField('Status: ', choices=[("kreiran", "kreiran"), ("završen", "završen")]) #1 - kreiran, 2 - u delu, 3 - kompletiran od strane radnika (popunjeno sve: sati, km, troškovi...), 4 - završen od strane administratora (arhiviran)
     # expenses = FloatField('Ukupni troškovi', validators=[DataRequired()])
 
     add_expenses = SubmitField('Dofaj trošak')

@@ -1,7 +1,4 @@
 from fpdf import FPDF
-from flask import url_for
-from flask_mail import Message
-from putninalozi import app, mail
 from num2words import num2words
 from putninalozi.travel_warrants.functions import replace_serbian_characters, get_warrant_details
 
@@ -337,62 +334,3 @@ Blagajnik: _____________________________________          Podnosilac računa: __
     pdf.output(path + file_name)
     return file_name, text_form
 
-
-
-def send_email(warrant, current_user, file_name, global_settings):
-    subject = ""
-    recipients = []
-    cc = []
-    if warrant.status == 'kreiran':
-        subject = f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}'
-        text_body = f'''Poštovani,
-
-Kreiran je putni nalog broj {warrant.travel_warrant_number}.
-Detaljnije informacije o putnom nalogu mogu se videti u dokumentu u prilogu ili klikom na link:
-{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
-
-S poštovanjem,
-{current_user.name} {current_user.surname}'''
-        if global_settings.send_email_kreiran and global_settings.send_email_kreiran_principal:
-            recipients = [warrant.travelwarrant_user.email]
-            cc = [warrant.principal_user.email]
-        elif global_settings.send_email_kreiran:
-            recipients = [warrant.travelwarrant_user.email]
-        elif global_settings.send_email_kreiran_principal:
-            recipients = [warrant.principal_user.email]
-    # ako je završen nalog: adminu / nalogodavcu
-    elif warrant.status == 'završen':
-        subject = f'Završen je putni nalog broj: {warrant.travel_warrant_number}'
-        text_body = f'''Poštovani,
-
-Završen je putni nalog broj {warrant.travel_warrant_number}. Klikom na link u nastavku, možete obračunati putni nalog:
-{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
-
-S poštovanjem,
-{warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}'''
-        if global_settings.send_email_zavrsen:
-            recipients = [warrant.principal_user.email]
-    # ako je obračunat nalog: blagajniku i korisniku
-    elif warrant.status == 'obračunat':
-        subject = f'Obračunat je putni nalog broj: {warrant.travel_warrant_number}'
-        text_body = f'''Poštovani,
-        
-Obračunat je putni nalog broj {warrant.travel_warrant_number}. Možete izvršiti isplatu dnevnica prema podacima iz dokumenta u prilogu.'''
-        if global_settings.send_email_obracunat_cashier:
-            recipients = [warrant.cashier_user.email]
-    else:
-        return
-    # ako je storniran nalog: da li treba nekoga da obaveštava?
-    msg = Message(subject,
-                    sender='noreply@putninalozi.online',
-                    recipients=recipients, cc=cc)
-    msg.body = text_body
-    path = 'static/pdf_forms/'
-    file_name = file_name
-    print(path)
-    print(file_name)
-    print(path+file_name)
-    with app.open_resource(path + file_name) as fp:
-        msg.attach(path + file_name, 'application/pdf', fp.read())
-
-    mail.send(msg)

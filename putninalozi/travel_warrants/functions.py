@@ -1,6 +1,68 @@
 #Fajl u kojem se nalaze funkcije koje se koriste u drugim fajlovima istog foldera
+from flask import  render_template, flash, request, url_for
+from flask_mail import Message
+from putninalozi import app, mail
 from putninalozi.models import TravelWarrant
+# from putninalozi.travel_warrants.pdf_form import update_pdf_form
 
+#! koristi se u fajlu: routes.py
+def send_email(warrant, current_user, file_name, global_settings):
+    subject = ""
+    recipients = []
+    cc = []
+    if warrant.status == 'kreiran':
+        subject = f'Kreiran je putni nalog broj: {warrant.travel_warrant_number}'
+        text_body = f'''Poštovani,
+
+Kreiran je putni nalog broj {warrant.travel_warrant_number}.
+Detaljnije informacije o putnom nalogu mogu se videti u dokumentu u prilogu ili klikom na link:
+{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
+
+S poštovanjem,
+{current_user.name} {current_user.surname}'''
+        if global_settings.send_email_kreiran and global_settings.send_email_kreiran_principal:
+            recipients = [warrant.travelwarrant_user.email]
+            cc = [warrant.principal_user.email]
+        elif global_settings.send_email_kreiran:
+            recipients = [warrant.travelwarrant_user.email]
+        elif global_settings.send_email_kreiran_principal:
+            recipients = [warrant.principal_user.email]
+    # ako je završen nalog: adminu / nalogodavcu
+    elif warrant.status == 'završen':
+        subject = f'Završen je putni nalog broj: {warrant.travel_warrant_number}'
+        text_body = f'''Poštovani,
+
+Završen je putni nalog broj {warrant.travel_warrant_number}. Klikom na link u nastavku, možete obračunati putni nalog:
+{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id, _external=True)}
+
+S poštovanjem,
+{warrant.travelwarrant_user.name} {warrant.travelwarrant_user.surname}'''
+        if global_settings.send_email_zavrsen:
+            recipients = [warrant.principal_user.email]
+    # ako je obračunat nalog: blagajniku i korisniku
+    elif warrant.status == 'obračunat':
+        subject = f'Obračunat je putni nalog broj: {warrant.travel_warrant_number}'
+        text_body = f'''Poštovani,
+        
+Obračunat je putni nalog broj {warrant.travel_warrant_number}. Možete izvršiti isplatu dnevnica prema podacima iz dokumenta u prilogu.'''
+        if global_settings.send_email_obracunat_cashier:
+            recipients = [warrant.cashier_user.email]
+    else:
+        return
+    # ako je storniran nalog: da li treba nekoga da obaveštava?
+    msg = Message(subject,
+                    sender='noreply@putninalozi.online',
+                    recipients=recipients, cc=cc)
+    msg.body = text_body
+    path = 'static/pdf_forms/'
+    file_name = file_name
+    print(path)
+    print(file_name)
+    print(path+file_name)
+    with app.open_resource(path + file_name) as fp:
+        msg.attach(path + file_name, 'application/pdf', fp.read())
+
+    mail.send(msg)
 
 #! koristi se u fajlu: routes.py
 def proracun_broja_dnevnica(br_casova):
@@ -27,6 +89,57 @@ def proracun_broja_dnevnica(br_casova):
             print(f'zaokruživanje na celu dnevnicu: {br_dnevnica=}')
     br_dnevnica = br_dnevnica * 1.0
     return br_dnevnica
+
+#! koristi se u fajlu: routes.py
+def update_warrant(warrant, form, global_settings, current_user, status):
+    print('ušao sam u def update_warrant')
+    print(f'{current_user.authorization=}')
+    warrant.with_task = form.with_task.data
+    warrant.abroad = form.abroad.data
+    warrant.abroad_contry = form.abroad_contry.data
+    warrant.relation = form.relation.data.title()
+    warrant.start_datetime = form.start_datetime.data
+    warrant.end_datetime = form.end_datetime.data
+    warrant.contry_leaving = form.contry_leaving.data
+    warrant.contry_return = form.contry_return.data
+    warrant.together_with = form.together_with.data if form.together_with.data else ""
+    warrant.personal_vehicle_id = form.personal_vehicle_id.data if form.personal_vehicle_id.data else None
+    warrant.other = form.other.data.upper() if form.other.data else ""
+    
+        
+    print(f'{request.form.get("dugme")=}')
+    if request.form.get('dugme') == 'Završi':
+        print('kliknuto je dugme ZAVRŠI')
+        warrant.status = 'završen'
+        # todo send email nalogodavcu
+        if global_settings.send_email_zavrsen:
+            send_email(warrant, current_user, warrant.file_name, global_settings)
+            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
+    elif request.form.get('dugme') == 'Obračunajte':
+        warrant.status = 'obračunat'
+        #todo send email zaposlenom, blagajniku
+        if global_settings.send_email_obracunat_cashier:
+            send_email(warrant, current_user, warrant.file_name, global_settings)
+            flash(f'{warrant.cashier_user.name} je {"dobio" if warrant.cashier_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog obračunat.', 'success')
+    else:
+        warrant.status = status
+    print(f'{current_user.authorization=}')
+    if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier']:
+        warrant.advance_payment = int(form.advance_payment.data)
+        warrant.advance_payment_currency = form.advance_payment_currency.data
+        warrant.daily_wage = int(form.daily_wage.data)
+        warrant.daily_wage_currency = form.daily_wage_currency.data
+        warrant.daily_wage_abroad = form.daily_wage_abroad.data
+        warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
+        warrant.costs_pays = form.costs_pays.data
+        
+        warrant.principal_id = form.principal_id.data
+        warrant.cashier_id = form.cashier_id.data
+    print(f'{form.vehicle_id.data=}')
+    if form.vehicle_id.data != '':
+        warrant.vehicle_id = form.vehicle_id.data
+
+
 
 #! koristi se u fajlu pdf_form.py
 def replace_serbian_characters(string):

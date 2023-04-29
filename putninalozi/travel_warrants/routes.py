@@ -3,8 +3,8 @@ from flask import  render_template, url_for, flash, redirect, abort, request, se
 from putninalozi import db, bcrypt
 from putninalozi.models import TravelWarrant, Company, User, Vehicle, TravelWarrantExpenses, Settings
 from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm, EditTravelWarrantExpenses
-from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_form, send_email
-from putninalozi.travel_warrants.functions import proracun_broja_dnevnica
+from putninalozi.travel_warrants.pdf_form import create_pdf_form, update_pdf_form
+from putninalozi.travel_warrants.functions import proracun_broja_dnevnica, send_email, update_warrant
 from flask_login import login_user, login_required, logout_user, current_user
 from datetime import datetime, timedelta
 from sqlalchemy import or_, not_
@@ -229,7 +229,18 @@ def travel_warrant_profile(warrant_id):
     vehicle_personal_list = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='private').order_by('vehicle_type').all()]
     print(f'{vehicle_company_list=}')
     print(f'{vehicle_personal_list=}')
-    
+    drivers = [('', '----------')] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
+                                                    for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
+                                                                                        TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
+                                                                                                                        warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
+                                                                                                                        warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
+                                                    for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
+                                                                                        TravelWarrant.personal_vehicle_id!='').filter(TravelWarrant.start_datetime.between(
+                                                                                                                        warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
+                                                                                                                        warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
+    end_datum = warrant.start_datetime + timedelta(days=30)
+    start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
+    start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
     if not current_user.is_authenticated:
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
@@ -249,474 +260,110 @@ def travel_warrant_profile(warrant_id):
         else:
             form = EditUserTravelWarrantForm()
             form.reset()
-            drivers = [('', '----------')] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
-                                                    for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
-                                                                                        TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
-                                                                                                                        warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
-                                                                                                                        warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
-                                                    for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
-                                                                                        TravelWarrant.personal_vehicle_id!='').filter(TravelWarrant.start_datetime.between(
-                                                                                                                        warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
-                                                                                                                        warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
-            global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
             form.together_with.choices = drivers
-            # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).group_by('name').all()]
+            global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
             form.vehicle_id.choices = vehicle_company_list
-            print(f'{form.vehicle_id.choices=}')
             form.personal_vehicle_id.choices = vehicle_personal_list
-            form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
-
-            if form.validate_on_submit():
-
-                if form.together_with.data != '':
-                    warrant.with_task = form.with_task.data
-                    warrant.abroad = form.abroad.data
-                    warrant.abroad_contry = form.abroad_contry.data
-                    warrant.relation = form.relation.data.title()
-
-                    warrant.start_datetime = form.start_datetime.data
-                    warrant.end_datetime = form.end_datetime.data
-                    warrant.contry_leaving = form.contry_leaving.data
-                    warrant.contry_return = form.contry_return.data
-
-                    warrant.vehicle_id=None
-                    warrant.together_with=form.together_with.data
-                    warrant.personal_vehicle_id=None
-                    warrant.other=""
-
-                    if request.form.get('dugme') == 'Završi':
-                        warrant.status = 'završen'
-                        #todo send email nalogodavcu
-                        if global_settings.send_email_zavrsen:
-                            send_email(warrant, current_user, warrant.file_name, global_settings)
-                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
-                    else:
-                        warrant.status = form.status.data
-
-                    # warrant.expenses = form.expenses.data
-                    print('zajedno sa - c_user')
-                elif form.personal_vehicle_id.data != "":
-                    warrant.with_task = form.with_task.data
-                    warrant.abroad = form.abroad.data
-                    warrant.abroad_contry = form.abroad_contry.data
-                    warrant.relation = form.relation.data.title()
-
-                    warrant.start_datetime = form.start_datetime.data
-                    warrant.end_datetime = form.end_datetime.data
-                    warrant.contry_leaving = form.contry_leaving.data
-                    warrant.contry_return = form.contry_return.data
-
-                    warrant.vehicle_id=None
-                    warrant.together_with=""
-                    warrant.personal_vehicle_id=form.personal_vehicle_id.data
-                    warrant.other=""
-
-                    if request.form.get('dugme') == 'Završi':
-                        warrant.status = 'završen'
-                        #todo send email nalogodavcu
-                        if global_settings.send_email_zavrsen:
-                            send_email(warrant, current_user, warrant.file_name, global_settings)
-                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
-                    else:
-                        warrant.status = form.status.data
-
-                    # warrant.expenses = form.expenses.data
-                    print('licno vozilo - c_user')
-                elif form.other.data != "":
-                    warrant.with_task = form.with_task.data
-                    warrant.abroad = form.abroad.data
-                    warrant.abroad_contry = form.abroad_contry.data
-                    warrant.relation = form.relation.data.title()
-
-                    warrant.start_datetime = form.start_datetime.data
-                    warrant.end_datetime = form.end_datetime.data
-                    warrant.contry_leaving = form.contry_leaving.data
-                    warrant.contry_return = form.contry_return.data
-
-                    warrant.vehicle_id=None
-                    warrant.together_with=""
-                    warrant.personal_vehicle_id=None
-                    warrant.other=form.other.data.upper()
-
-                    if request.form.get('dugme') == 'Završi':
-                        warrant.status = 'završen'
-                        #todo send email nalogodavcu
-                        if global_settings.send_email_zavrsen:
-                            send_email(warrant, current_user, warrant.file_name, global_settings)
-                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
-                    else:
-                        warrant.status = form.status.data
-
-                    # warrant.expenses = form.expenses.data
-                    print(f'vrednost polja službeno vozilo: {form.vehicle_id.data}')
-                    print('drugo - c_user')
-                elif form.vehicle_id.data == "":
-                    flash('Morate da odaberete jedan od načina prevoza klikom na dugme "Nazad".', 'danger')
-                    return render_template('403.html')
-                else:
-                    warrant.with_task = form.with_task.data
-                    warrant.abroad = form.abroad.data
-                    warrant.abroad_contry = form.abroad_contry.data
-                    warrant.relation = form.relation.data.title()
-
-                    warrant.start_datetime = form.start_datetime.data
-                    warrant.end_datetime = form.end_datetime.data
-                    warrant.contry_leaving = form.contry_leaving.data
-                    warrant.contry_return = form.contry_return.data
-
-                    warrant.vehicle_id=form.vehicle_id.data
-                    warrant.together_with=""
-                    warrant.personal_vehicle_id=None
-                    warrant.other=""
-
-                    if request.form.get('dugme') == 'Završi':
-                        warrant.status = 'završen'
-                        #todo send email nalogodavcu
-                        if global_settings.send_email_zavrsen:
-                            send_email(warrant, current_user, warrant.file_name, global_settings)
-                            flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
-                    else:
-                        warrant.status = form.status.data
-
-                    # warrant.expenses = form.expenses.data
-                    print('službeno vozilo - c_user')
-    ##########################################################################################
-
-                if warrant.abroad:
-                    br_casova = 0
-                    br_casova_ino = warrant.contry_return - warrant.contry_leaving
-                    br_casova_ino = br_casova_ino.total_seconds() / 3600                        #! vreme provedeno u inostranstvu
-                    br_casova_start = warrant.contry_leaving - form.start_datetime.data
-                    br_casova_start = br_casova_start.total_seconds() / 3600                    #! vreme provedeno u zemlji pre izlaska iz zemlje
-                    br_casova_end = form.end_datetime.data - warrant.contry_return
-                    br_casova_end = br_casova_end.total_seconds() / 3600                        #! vreme provedeno u zemlji po povratku iz inostranstva
-                    br_dnevnica_start = proracun_broja_dnevnica(br_casova_start)
-                    br_dnevnica_end = proracun_broja_dnevnica(br_casova_end)
-                    br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
-                    br_dnevnica = br_dnevnica_start + br_dnevnica_end
-                else:
-                    br_casova = form.end_datetime.data - form.start_datetime.data
-                    br_casova = br_casova.total_seconds() / 3600  
-                    br_casova_ino = 0
-                    br_casova_start = 0
-                    br_casova_end = 0
-                    br_dnevnica = proracun_broja_dnevnica(br_casova)
-                    br_dnevnica_start = 0
-                    br_dnevnica_end = 0
-                    br_dnevnica_ino = 0
-                print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
-
-                file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino, troskovi)
-                print(f'update naloga: {text_form=}')
-                warrant.file_name = file_name
-                # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
-                warrant.text_form = text_form
-                print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
-
-                db.session.commit()
-                
-    ##########################################################################################
-
-                flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
-                if request.form.get('dugme') == 'Dodajte trošak':
-                    return redirect(url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id))
-                return redirect(url_for('travel_warrants.travel_warrant_list'))
-            elif request.method == 'GET':
-                form.with_task.data = warrant.with_task
-                form.abroad.data = warrant.abroad
-                form.abroad_contry.data = warrant.abroad_contry
-                form.relation.data = warrant.relation
-                form.start_datetime.data = warrant.start_datetime
-                form.end_datetime.data = warrant.end_datetime
-                form.contry_leaving.data = warrant.contry_leaving
-                form.contry_return.data = warrant.contry_return
-                form.vehicle_id.choices =[('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='company').order_by('vehicle_type').all()]
-                form.vehicle_id.data = str(warrant.vehicle_id)
-                form.together_with.data = warrant.together_with
-                form.personal_vehicle_id.choices = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='private').order_by('vehicle_type').all()]
-                form.personal_vehicle_id.data = str(warrant.personal_vehicle_id)
-                form.other.data = warrant.other
-
-                form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
-                form.status.data = str(warrant.status)
-
-                end_datum = warrant.start_datetime + timedelta(days=30)
-                start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
-                start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
-
-            print(f'EditUser: {form.errors=}')
-
-            return render_template('travel_warrant_user.html', title='Uređivanje putnog naloga', warrant=warrant, 
-                                    legend='Uređivanje putnog naloga (pregled korisnika)', detalji=Markup(warrant.text_form.replace('\n', '<br>')), form=form, rod=rod, 
-                                    troskovi=troskovi, end_datum=end_datum, start_datetime_min=start_datetime_min, start_datetime_max=start_datetime_max)
-
     else:
         form = EditAdminTravelWarrantForm()
         form.reset()
-        drivers = [('', '----------')] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
-                                                for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
-                                                                                    TravelWarrant.vehicle_id!='').filter(TravelWarrant.start_datetime.between(
-                                                                                                                    warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
-                                                                                                                    warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()] + [(tw.travel_warrant_number, tw.travel_warrant_number + " => " + tw.travelwarrant_user.name + " " + tw.travelwarrant_user.surname)
-                                                    for tw in TravelWarrant.query.filter(TravelWarrant.company_id==current_user.user_company.id,
-                                                                                        TravelWarrant.personal_vehicle_id!='').filter(TravelWarrant.start_datetime.between(
-                                                                                                                        warrant.start_datetime.replace(hour=0, minute=0, second=0, microsecond=0),
-                                                                                                                        warrant.start_datetime.replace(hour=23, minute=59, second=59, microsecond=9))).all()]
         form.together_with.choices = drivers
         global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
-        # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
         form.vehicle_id.choices = vehicle_company_list
         form.personal_vehicle_id.choices = vehicle_personal_list
-        print(f'{form.vehicle_id.choices=}')
-        form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat"), ("storniran", "storniran")]
 
         form.principal_id.choices = [(principal.id, principal.name + " " + principal.surname) for principal in User.query.filter_by(company_id=current_user.company_id).filter_by(principal=True).filter(User.authorization != "c_deleted").all()]
         form.cashier_id.choices = [(cashier.id, cashier.name + " " + cashier.surname) for cashier in User.query.filter_by(company_id=current_user.company_id).filter(or_(User.authorization == 'c_cashier', User.authorization == 'o_cashier')).all()]
+            
+    if form.validate_on_submit():
+        if form.together_with.data:
+            warrant.vehicle_id=None
+            update_warrant(warrant, form, global_settings, current_user, form.status.data)
+            print('zajedno sa - c_user')
+        elif form.personal_vehicle_id.data:
+            warrant.vehicle_id=None
+            warrant.together_with=""
+            update_warrant(warrant, form, global_settings, current_user, form.status.data)
+            print('licno vozilo - c_user')
+        elif form.other.data:
+            warrant.vehicle_id=None
+            warrant.together_with=""
+            warrant.personal_vehicle_id=None
+            update_warrant(warrant, form, global_settings, current_user, form.status.data)
+            print('drugo - c_user')
+        elif form.vehicle_id.data:
+            warrant.together_with=""
+            warrant.personal_vehicle_id=None
+            warrant.other=""
+            update_warrant(warrant, form, global_settings, current_user, form.status.data)
+        else:
+            flash('Morate da odaberete jedan od načina prevoza klikom na dugme "Nazad".', 'danger')
+            return render_template('403.html')
+            ####################################################################################
 
-        if form.validate_on_submit():
-            if form.together_with.data != '':
-                # warrant.user_id = form.user_id.data
-                warrant.with_task = form.with_task.data
-                # warrant.company_id = int(form.company_id.data)
-                warrant.abroad = form.abroad.data
-                warrant.abroad_contry = form.abroad_contry.data
-                warrant.relation = form.relation.data.title()
+        if warrant.abroad:
+            br_casova = 0
+            br_casova_ino = warrant.contry_return - warrant.contry_leaving
+            br_casova_ino = br_casova_ino.total_seconds() / 3600                        #! vreme provedeno u inostranstvu
+            br_casova_start = warrant.contry_leaving - form.start_datetime.data
+            br_casova_start = br_casova_start.total_seconds() / 3600                    #! vreme provedeno u zemlji pre izlaska iz zemlje
+            br_casova_end = form.end_datetime.data - warrant.contry_return
+            br_casova_end = br_casova_end.total_seconds() / 3600                        #! vreme provedeno u zemlji po povratku iz inostranstva
+            br_dnevnica_start = proracun_broja_dnevnica(br_casova_start)
+            br_dnevnica_end = proracun_broja_dnevnica(br_casova_end)
+            br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
+            br_dnevnica = br_dnevnica_start + br_dnevnica_end
+        else:
+            br_casova = form.end_datetime.data - form.start_datetime.data
+            br_casova = br_casova.total_seconds() / 3600  
+            br_casova_ino = 0
+            br_casova_start = 0
+            br_casova_end = 0
+            br_dnevnica = proracun_broja_dnevnica(br_casova)
+            br_dnevnica_start = 0
+            br_dnevnica_end = 0
+            br_dnevnica_ino = 0
+        print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
 
-                warrant.start_datetime = form.start_datetime.data
-                warrant.end_datetime = form.end_datetime.data
-                warrant.contry_leaving = form.contry_leaving.data
-                warrant.contry_return = form.contry_return.data
+        file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino, troskovi)
+        print(f'update naloga: {text_form=}')
+        warrant.file_name = file_name
+        # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
+        warrant.text_form = text_form
+        print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
 
-                warrant.vehicle_id=None
-                warrant.together_with=form.together_with.data
-                warrant.personal_vehicle_id=None
-                warrant.other=""
+        db.session.commit()
+            
+        ##########################################################################################
 
-                warrant.advance_payment = int(form.advance_payment.data)
-                warrant.advance_payment_currency = form.advance_payment_currency.data
-                warrant.daily_wage = form.daily_wage.data
-                warrant.daily_wage_currency = form.daily_wage_currency.data
-                warrant.daily_wage_abroad = form.daily_wage_abroad.data
-                warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
-                warrant.costs_pays = form.costs_pays.data
-                
-                warrant.principal_id = form.principal_id.data
-                warrant.cashier_id = form.cashier_id.data
+        flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
+        if request.form.get('dugme') == 'Dodajte trošak':
+            return redirect(url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id))
+        return redirect(url_for('travel_warrants.travel_warrant_list'))
+    elif request.method == 'GET':
+        form.with_task.data = warrant.with_task
+        form.abroad.data = warrant.abroad
+        form.abroad_contry.data = warrant.abroad_contry
+        form.relation.data = warrant.relation
+        form.start_datetime.data = warrant.start_datetime
+        form.end_datetime.data = warrant.end_datetime
+        form.contry_leaving.data = warrant.contry_leaving
+        form.contry_return.data = warrant.contry_return
+        form.vehicle_id.choices =[('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='company').order_by('vehicle_type').all()]
+        form.vehicle_id.data = str(warrant.vehicle_id)
+        form.together_with.data = warrant.together_with
+        form.personal_vehicle_id.choices = [('', '----------')] + [(v.id, v.vehicle_type + "-" + v.vehicle_brand+" ("+v.vehicle_registration+")") for v in db.session.query(Vehicle.id,Vehicle.vehicle_type,Vehicle.vehicle_brand,Vehicle.vehicle_registration).filter_by(company_id=current_user.user_company.id).filter_by(vehicle_ownership='private').order_by('vehicle_type').all()]
+        form.personal_vehicle_id.data = str(warrant.personal_vehicle_id)
+        form.other.data = warrant.other
 
-                if request.form.get('dugme') == 'Završi':
-                    warrant.status = 'završen'
-                    if global_settings.send_email_zavrsen:
-                        send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
-                elif request.form.get('dugme') == 'Obračunajte':
-                    warrant.status = 'obračunat'
-                    #todo send email zaposlenom, blagajniku
-                    if global_settings.send_email_obracunat_cashier:
-                        send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.cashier_user.name} je {"dobio" if warrant.cashier_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog obračunat.', 'success')
-                else:
-                    warrant.status = form.status.data
+        form.status.choices=[("kreiran", "kreiran"), ("završen", "završen")]
+        form.status.data = str(warrant.status)
 
-                # warrant.expenses = form.expenses.data
-                print('zajedno sa')
-            elif form.personal_vehicle_id.data != "":
-                # warrant.user_id = form.user_id.data
-                warrant.with_task = form.with_task.data
-                # warrant.company_id = int(form.company_id.data)
-                warrant.abroad = form.abroad.data
-                warrant.abroad_contry = form.abroad_contry.data
-                warrant.relation = form.relation.data.title()
-
-                warrant.start_datetime = form.start_datetime.data
-                warrant.end_datetime = form.end_datetime.data
-                warrant.contry_leaving = form.contry_leaving.data
-                warrant.contry_return = form.contry_return.data
-
-                warrant.vehicle_id=None
-                warrant.together_with=""
-                warrant.personal_vehicle_id=form.personal_vehicle_id.data
-                warrant.other=""
-
-                warrant.advance_payment = int(form.advance_payment.data)
-                warrant.advance_payment_currency = form.advance_payment_currency.data
-                warrant.daily_wage = int(form.daily_wage.data)
-                warrant.daily_wage_currency = form.daily_wage_currency.data
-                warrant.daily_wage_abroad = form.daily_wage_abroad.data
-                warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
-                warrant.costs_pays = form.costs_pays.data
-                
-                warrant.principal_id = form.principal_id.data
-                warrant.cashier_id = form.cashier_id.data
-                
-                if request.form.get('dugme') == 'Završi':
-                    warrant.status = 'završen'
-                    if global_settings.send_email_zavrsen:
-                        send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
-                elif request.form.get('dugme') == 'Obračunajte':
-                    warrant.status = 'obračunat'
-                    #todo send email zaposlenom, blagajniku
-                    if global_settings.send_email_obracunat_cashier:
-                        send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.cashier_user.name} je {"dobio" if warrant.cashier_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog obračunat.', 'success')
-                else:
-                    warrant.status = form.status.data
-
-                # warrant.expenses = form.expenses.data
-                print('Privatno vozilo')
-            elif form.other.data != "":
-                # warrant.user_id = form.user_id.data
-                warrant.with_task = form.with_task.data
-                # warrant.company_id = int(form.company_id.data)
-                warrant.abroad = form.abroad.data
-                warrant.abroad_contry = form.abroad_contry.data
-                warrant.relation = form.relation.data.title()
-
-                warrant.start_datetime = form.start_datetime.data
-                warrant.end_datetime = form.end_datetime.data
-                warrant.contry_leaving = form.contry_leaving.data
-                warrant.contry_return = form.contry_return.data
-
-                warrant.vehicle_id=None
-                warrant.together_with=""
-                warrant.personal_vehicle_id=None
-                warrant.other=form.other.data.upper()
-
-                warrant.advance_payment = int(form.advance_payment.data)
-                warrant.advance_payment_currency = form.advance_payment_currency.data
-                warrant.daily_wage = int(form.daily_wage.data)
-                warrant.daily_wage_currency = form.daily_wage_currency.data
-                warrant.daily_wage_abroad = form.daily_wage_abroad.data
-                warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
-                warrant.costs_pays = form.costs_pays.data
-                
-                warrant.principal_id = form.principal_id.data
-                warrant.cashier_id = form.cashier_id.data
-                
-                if request.form.get('dugme') == 'Završi':
-                    warrant.status = 'završen'
-                    if global_settings.send_email_zavrsen:
-                        send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
-                elif request.form.get('dugme') == 'Obračunajte':
-                    warrant.status = 'obračunat'
-                    #todo send email zaposlenom, blagajniku
-                    if global_settings.send_email_obracunat_cashier:
-                        send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.cashier_user.name} je {"dobio" if warrant.cashier_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog obračunat.', 'success')
-                else:
-                    warrant.status = form.status.data
-
-                # warrant.expenses = form.expenses.data
-                print('drugo')
-            elif form.vehicle_id.data == "":
-                flash('Morate da odaberete jedan od načina prevoza klikom na dugme "Nazad".', 'danger')
-                return render_template('403.html')
-            else:
-                # warrant.user_id = form.user_id.data
-                warrant.with_task = form.with_task.data
-                # warrant.company_id = int(form.company_id.data)
-                warrant.abroad = form.abroad.data
-                warrant.abroad_contry = form.abroad_contry.data
-                warrant.relation = form.relation.data.title()
-
-                warrant.start_datetime = form.start_datetime.data
-                warrant.end_datetime = form.end_datetime.data
-                warrant.contry_leaving = form.contry_leaving.data
-                warrant.contry_return = form.contry_return.data
-
-                warrant.vehicle_id=form.vehicle_id.data
-                warrant.together_with=""
-                warrant.personal_vehicle_id=None
-                warrant.other=""
-
-                warrant.advance_payment = int(form.advance_payment.data)
-                warrant.advance_payment_currency = form.advance_payment_currency.data
-                warrant.daily_wage = int(form.daily_wage.data)
-                warrant.daily_wage_currency = form.daily_wage_currency.data
-                warrant.daily_wage_abroad = form.daily_wage_abroad.data
-                warrant.daily_wage_abroad_currency = form.daily_wage_abroad_currency.data
-                warrant.costs_pays = form.costs_pays.data
-                
-                warrant.principal_id = form.principal_id.data
-                warrant.cashier_id = form.cashier_id.data
-                
-                if request.form.get('dugme') == 'Završi':
-                    warrant.status = 'završen'
-                    if global_settings.send_email_zavrsen:
-                        send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.principal_user.name} je {"dobio" if warrant.principal_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog završen.', 'success')
-                elif request.form.get('dugme') == 'Obračunajte':
-                    warrant.status = 'obračunat'
-                    #todo send email zaposlenom, blagajniku
-                    if global_settings.send_email_obracunat_cashier:
-                        send_email(warrant, current_user, warrant.file_name, global_settings)
-                        flash(f'{warrant.cashier_user.name} je {"dobio" if warrant.cashier_user.gender == "1" else "dobila"} mejl sa informacijom da je putni nalog obračunat.', 'success')
-                else:
-                    warrant.status = form.status.data
-
-                # warrant.expenses = []
-                print('službeno vozilo')
-
-                ##########################################################################################
-            if warrant.abroad:
-                br_casova = 0
-                br_casova_ino = warrant.contry_return - warrant.contry_leaving
-                br_casova_ino = br_casova_ino.total_seconds() / 3600                        #! vreme provedeno u inostranstvu
-                br_casova_start = warrant.contry_leaving - form.start_datetime.data
-                br_casova_start = br_casova_start.total_seconds() / 3600                    #! vreme provedeno u zemlji pre izlaska iz zemlje
-                br_casova_end = form.end_datetime.data - warrant.contry_return
-                br_casova_end = br_casova_end.total_seconds() / 3600                        #! vreme provedeno u zemlji po povratku iz inostranstva
-                br_dnevnica_start = proracun_broja_dnevnica(br_casova_start)
-                br_dnevnica_end = proracun_broja_dnevnica(br_casova_end)
-                br_dnevnica_ino = proracun_broja_dnevnica(br_casova_ino)
-                br_dnevnica = br_dnevnica_start + br_dnevnica_end
-            else:
-                br_casova = form.end_datetime.data - form.start_datetime.data
-                br_casova = br_casova.total_seconds() / 3600  
-                br_casova_ino = 0
-                br_casova_start = 0
-                br_casova_end = 0
-                br_dnevnica = proracun_broja_dnevnica(br_casova)
-                br_dnevnica_start = 0
-                br_dnevnica_end = 0
-                br_dnevnica_ino = 0
-            print(f'{br_casova=} {br_casova_ino=} {br_dnevnica=} {br_dnevnica_ino=} ')
-
-            file_name, text_form = update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino, troskovi)
-            warrant.file_name = file_name
-            # warrant.text_form = Markup(text_form.replace('\n', '<br>')) #! menja \n u <br> element, a Markup omogućava da se <br> vidi kao element a ne kao string, u html filu treba dodati nastavak "| save" -> {{ warrant.text_form | safe }}
-            warrant.text_form = text_form
-            #! pomoću GPT:
-            #! U HTML fajlu koristili smo Jinju-ovu sintaksu kako bismo renderovali tekst iz promenljive warrant.text_form. Kada smo stavili safe na kraju, to je značilo da prikazujemo HTML koji se nalazi u toj promenljivoj, a ne da ga Jinja renderuje kao plain tekst.
-            #! U routes.py fajlu smo zamenili svaki newline karakter u warrant.text_form sa HTML tagom <br> pomoću metode replace(). Zatim smo promenljivu konvertorvali u Markup objekat, kako bismo osigurali da Jinja ne pokuša da escapuje HTML kod prilikom renderovanja u HTML fajlu.
-            print(f'{warrant.end_datetime=},{warrant.start_datetime=}')
-
-
-                ##########################################################################################
-
-            db.session.commit()
-            flash(f'Putni nalog {warrant.travel_warrant_number} je ažuriran.', 'success')
-            if request.form.get('dugme') == 'Dodajte trošak':
-                return redirect(url_for('travel_warrants.add_expenses', warrant_id=warrant.travel_warrant_id))
-            return redirect(url_for('travel_warrants.travel_warrant_list'))
-        elif request.method == 'GET':
-            # form.user_id.choices = [(u.id, u.name+ " " + u.surname) for u in db.session.query(User.id,User.name,User.surname).filter_by(company_id=current_user.user_company.id).order_by('name').all()]
-            # form.user_id.data = warrant.user_id
-            form.with_task.data = warrant.with_task
-            # form.company_id.data = str(User.query.filter_by(id=form.user_id.data).first().user_company.id)
-            form.abroad.data = warrant.abroad
-            form.abroad_contry.data = warrant.abroad_contry
-            form.relation.data = warrant.relation
-            form.start_datetime.data = warrant.start_datetime
-            form.end_datetime.data = warrant.end_datetime
-            form.contry_leaving.data = warrant.contry_leaving
-            form.contry_return.data = warrant.contry_return
-            form.vehicle_id.data = str(warrant.vehicle_id)
-            form.together_with.data = warrant.together_with
-            form.personal_vehicle_id.data = str(warrant.personal_vehicle_id)
-            form.other.data = warrant.other
-
+        # end_datum = warrant.start_datetime + timedelta(days=30)
+        # start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
+        # start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
+        
+        if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier']:
             form.advance_payment.data = warrant.advance_payment
             form.advance_payment_currency.data = warrant.advance_payment_currency
             form.daily_wage.data = warrant.daily_wage
@@ -726,20 +373,18 @@ def travel_warrant_profile(warrant_id):
             form.costs_pays.data = warrant.costs_pays
             form.principal_id.data = str(warrant.principal_id)
             form.cashier_id.data = str(warrant.cashier_id)
+            
             form.status.choices=[("kreiran", "kreiran"), ("završen", "završen"), ("obračunat", "obračunat") , ("storniran", "storniran")]
             form.status.data = str(warrant.status)
-
-            end_datum = warrant.start_datetime + timedelta(days=30)
-            start_datetime_min = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 0, 0, 0)
-            start_datetime_max = datetime(warrant.start_datetime.year, warrant.start_datetime.month, warrant.start_datetime.day, 23, 59, 59)
-
-        print(f'EditAdmin: {form.errors=}')
-
-        return render_template('travel_warrant.html', 
-                                title='Uređivanje putnog naloga', 
-                                warrant=warrant, legend='Uređivanje putnog naloga (pregled administratora)', detalji=Markup(warrant.text_form.replace('\n', '<br>')), 
-                                form=form, rod=rod, troskovi=troskovi, 
-                                end_datum=end_datum, start_datetime_min=start_datetime_min, start_datetime_max=start_datetime_max)
+            
+    if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder', 'c_cashier', 'o_cashier']:
+        return render_template('travel_warrant.html', title='Uređivanje putnog naloga', warrant=warrant, 
+                        legend='Uređivanje putnog naloga (pregled korisnika)', detalji=Markup(warrant.text_form.replace('\n', '<br>')), form=form, rod=rod, 
+                        troskovi=troskovi, end_datum=end_datum, start_datetime_min=start_datetime_min, start_datetime_max=start_datetime_max)
+    else:
+        return render_template('travel_warrant_user.html', title='Uređivanje putnog naloga', warrant=warrant, 
+                                legend='Uređivanje putnog naloga (pregled korisnika)', detalji=Markup(warrant.text_form.replace('\n', '<br>')), form=form, rod=rod, 
+                                troskovi=troskovi, end_datum=end_datum, start_datetime_min=start_datetime_min, start_datetime_max=start_datetime_max)
 
 
 @travel_warrants.route("/add_expenses/<int:warrant_id>", methods=['GET', 'POST'])

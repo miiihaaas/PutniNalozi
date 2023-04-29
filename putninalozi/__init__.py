@@ -1,4 +1,5 @@
 import os
+import logging
 from dotenv import load_dotenv
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
@@ -20,10 +21,6 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 }
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_APP'] = 'run.py'
-#'sqlite:///site.db' #'mysql://scott:tiger@localhost/mydatabase'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@MariaDB/putninalozi_app' #iz simketovog mejla sam dobio IP
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://putninalozi_mihas:mihasmihasmihas@localhost:3306/putninalozi_app' #ovo zapravo radi na serveru
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://putninalozi_mihas:mihasmihasmihas@putninalozi.online:3306/putninalozi_app'
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -38,6 +35,13 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = os.getenv('EMAIL_USER') # https://www.youtube.com/watch?v=IolxqkL7cD8&ab_channel=CoreySchafer
 app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASS') # https://www.youtube.com/watch?v=IolxqkL7cD8&ab_channel=CoreySchafer -- za 2 step verification: https://support.google.com/accounts/answer/185833
 mail = Mail(app)
+app.logger.setLevel(logging.DEBUG)
+file_handler = logging.FileHandler('myapp.txt')
+file_handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+app.logger.addHandler(file_handler)
+
 
 from putninalozi.companys.routes import companys
 from putninalozi.travel_warrants.routes import travel_warrants

@@ -5,12 +5,12 @@ from wtforms.validators import DataRequired, Length, Email, ValidationError, Reg
 from putninalozi.models import Company
 
 class RegistrationCompanyForm(FlaskForm):
-    companyname = StringField('Naziv kompanije ', validators=[DataRequired(), Length(min=2, max=50)])
+    companyname = StringField('Naziv kompanije ', validators=[DataRequired()])
     company_address = StringField('Adresa', validators=[DataRequired(), Length(min=2, max=50)])
     company_address_number = StringField('Broj', validators=[DataRequired(), Length(min=1, max=5)])
     company_zip_code = StringField('Poštanski broj', validators=[DataRequired(), Length(min=5, max=5)])
     company_city = StringField('Mesto', validators=[DataRequired(), Length(min=2, max=50)])
-    company_state = StringField('Država', validators=[DataRequired(), Length(min=2, max=50), Regexp('^[a-zA-Z]*$', message='Dozvoljena su samo slova.')])
+    company_state = StringField('Država', validators=[DataRequired(), Length(min=2, max=50), Regexp('^[a-zA-ZčČćĆžŽšŠđĐ]*$', message='Dozvoljena su samo slova.')])
     company_pib = StringField('PIB', validators=[DataRequired(), Length(min=9, max=9), Regexp('^[0-9]*$', message='Dozvoljeni su samo brojevi.')]) #koji me min max broj cifara - da li su samo cifre - dali je fiksan broj cifara?
     company_mb = StringField('MB', validators=[DataRequired(), Length(min=8, max=8), Regexp('^[0-9]*$', message='Dozvoljeni su samo brojevi.')])
     company_site = StringField('Veb sajt', validators=[Optional(), Length(min=5, max=50)])
@@ -23,6 +23,8 @@ class RegistrationCompanyForm(FlaskForm):
         company = Company.query.filter_by(companyname=companyname.data).first()
         if company:
             raise ValidationError('Takva kompanija je već kreirana, molim Vas kreirajte novu kompaniju.')
+        if len(companyname.data) < 2 or len(companyname.data) > 50:
+            raise ValidationError('Naziv kompanije mora biti između 2 i 50 karaktera.')
 
 class EditCompanyForm(FlaskForm):
     companyname = StringField('Naziv kompanije', validators=[DataRequired(), Length(min=2, max=50)])
