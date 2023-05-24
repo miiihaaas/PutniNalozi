@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Greška u serveru.</h1>
+<div>
+    <a class="btn btn-info" href="{{ url_for('main.home') }}">Početna</a>
+    <button class="btn btn-info" onclick="history.back()">Nazad</button>
+</div>
+<h2>{{error_info}}</h2>
+<!-- <img src="/static/img/404.jpg" alt="Stranica 404" width="1200" height="800"> -->
+{% endblock content%}

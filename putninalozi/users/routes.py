@@ -103,7 +103,7 @@ def user_profile(user_id): #ovo je funkcija za editovanje user-a
         else:
             validate_email = User.query.filter_by(email=form.email.data).first()
             if validate_email:
-                flash('Taj mejl je već postoji, izabeite drugači mejl', 'danger')
+                flash('Taj mejl već postoji, izaberite drugi mejl', 'danger')
                 return render_template('user.html', title="Uređivanje korisničkih podataka", user=user, form=form, legend='Uređivanje korisničkih podataka')
             else:
                 user.email = form.email.data

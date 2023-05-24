@@ -60,3 +60,8 @@ app.register_blueprint(main)
 @app.errorhandler(500)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    error_info = "An error occurred: " + str(e)
+    return render_template('500.html', error_info=error_info), 500
