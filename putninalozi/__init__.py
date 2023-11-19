@@ -70,3 +70,4 @@ def handle_error(e):
 
 print('Arso je car')
 print('pa i ja sam valjda neki kralj')
+print('Miodrag je car')
