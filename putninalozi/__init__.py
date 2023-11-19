@@ -35,6 +35,8 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = os.getenv('EMAIL_USER') # https://www.youtube.com/watch?v=IolxqkL7cD8&ab_channel=CoreySchafer
 app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASS') # https://www.youtube.com/watch?v=IolxqkL7cD8&ab_channel=CoreySchafer -- za 2 step verification: https://support.google.com/accounts/answer/185833
 mail = Mail(app)
+
+#logging
 app.logger.setLevel(logging.DEBUG)
 file_handler = logging.FileHandler('myapp.txt')
 file_handler.setLevel(logging.DEBUG)
@@ -65,3 +67,5 @@ def page_not_found(e):
 def handle_error(e):
     error_info = "An error occurred: " + str(e)
     return render_template('500.html', error_info=error_info), 500
+
+print('Arso je car')
