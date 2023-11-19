@@ -69,3 +69,4 @@ def handle_error(e):
     return render_template('500.html', error_info=error_info), 500
 
 print('Arso je car')
+print('pa i ja sam valjda neki kralj')
