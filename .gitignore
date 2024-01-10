@@ -13,6 +13,7 @@ putninalozi/users/__pycache__/
 putninalozi/vehicles/__pycache__/
 __pycache__/
 venv/
+venvPutniNalozi/
 putninalozi/static/pdf_forms/*.*
 
 ### Python ###
