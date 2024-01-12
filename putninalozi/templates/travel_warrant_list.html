@@ -91,14 +91,17 @@
               role="button"
               title="Izmenite putni nalog"
             >
-              {{ warrant.travel_warrant_number }}</a
-            ><a
-              class="btn btn-outline-info"
+              {{ warrant.travel_warrant_number }}
+            </a>
+            <a
+              class="btn btn-info"
               href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
               title="Preuzmite dokument"
-              >&#x21E9;</a
+              target="_blank"
             >
-          </div>
+              &#x21E9;
+            </a>
+          </div>          
         </td>
         <td class="align-middle">
           {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }}
@@ -167,6 +170,7 @@
               class="btn btn-outline-info"
               href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
               title="Preuzmite dokument"
+              target="_blank"
               >&#x21E9;</a
             >
           </div>
@@ -229,14 +233,14 @@
               role="button"
               title="Izmenite putni nalog"
             >
-              {{ warrant.travel_warrant_number }}</a
-            ><a
-              class="btn btn-outline-info"
-              href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
-              title="Preuzmite dokument"
-              >&#x21E9;</a
-            >
-          </div>
+              {{ warrant.travel_warrant_number }}</a><a
+                class="btn btn-outline-info"
+                href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
+                title="Preuzmite dokument"
+                target="_blank"
+                >&#x21E9;</a
+              >
+            </div>
         </td>
         <td class="align-middle">
           {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}}

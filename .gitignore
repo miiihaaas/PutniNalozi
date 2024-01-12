@@ -15,6 +15,7 @@ __pycache__/
 venv/
 venvPutniNalozi/
 putninalozi/static/pdf_forms/*.*
+.vscode/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

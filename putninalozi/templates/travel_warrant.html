@@ -477,6 +477,7 @@
       <a
         class="btn btn-info"
         href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
+        target="_blank"
         >Preuzmite dokument</a>
       {% if current_user.authorization in ['c_functionary', 's_admin', 'c_admin', 'c_founder']  %}
       <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Obrišite putni nalog</button>
