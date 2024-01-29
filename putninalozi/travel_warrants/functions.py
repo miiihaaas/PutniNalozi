@@ -3,6 +3,7 @@ from flask import  render_template, flash, request, url_for
 from flask_mail import Message
 from putninalozi import app, mail
 from putninalozi.models import TravelWarrant
+from sqlalchemy import and_
 # from putninalozi.travel_warrants.pdf_form import update_pdf_form
 
 #! koristi se u fajlu: routes.py
@@ -175,14 +176,21 @@ def get_warrant_details(warrant):
     end_datetime = warrant.end_datetime.strftime('%d.%m.%Y')
     if warrant.together_with != '':
         try:
-            regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_registration
-            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_brand
+            #! registracija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_registration
+            registracija_kolege_koji_vozi = TravelWarrant.query.filter(and_(TravelWarrant.travel_warrant_number == warrant.together_with,TravelWarrant.company_id == warrant.company_id)).first().travelwarrant_vehicle.vehicle_registration
+
+            #! automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_vehicle.vehicle_brand
+            automobil_kolege_koji_vozi = TravelWarrant.query.filter(and_(TravelWarrant.travel_warrant_number == warrant.together_with,TravelWarrant.company_id == warrant.company_id)).first().travelwarrant_vehicle.vehicle_brand
+
         except AttributeError:
             # If the 'vehicle_registration' attribute is not found, try getting the 'vehicle_registration' from the 'travelwarrant_personal' object
-            regisrtacija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_registration
-            automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_brand
+            #! registracija_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_registration
+            registracija_kolege_koji_vozi = TravelWarrant.query.filter(and_(TravelWarrant.travel_warrant_number == warrant.together_with,TravelWarrant.company_id == warrant.company_id)).first().travelwarrant_personal.vehicle_registration
+
+            #! automobil_kolege_koji_vozi = TravelWarrant.query.filter_by(travel_warrant_number=warrant.together_with).first().travelwarrant_personal.vehicle_brand
+            automobil_kolege_koji_vozi = TravelWarrant.query.filter(and_(TravelWarrant.travel_warrant_number == warrant.together_with,TravelWarrant.company_id == warrant.company_id)).first().travelwarrant_personal.vehicle_brand
     else:
-        regisrtacija_kolege_koji_vozi = ''
+        registracija_kolege_koji_vozi = ''
         automobil_kolege_koji_vozi = ''
         
     rod = []
@@ -201,4 +209,4 @@ def get_warrant_details(warrant):
         startna_recenica = f"{pozicija[2]} {name} {surname}"
     elif authorization == 'c_founder':
         startna_recenica = f"{pozicija[3]} {name} {surname}"
-    return warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica
+    return warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, registracija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica

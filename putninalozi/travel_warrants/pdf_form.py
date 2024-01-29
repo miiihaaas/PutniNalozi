@@ -4,7 +4,7 @@ from putninalozi.travel_warrants.functions import replace_serbian_characters, ge
 
 
 def create_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino):
-    warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
+    warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, registracija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
 
     #za header
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
@@ -20,7 +20,7 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casov
     company_site = warrant.travelwarrant_company.company_site
 
     text_form = f'''{startna_recenica} upućuje se na službeni put dana {start_datetime}. {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.\n
-Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'{warrant.travelwarrant_vehicle.vehicle_brand if warrant.vehicle_id != None else f"{warrant.travelwarrant_personal.vehicle_brand if warrant.personal_vehicle_id !=None else automobil_kolege_koji_vozi}"} registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.\n
+Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'{warrant.travelwarrant_vehicle.vehicle_brand if warrant.vehicle_id != None else f"{warrant.travelwarrant_personal.vehicle_brand if warrant.personal_vehicle_id !=None else automobil_kolege_koji_vozi}"} registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{registracija_kolege_koji_vozi}.\n
 Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage:.2f} {warrant.daily_wage_currency}{f' / {warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}' if warrant.abroad else ""}.\n
 Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolaska na posao, podneće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.\n
 Putni troškovi padaju na teret: {costs_pays}.\n
@@ -141,7 +141,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
 
 
 def update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casova_end, br_dnevnica, br_dnevnica_start, br_dnevnica_end, br_dnevnica_ino, troskovi):
-    warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, regisrtacija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
+    warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, registracija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
 
     #za header
     company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
@@ -157,7 +157,7 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casov
     company_site = warrant.travelwarrant_company.company_site
 
     text_form = f'''{startna_recenica} upućuje se na službeni put dana {start_datetime}. {f'u' if '-' not in relation else 'na relaciji' } {relation} {f'({abroad_contry})'if abroad_contry !="" else ""} sa zadatkom: {with_task}.\n
-Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'{warrant.travelwarrant_vehicle.vehicle_brand if warrant.vehicle_id != None else f"{warrant.travelwarrant_personal.vehicle_brand if warrant.personal_vehicle_id !=None else automobil_kolege_koji_vozi}"} registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{regisrtacija_kolege_koji_vozi}.\n
+Na službenom putu {'koristi' if warrant.together_with == '' else 'deli'} prevozno sredstvo {warrant.other if warrant.other != "" else f'{warrant.travelwarrant_vehicle.vehicle_brand if warrant.vehicle_id != None else f"{warrant.travelwarrant_personal.vehicle_brand if warrant.personal_vehicle_id !=None else automobil_kolege_koji_vozi}"} registracionih oznaka: {warrant.travelwarrant_vehicle.vehicle_registration if warrant.vehicle_id != None else ""}'}{warrant.travelwarrant_personal.vehicle_registration if warrant.personal_vehicle_id != None else ""}{registracija_kolege_koji_vozi}.\n
 Dnevnica za ovo služebno putovanje pripada u iznosu od: {warrant.daily_wage:.2f} {warrant.daily_wage_currency}{f' / {warrant.daily_wage_abroad} {warrant.daily_wage_abroad_currency}' if warrant.abroad else ""}.\n
 Na službenom putu će se zadržati najdalje do {end_datetime}, a u roku od 48h po povratku sa službenog puta i dolaska na posao, podneće pismeni izveštaj o obavljenom službenom poslu. Račun o učinjenim putnim troškovima podneti u roku od tri dana.\n
 Putni troškovi padaju na teret: {costs_pays}.\n
