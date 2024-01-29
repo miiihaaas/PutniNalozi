@@ -101,7 +101,7 @@
             >
               <i class="fa-solid fa-print"></i>
             </a>
-            <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download>&#x21E9;</a>
+            <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download> <i class="fa-solid fa-download"></i></a>
           </div>          
         </td>
         <td class="align-middle">
@@ -174,7 +174,7 @@
               target="_blank"
               ><i class="fa-solid fa-print"></i></a
             >
-            <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download>&#x21E9;</a>
+            <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download> <i class="fa-solid fa-download"></i></a>
           </div>
         </td>
         <td class="align-middle">
@@ -237,7 +237,7 @@
             >
               {{ warrant.travel_warrant_number }}</a>
               <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Štampa dokumenta" target="_blank"><i class="fa-solid fa-print"></i></a>
-              <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download>&#x21E9;</a>
+              <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download> <i class="fa-solid fa-download"></i></a>
           </div>
         </td>
         <td class="align-middle">
