@@ -9,6 +9,13 @@ from datetime import datetime, timedelta
 main = Blueprint('main', __name__)
 
 
+@main.route("/test_send_mail")
+def test_send_mail():
+    flash('proveri da li ti je stigao mejl', 'success')
+    return redirect (url_for('main.home'))
+
+
+
 @main.route("/")
 @main.route("/home")
 def home():
@@ -45,6 +52,7 @@ def settings(company_id):
     if form.validate_on_submit():
         global_settings.daily_wage_domestic = form.daily_wage_domestic.data
         global_settings.daily_wage_abroad = form.daily_wage_abroad.data
+        global_settings.default_currency = form.default_currency.data
         global_settings.send_email_kreiran = form.send_email_kreiran.data
         global_settings.send_email_kreiran_principal = form.send_email_kreiran_principal.data
         global_settings.send_email_zavrsen = form.send_email_zavrsen.data
@@ -55,6 +63,7 @@ def settings(company_id):
     elif request.method == 'GET':
         form.daily_wage_domestic.data = global_settings.daily_wage_domestic
         form.daily_wage_abroad.data = global_settings.daily_wage_abroad
+        form.default_currency.data = global_settings.default_currency
         form.send_email_kreiran.data = global_settings.send_email_kreiran
         form.send_email_kreiran_principal.data = global_settings.send_email_kreiran_principal
         form.send_email_zavrsen.data = global_settings.send_email_zavrsen

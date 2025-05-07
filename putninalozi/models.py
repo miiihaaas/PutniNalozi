@@ -1,6 +1,6 @@
 from putninalozi import app, db, login_manager
 from flask_login import UserMixin
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
 
 
 @login_manager.user_loader
@@ -56,14 +56,14 @@ class User(db.Model, UserMixin):
     # https://www.reddit.com/r/flask/comments/2o4ejl/af_flask_sqlalchemy_two_foreign_keys_referencing/
 
     def get_reset_token(self, expires_sec=1800):
-        s = Serializer(app.config['SECRET_KEY'], expires_sec)
-        return s.dumps({'user_id': self.id}).decode('utf-8')
+        s = Serializer(app.config['SECRET_KEY'])
+        return s.dumps({'user_id': self.id})
 
     @staticmethod
     def verify_reset_token(token):
         s = Serializer(app.config['SECRET_KEY'])
         try:
-            user_id = s.loads(token)['user_id']
+            user_id = s.loads(token, max_age=1800)['user_id']
         except:
             return None
         return User.query.get(user_id)
@@ -144,11 +144,8 @@ class Settings(db.Model):
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     daily_wage_domestic = db.Column(db.Float, nullable=False)
     daily_wage_abroad = db.Column(db.Float, nullable=False)
+    default_currency = db.Column(db.String(3), nullable=False, default='RSD')
     send_email_kreiran = db.Column(db.Boolean, nullable=False)
     send_email_kreiran_principal = db.Column(db.Boolean, nullable=False)
     send_email_zavrsen = db.Column(db.Boolean, nullable=False)
     send_email_obracunat_cashier = db.Column(db.Boolean, nullable=False)
-
-
-db.create_all()
-db.session.commit()

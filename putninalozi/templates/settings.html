@@ -31,6 +31,19 @@
                 {{ form.daily_wage_abroad(class="form-control form-control-lg") }}
             {% endif %}
         </div>
+        <div class="col form-box col-md-6 full-on-mob top15mob">
+            {{ form.default_currency.label(class="form-control-label") }}
+            {% if form.default_currency.errors %}
+                {{ form.default_currency(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.default_currency.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.default_currency(class="form-select form-select-lg") }}
+            {% endif %}
+        </div>
         <br>
         <br>
         <legend class="border-bottom mb-3">Podešavanje opcija slanja mejla:</legend>

@@ -15,7 +15,7 @@ class PreCreateTravelWarrantForm(FlaskForm):
 
 class CreateTravelWarrantForm(FlaskForm):
     with_task = StringField('Sa zadatkom: ', validators=[DataRequired()])
-    company_id = SelectField('Kompanija: ', validators=[DataRequired()], choices=[(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).all()])
+    company_id = SelectField('Kompanija: ', validators=[DataRequired()], choices=[])
     abroad = BooleanField('Putovanje u inostranstvo')
     abroad_contry = StringField('Država: ')
     relation = StringField('Relacija: ', validators=[DataRequired()])

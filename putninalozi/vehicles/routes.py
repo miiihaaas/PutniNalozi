@@ -26,6 +26,7 @@ def register_v():
         return redirect(url_for('main.home'))
     form = RegistrationVehicleForm()
     form.reset()
+    form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
     if form.validate_on_submit():
         if current_user.authorization in ['c_admin', 'c_functionary', 'c_founder', 'c_cashier']:
             vehicle = Vehicle(vehicle_ownership=form.vehicle_ownership.data,
@@ -65,6 +66,7 @@ def vehicle_profile(vehicle_id): #ovo je funkcija za editovanje vozila
     print(Company.query.filter_by(id=vehicle.company_id).first().id)
     form = UpdateVehicleForm()
     form.reset()
+    form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).order_by('companyname').all()]
 
     if form.validate_on_submit():
         vehicle.vehicle_ownership = form.vehicle_ownership.data

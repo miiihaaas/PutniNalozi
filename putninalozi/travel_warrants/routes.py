@@ -1,5 +1,5 @@
-from flask import Blueprint, Markup
-from flask import  render_template, url_for, flash, redirect, abort, request, send_file
+from markupsafe import Markup
+from flask import Blueprint, render_template, url_for, flash, redirect, abort, request, send_file
 from putninalozi import db, bcrypt
 from putninalozi.models import TravelWarrant, Company, User, Vehicle, TravelWarrantExpenses, Settings
 from putninalozi.travel_warrants.forms import PreCreateTravelWarrantForm, CreateTravelWarrantForm, EditAdminTravelWarrantForm, EditUserTravelWarrantForm, TravelWarrantExpensesForm, EditTravelWarrantExpenses
@@ -101,6 +101,7 @@ def register_tw(korisnik_id, datum):
         form = CreateTravelWarrantForm()
         form.reset()
         global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
+        form.company_id.choices = [(c.id, c.companyname) for c in db.session.query(Company.id,Company.companyname).all()]
         # form.user_id.choices = user_list
         # form.user_id.data = str(korisnik_id)
         form.vehicle_id.choices = vehicle_company_list
@@ -113,7 +114,9 @@ def register_tw(korisnik_id, datum):
             form.personal_vehicle_id.data  = str(podrazumevano_vozilo)
             form.costs_pays.data = 'poslodavca'
             form.daily_wage.data = global_settings.daily_wage_domestic
+            form.daily_wage_currency.data = global_settings.default_currency
             form.daily_wage_abroad.data = global_settings.daily_wage_abroad
+            form.advance_payment_currency.data = global_settings.default_currency
             if form.advance_payment.data == None:
                 form.advance_payment.data = 0
         # form.start_datetime.data = datum
