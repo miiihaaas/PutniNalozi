@@ -1,3 +1,4 @@
+import os
 from fpdf import FPDF
 from num2words import num2words
 from putninalozi.travel_warrants.functions import replace_serbian_characters, get_warrant_details
@@ -32,8 +33,22 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     class PDF(FPDF):
         def __init__(self, **kwargs):
             super(PDF, self).__init__(**kwargs)
-            self.add_font('DejaVuSansCondensed', '', './putninalozi/static/fonts/DejaVuSansCondensed.ttf', uni=True)
-            self.add_font('DejaVuSansCondensed', 'B', './putninalozi/static/fonts/DejaVuSansCondensed-Bold.ttf', uni=True)
+            # baza = folder gde je pdf_form.py
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+
+            # idi jedan nivo gore (iz travel_warrants u putninalozi)
+            project_root = os.path.dirname(base_dir)
+
+            # dođi do static/fonts
+            font_path = os.path.join(project_root, "static", "fonts")
+
+            # registruj fontove
+            self.add_font('DejaVuSansCondensed', '',
+                        os.path.join(font_path, 'DejaVuSansCondensed.ttf'),
+                        uni=True)
+            self.add_font('DejaVuSansCondensed', 'B',
+                        os.path.join(font_path, 'DejaVuSansCondensed-Bold.ttf'),
+                        uni=True)
         def header(self):
             # Logo
             self.image(company_logo, 1, 1, 25)
@@ -169,8 +184,22 @@ Nalogodavac: {warrant.principal_user.name} {warrant.principal_user.surname}.
     class PDF(FPDF):
         def __init__(self, **kwargs):
             super(PDF, self).__init__(**kwargs)
-            self.add_font('DejaVuSansCondensed', '', './putninalozi/static/fonts/DejaVuSansCondensed.ttf', uni=True)
-            self.add_font('DejaVuSansCondensed', 'B', './putninalozi/static/fonts/DejaVuSansCondensed-Bold.ttf', uni=True)
+            # baza = folder gde je pdf_form.py
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+
+            # idi jedan nivo gore (iz travel_warrants u putninalozi)
+            project_root = os.path.dirname(base_dir)
+
+            # dođi do static/fonts
+            font_path = os.path.join(project_root, "static", "fonts")
+
+            # registruj fontove
+            self.add_font('DejaVuSansCondensed', '',
+                        os.path.join(font_path, 'DejaVuSansCondensed.ttf'),
+                        uni=True)
+            self.add_font('DejaVuSansCondensed', 'B',
+                        os.path.join(font_path, 'DejaVuSansCondensed-Bold.ttf'),
+                        uni=True)
         def header(self):
             # Logo
             self.image(company_logo, 1, 1, 25)
