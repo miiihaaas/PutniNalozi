@@ -167,7 +167,7 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     project_root = os.path.dirname(base_dir)
     path = os.path.join(project_root, "static", "pdf_forms")
     file_name = replace_serbian_characters(f'{warrant_number} {company_name}-{name} {surname}.pdf')    
-    pdf.output(path + file_name)
+    pdf.output(os.path.join(path, file_name))
     return file_name, text_form
 
 
@@ -393,6 +393,6 @@ Blagajnik: _____________________________________          Podnosilac računa: __
     project_root = os.path.dirname(base_dir)
     path = os.path.join(project_root, "static", "pdf_forms")
     file_name = replace_serbian_characters(f'{warrant_number} {company_name}-{name} {surname}.pdf')
-    pdf.output(path + file_name)
+    pdf.output(os.path.join(path, file_name))
     return file_name, text_form
 
