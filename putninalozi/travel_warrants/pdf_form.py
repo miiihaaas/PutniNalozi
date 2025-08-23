@@ -160,8 +160,12 @@ Povratak u državu: {warrant.contry_return.strftime("%d/%m/%Y, %H:%M") if warran
     pdf.line(196,174,196,240)
 
 
+    # baza = folder gde se nalazi ovaj fajl
+    base_dir = os.path.dirname(os.path.abspath(__file__))
 
-    path = "putninalozi/static/pdf_forms/"
+    # idi jedan nivo gore (iz travel_warrants u putninalozi)
+    project_root = os.path.dirname(base_dir)
+    path = os.path.join(project_root, "static", "pdf_forms")
     file_name = replace_serbian_characters(f'{warrant_number} {company_name}-{name} {surname}.pdf')    
     pdf.output(path + file_name)
     return file_name, text_form
@@ -381,8 +385,13 @@ U mestu {warrant.travelwarrant_company.company_city}, dana {warrant.end_datetime
     pdf.multi_cell(0, 4, f'''
 
 Blagajnik: _____________________________________          Podnosilac računa: _____________________________________''', ln=True, align='C')
+    
+    # baza = folder gde se nalazi ovaj fajl
+    base_dir = os.path.dirname(os.path.abspath(__file__))
 
-    path = "putninalozi/static/pdf_forms/"
+    # idi jedan nivo gore (iz travel_warrants u putninalozi)
+    project_root = os.path.dirname(base_dir)
+    path = os.path.join(project_root, "static", "pdf_forms")
     file_name = replace_serbian_characters(f'{warrant_number} {company_name}-{name} {surname}.pdf')
     pdf.output(path + file_name)
     return file_name, text_form
