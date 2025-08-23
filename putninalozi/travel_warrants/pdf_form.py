@@ -8,7 +8,19 @@ def create_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casov
     warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, registracija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
 
     #za header
-    company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
+        # baza = folder gde se nalazi ovaj fajl
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # idi jedan nivo gore (iz travel_warrants u putninalozi)
+    project_root = os.path.dirname(base_dir)
+
+    # napravi apsolutnu putanju do logo fajla
+    company_logo = os.path.join(
+        project_root,
+        "static",
+        "company_logos",
+        warrant.travelwarrant_company.company_logo
+    )
     company_name = warrant.travelwarrant_company.companyname
     company_address = warrant.travelwarrant_company.company_address + f" {warrant.travelwarrant_company.company_address_number}"
     company_zip_code = warrant.travelwarrant_company.company_zip_code
@@ -159,7 +171,19 @@ def update_pdf_form(warrant, br_casova, br_casova_ino, br_casova_start, br_casov
     warrant_number, name, surname, with_task, relation, abroad_contry, costs_pays, start_datetime, end_datetime, registracija_kolege_koji_vozi, automobil_kolege_koji_vozi, rod, startna_recenica = get_warrant_details(warrant)
 
     #za header
-    company_logo = "putninalozi/static/company_logos/" + warrant.travelwarrant_company.company_logo
+    # baza = folder gde se nalazi ovaj fajl
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # idi jedan nivo gore (iz travel_warrants u putninalozi)
+    project_root = os.path.dirname(base_dir)
+
+    # napravi apsolutnu putanju do logo fajla
+    company_logo = os.path.join(
+        project_root,
+        "static",
+        "company_logos",
+        warrant.travelwarrant_company.company_logo
+    )
     company_name = warrant.travelwarrant_company.companyname
     company_address = warrant.travelwarrant_company.company_address + f" {warrant.travelwarrant_company.company_address_number}"
     company_zip_code = warrant.travelwarrant_company.company_zip_code
