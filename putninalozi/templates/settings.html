@@ -1,86 +1,120 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
-  <form action="" method="POST">
-    {{ form.hidden_tag() }}
-    <fieldset class="form-group">
-      <div class="row">
-        <div class="col form-box col-md-6 full-on-mob">
-          {{ form.daily_wage_domestic.label(class="form-control-label") }}
-            {% if form.daily_wage_domestic.errors %}
-                {{ form.daily_wage_domestic(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.daily_wage_domestic.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.daily_wage_domestic(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="col form-box col-md-6 full-on-mob top15mob">
-          {{ form.daily_wage_abroad.label(class="form-control-label") }}
-            {% if form.daily_wage_abroad.errors %}
-                {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.daily_wage_abroad.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.daily_wage_abroad(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="col form-box col-md-6 full-on-mob top15mob">
-            {{ form.default_currency.label(class="form-control-label") }}
-            {% if form.default_currency.errors %}
-                {{ form.default_currency(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.default_currency.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.default_currency(class="form-select form-select-lg") }}
-            {% endif %}
-        </div>
-        <br>
-        <br>
-        <legend class="border-bottom mb-3">Podešavanje opcija slanja mejla:</legend>
-        <div class="form-check form-switch">
-          {{ form.send_email_kreiran(class="form-check-input") }} 
-          {{ form.send_email_kreiran.label(class="form-check-label") }}
-        </div>
-        <div class="form-check form-switch">
-          {{ form.send_email_kreiran_principal(class="form-check-input") }} 
-          {{ form.send_email_kreiran_principal.label(class="form-check-label") }}
-        </div>
-        <div class="form-check form-switch">
-          {{ form.send_email_zavrsen(class="form-check-input") }} 
-          {{ form.send_email_zavrsen.label(class="form-check-label") }}
-        </div>
-        <!-- dodaj if blok -->
-        {% if premium %}
-          <div class="form-check form-switch">
-            {{ form.send_email_obracunat_cashier(class="form-check-input") }} 
-            {{ form.send_email_obracunat_cashier.label(class="form-check-label") }}
-          </div>
-        {% else %}
-          <legend class="border-bottom mb-3">Podešavanje opcija za premijum paket:</legend>
-          <div class="form-check form-switch">
-            {{ form.send_email_obracunat_cashier(class="form-check-input", readonly=True, disabled=True) }} 
-            {{ form.send_email_obracunat_cashier.label(class="form-check-label") }}
-          </div>
-        {% endif %}
-        <div class="button-group">
-          <br>
-          <a class="btn btn-info" href="{{url_for('main.home')}}">Nazad</a>
-          {{ form.submit(class="btn btn-outline-primary") }}
-        </div>
+<form action="" method="POST">
+  {{ form.hidden_tag() }}
 
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-coins"></i>
+      <h3>Dnevnice</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="row">
+        <div class="col-md-4 form-box full-on-mob">
+          {{ form.daily_wage_domestic.label(class="form-control-label") }}
+          {% if form.daily_wage_domestic.errors %}
+            {{ form.daily_wage_domestic(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.daily_wage_domestic.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.daily_wage_domestic(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-4 form-box full-on-mob top15mob">
+          {{ form.daily_wage_abroad.label(class="form-control-label") }}
+          {% if form.daily_wage_abroad.errors %}
+            {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.daily_wage_abroad.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.daily_wage_abroad(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-4 form-box full-on-mob top15mob">
+          {{ form.default_currency.label(class="form-control-label") }}
+          {% if form.default_currency.errors %}
+            {{ form.default_currency(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.default_currency.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.default_currency(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
       </div>
-    </fieldset>
-  </form>
-</div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-envelope"></i>
+      <h3>Opcije slanja mejla</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="settings-switch-list">
+        <div class="settings-switch-item">
+          <div class="form-check form-switch">
+            {{ form.send_email_kreiran(class="form-check-input") }}
+            {{ form.send_email_kreiran.label(class="form-check-label") }}
+          </div>
+        </div>
+        <div class="settings-switch-item">
+          <div class="form-check form-switch">
+            {{ form.send_email_kreiran_principal(class="form-check-input") }}
+            {{ form.send_email_kreiran_principal.label(class="form-check-label") }}
+          </div>
+        </div>
+        <div class="settings-switch-item">
+          <div class="form-check form-switch">
+            {{ form.send_email_zavrsen(class="form-check-input") }}
+            {{ form.send_email_zavrsen.label(class="form-check-label") }}
+          </div>
+        </div>
+        {% if premium %}
+        <div class="settings-switch-item">
+          <div class="form-check form-switch">
+            {{ form.send_email_obracunat_cashier(class="form-check-input") }}
+            {{ form.send_email_obracunat_cashier.label(class="form-check-label") }}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if not premium %}
+  <div class="settings-section settings-section-locked">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-lock"></i>
+      <h3>Premium opcije</h3>
+      <span class="premium-badge">Premium</span>
+    </div>
+    <div class="settings-section-body">
+      <div class="settings-switch-list">
+        <div class="settings-switch-item settings-switch-disabled">
+          <div class="form-check form-switch">
+            {{ form.send_email_obracunat_cashier(class="form-check-input", readonly=True, disabled=True) }}
+            {{ form.send_email_obracunat_cashier.label(class="form-check-label") }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="settings-actions">
+    <a class="btn btn-secondary" href="{{url_for('main.home')}}"><i class="fa-solid fa-arrow-left"></i> Nazad</a>
+    {{ form.submit(class="btn btn-primary") }}
+  </div>
+
+</form>
 <script>document.body.classList.add('settings');</script>
 {% endblock content%}

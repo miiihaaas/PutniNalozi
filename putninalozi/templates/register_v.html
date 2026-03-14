@@ -1,85 +1,98 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <div class="form-group">
-                {{ form.vehicle_ownership.label(class="form-control-label") }}
-                {% if form.vehicle_ownership.errors %}
-                    {{ form.vehicle_ownership(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.vehicle_ownership.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.vehicle_ownership(class="form-select form-select-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.vehicle_type.label(class="form-control-label") }}
-                {% if form.vehicle_type.errors %}
-                    {{ form.vehicle_type(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.vehicle_type.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.vehicle_type(class="form-select form-select-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.vehicle_brand.label(class="form-control-label") }}
-                {% if form.vehicle_brand.errors %}
-                    {{ form.vehicle_brand(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.vehicle_brand.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.vehicle_brand(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group">
-                {{ form.vehicle_registration.label(class="form-control-label") }}
 
-                {% if form.vehicle_registration.errors %}
-                    {{ form.vehicle_registration(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.vehicle_registration.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.vehicle_registration(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            {% if current_user.authorization == 's_admin'%}
-                <div class="form-group">
-                    {{ form.company_id.label(class="form-control-label") }}
-                    {% if form.company_id.errors %}
-                        {{ form.company_id(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.company_id.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.company_id(class="form-select form-select-lg") }}
-                    {% endif %}
-                </div>
-            {% else %}
-                {{ form.company_id(class="sr-only form-select form-select-lg") }}
-            {% endif %}
-        </fieldset>
-        <div class="form-group">
-          <a class="btn btn-info" href="{{url_for('vehicles.vehicle_list')}}">Nazad</a>
-      {{ form.submit(class="btn btn-outline-info") }}
+<form method="POST" action="">
+  {{ form.hidden_tag() }}
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-car-side"></i>
+      <h3>Registracija novog vozila</h3>
     </div>
-  </form>
-</div>
+    <div class="settings-section-body">
+      <div class="row">
+        <div class="col-md-6 form-group">
+          {{ form.vehicle_ownership.label(class="form-control-label") }}
+          {% if form.vehicle_ownership.errors %}
+            {{ form.vehicle_ownership(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.vehicle_ownership.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.vehicle_ownership(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-6 form-group">
+          {{ form.vehicle_type.label(class="form-control-label") }}
+          {% if form.vehicle_type.errors %}
+            {{ form.vehicle_type(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.vehicle_type.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.vehicle_type(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          {{ form.vehicle_brand.label(class="form-control-label") }}
+          {% if form.vehicle_brand.errors %}
+            {{ form.vehicle_brand(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.vehicle_brand.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.vehicle_brand(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-6 form-group">
+          {{ form.vehicle_registration.label(class="form-control-label") }}
+          {% if form.vehicle_registration.errors %}
+            {{ form.vehicle_registration(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.vehicle_registration.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.vehicle_registration(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+      </div>
+      {% if current_user.authorization == 's_admin'%}
+      <div class="row">
+        <div class="col-md-6 form-group">
+          {{ form.company_id.label(class="form-control-label") }}
+          {% if form.company_id.errors %}
+            {{ form.company_id(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.company_id.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.company_id(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+      </div>
+      {% else %}
+        {{ form.company_id(class="sr-only form-select form-select-lg") }}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="settings-actions">
+    <a class="btn btn-secondary" href="{{url_for('vehicles.vehicle_list')}}"><i class="fa-solid fa-arrow-left"></i> Nazad</a>
+    {{ form.submit(class="btn btn-primary") }}
+  </div>
+</form>
+
 <script>document.body.classList.add('register-v');</script>
 {% endblock content%}

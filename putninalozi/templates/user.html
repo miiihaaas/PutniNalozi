@@ -1,164 +1,175 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <div class="row just-column">
-                <div class="col form-group">
-                    {{ form.name.label(class="form-control-label") }}
-                    {% if form.name.errors %}
-                        {{ form.name(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.name.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.name(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="col form-group">
-                    {{ form.surname.label(class="form-control-label") }}
-                    {% if form.surname.errors %}
-                        {{ form.surname(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.surname.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.surname(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row just-column">
-                <div class="col form-group">
-                    {{ form.gender.label(class="form-control-label") }}
-                    {% if form.gender.errors %}
-                        {{ form.gender(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.gender.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.gender(class="form-select form-select-lg") }}
-                    {% endif %}
-                </div>
-                <div class="col form-group">
-                    {{ form.email.label(class="form-control-label") }}
-                    {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.email(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-            </div>
-            <div class="row just-column">
-                <div class="col form-group">
-                    {{ form.workplace.label(class="form-control-label") }}
-                    {% if form.workplace.errors %}
-                        {{ form.workplace(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.workplace.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.workplace(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                <div class="col form-group">
-                    {{ form.authorization.label(class="form-control-label") }}
-                    {% if form.authorization.errors %}
-                        {{ form.authorization(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.authorization.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.authorization(class="form-select form-select-lg") }}
-                    {% endif %}
-                </div>
-                <div class="form-check form-switch">
-                    {{ form.principal(class="form-check-input") }} 
-                    {{ form.principal.label(class="form-check-label") }}
-                </div>
-            </div>
-            <div class="row just-column">
-                <div class="col form-group">
-                    {{ form.default_vehicle.label(class="form-control-label") }}
-                    {% if form.default_vehicle.errors %}
-                        {{ form.default_vehicle(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.default_vehicle.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.default_vehicle(class="form-select form-select-lg") }}
-                    {% endif %}
-                </div>
-                {% if current_user.authorization == 's_admin'%}
-                <div class="col form-group">
-                    {{ form.company_id.label(class="form-control-label") }}
-                    {% if form.company_id.errors %}
-                        {{ form.company_id(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.company_id.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.company_id(class="form-select form-select-lg") }}
-                    {% endif %}
-                </div>
-                {% else %}
-                {{ form.company_id(class="sr-only form-select form-select-lg") }}
-                {% endif %}
-            </div>
 
-        </fieldset>
-        <div class="form-group">
-            <a class="btn btn-info" href="{{url_for('users.user_list')}}">Nazad</a>
-            {{ form.submit(class="btn btn-outline-info") }}
-            {% if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder'] %}
-            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Obrišite profil korisnika</button>
-            {% endif %}
+<form method="POST" action="">
+  {{ form.hidden_tag() }}
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-user"></i>
+      <h3>Lični podaci</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="row">
+        <div class="col-md-4 form-group">
+          {{ form.name.label(class="form-control-label") }}
+          {% if form.name.errors %}
+            {{ form.name(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.name.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.name(class="form-control form-control-lg") }}
+          {% endif %}
         </div>
-    </form>
-</div>
+        <div class="col-md-4 form-group">
+          {{ form.surname.label(class="form-control-label") }}
+          {% if form.surname.errors %}
+            {{ form.surname(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.surname.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.surname(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-4 form-group">
+          {{ form.gender.label(class="form-control-label") }}
+          {% if form.gender.errors %}
+            {{ form.gender(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.gender.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.gender(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-briefcase"></i>
+      <h3>Radno mesto i kontakt</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="row">
+        <div class="col-md-6 form-group">
+          {{ form.email.label(class="form-control-label") }}
+          {% if form.email.errors %}
+            {{ form.email(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.email.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.email(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-6 form-group">
+          {{ form.workplace.label(class="form-control-label") }}
+          {% if form.workplace.errors %}
+            {{ form.workplace(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.workplace.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.workplace(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-shield-halved"></i>
+      <h3>Autorizacija i podešavanja</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="row">
+        <div class="col-md-6 form-group">
+          {{ form.authorization.label(class="form-control-label") }}
+          {% if form.authorization.errors %}
+            {{ form.authorization(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.authorization.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.authorization(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-6 form-group">
+          {{ form.default_vehicle.label(class="form-control-label") }}
+          {% if form.default_vehicle.errors %}
+            {{ form.default_vehicle(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.default_vehicle.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.default_vehicle(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="settings-switch-item" style="padding-top: 10px;">
+        <div class="form-check form-switch">
+          {{ form.principal(class="form-check-input") }}
+          {{ form.principal.label(class="form-check-label") }}
+        </div>
+      </div>
+      {% if current_user.authorization == 's_admin'%}
+      <div class="row" style="margin-top: 16px;">
+        <div class="col-md-6 form-group">
+          {{ form.company_id.label(class="form-control-label") }}
+          {% if form.company_id.errors %}
+            {{ form.company_id(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.company_id.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.company_id(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+      </div>
+      {% else %}
+        {{ form.company_id(class="sr-only form-select form-select-lg") }}
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="settings-actions">
+    <a class="btn btn-secondary" href="{{url_for('users.user_list')}}"><i class="fa-solid fa-arrow-left"></i> Nazad</a>
+    {{ form.submit(class="btn btn-primary") }}
+    {% if current_user.authorization in ['c_admin', 's_admin', 'c_functionary', 'c_founder'] %}
+      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DeleteModal"><i class="fa-solid fa-trash"></i> Obrišite profil</button>
+    {% endif %}
+  </div>
+</form>
+
 <!-- Modal -->
 <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
-        <div class="modal-header">
-        <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želite da trajno izbišete profil korisnika {{form.name.data}} {{form.surname.data}}?</h5>
+      <div class="modal-header">
+        <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želite da trajno izbrišete profil korisnika {{form.name.data}} {{form.surname.data}}?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times;</span>
         </button>
-        </div>
-        <div class="modal-body">
+      </div>
+      <div class="modal-body">
         <label for="input_password">Da biste izbrisali korisnika potrebno je uneti svoju lozinku.</label>
-        </div>
-        <div class="modal-footer">
-        <form  action="{{ url_for('users.delete_user', user_id=user.id) }}" method="post">
-            <input class="form-control" type="password" id="input_password" name="input_password" value="" placeholder="potvrdite lozinkom">
-            <br>
+        <form action="{{ url_for('users.delete_user', user_id=user.id) }}" method="post">
+          <input class="form-control mt-3" type="password" id="input_password" name="input_password" value="" placeholder="Potvrdite lozinkom">
+          <div class="settings-actions mt-3">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
             <input class="btn btn-danger" type="submit" value="Izbrišite profil korisnika">
+          </div>
         </form>
-        </div>
+      </div>
     </div>
-    </div>
+  </div>
 </div>
+
 <script>document.body.classList.add('user');</script>
 {% endblock content%}
 
@@ -169,24 +180,19 @@
         const principalInput = $('#principal');
 
         if (['c_admin', 'c_functionary', 'c_founder'].includes(authorizationSelect.val())) {
-            console.log('Može da bude nalogodavac');
             principalInput.removeAttr('disabled');
         } else {
-            console.log('NE može da bude nalogodavac');
             principalInput.attr('disabled', true);
         }
 
         authorizationSelect.on('change', function() {
             if (['c_admin', 'c_functionary', 'c_founder'].includes(authorizationSelect.val())) {
-                console.log('Može da bude nalogodavac');
                 principalInput.removeAttr('disabled');
             } else {
-                console.log('NE može da bude nalogodavac');
                 principalInput.prop('checked', false);
                 principalInput.attr('disabled', true);
             }
         });
     });
 </script>
-
 {% endblock %}

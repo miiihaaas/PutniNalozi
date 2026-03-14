@@ -1,26 +1,30 @@
 {% extends "layout.html" %}
 {% block content %}
 {% if current_user.authorization not in ['c_user', 'c_member', 'o_cashier'] %}
-  <a class="btn btn-info btn-sm m-1" href="{{ url_for('users.register_u') }}">Registrujte novog korisnika</a>
-  <hr>
+<div style="margin-bottom: 20px;">
+  <a class="btn btn-info m-1" href="{{ url_for('users.register_u') }}"><i class="fa-solid fa-plus"></i> Registrujte novog korisnika</a>
+</div>
 {% endif %}
 
-<table id="data" border="1" class="table table-striped userlist">
+<table id="data" class="table table-striped userlist">
   {% if current_user.authorization == 's_admin' %}
     <thead>
       <tr id="header">
         <th>Ime i prezime</th>
         <th>Kompanija</th>
         <th>Autorizacija</th>
-        <th>email</th>
+        <th>E-mail</th>
       </tr>
     </thead>
     <tbody>
       {% for user in users %}
         <tr>
-          <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} <i class="fa fa-pencil" title="Nalogodavac"></i> {% endif %}</td>
+          <td>
+            <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a>
+            {% if user.principal %} <span class="principal-badge" title="Nalogodavac"><i class="fa-solid fa-stamp"></i> N</span> {% endif %}
+          </td>
           <td>{{ user.user_company.companyname }}</td>
-          <td>{{ user.authorization }}</td>
+          <td><span class="auth-badge auth-{{ user.authorization }}">{{ user.authorization }}</span></td>
           <td>{{ user.email }}</td>
         </tr>
       {% endfor %}
@@ -29,7 +33,7 @@
     <thead>
       <tr id="header">
         <th>Ime i prezime</th>
-        <th>email</th>
+        <th>E-mail</th>
         <th>Autorizacija</th>
       </tr>
     </thead>
@@ -38,31 +42,32 @@
         {% if user.user_company.id == current_user.user_company.id %}
           {% if user.authorization != 'c_deleted' %}
             <tr>
-              <td> 
-                <div class="btn-group">
-                <a class="btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a>
-                {% if user.principal %}
-                <a class="btn btn-outline-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" class="fa fa-pencil" title="Nalogodavac">N</a>
-                {% endif %}
+              <td>
+                <div class="tw-actions">
+                  <a class="btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a>
+                  {% if user.principal %}
+                  <span class="principal-badge" title="Nalogodavac"><i class="fa-solid fa-stamp"></i> N</span>
+                  {% endif %}
                 </div>
               </td>
               <td>{{ user.email }}</td>
               <td class="tableflexcell">
                 {% if user.authorization == 'c_user' %}
-                  <img src="../../static/img/K-Light.png" alt="(K)" class="tableiconimg" title="Korisnik">  ZAPOSLENI
+                  <img src="{{ url_for('static', filename='img/K-Light.png') }}" alt="(K)" class="tableiconimg" title="Korisnik"> ZAPOSLENI
                 {% elif user.authorization == 'c_member' %}
-                  <img src="../../static/img/K-Light.png" alt="(K)" class="tableiconimg" title="Korisnik"></i>  ČLAN BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="{{ url_for('static', filename='img/K-Light.png') }}" alt="(K)" class="tableiconimg" title="Korisnik"> ČLAN BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_admin' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  ZAPOSLENI
+                  <img src="{{ url_for('static', filename='img/A-Light.png') }}" alt="(A)" class="tableiconimg" title="Admin"> ZAPOSLENI
                 {% elif user.authorization == 'c_functionary' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  FUNKCIONER BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="{{ url_for('static', filename='img/A-Light.png') }}" alt="(A)" class="tableiconimg" title="Admin"> FUNKCIONER BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_founder' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  OSNIVAČ BEZ ZAPOSLENJA U PRAVNOM LICU
+                  <img src="{{ url_for('static', filename='img/A-Light.png') }}" alt="(A)" class="tableiconimg" title="Admin"> OSNIVAČ BEZ ZAPOSLENJA U PRAVNOM LICU
                 {% elif user.authorization == 'c_cashier' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  KNJIGOVOĐA/BLAGAJNIK
+                  <img src="{{ url_for('static', filename='img/A-Light.png') }}" alt="(A)" class="tableiconimg" title="Admin"> KNJIGOVOĐA/BLAGAJNIK
                 {% elif user.authorization == 'o_cashier' %}
-                  <img src="../../static/img/A-Light.png" alt="(A)" class="tableiconimg" title="Admin">  KNJIGOVOĐA BEZ ZAPOSLENJA U PRAVNOM LICU
-                {% endif %}</td>
+                  <img src="{{ url_for('static', filename='img/A-Light.png') }}" alt="(A)" class="tableiconimg" title="Admin"> KNJIGOVOĐA BEZ ZAPOSLENJA U PRAVNOM LICU
+                {% endif %}
+              </td>
             </tr>
           {% endif %}
         {% endif %}
@@ -72,7 +77,7 @@
     <thead>
       <tr id="header">
         <th>Ime i prezime</th>
-        <th>email</th>
+        <th>E-mail</th>
         <th>Autorizacija</th>
       </tr>
     </thead>
@@ -80,9 +85,12 @@
       {% for user in users %}
         {% if user.id == current_user.id %}
           <tr>
-            <td> <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a> {% if user.principal %} <i class="fa fa-pencil" title="Nalogodavac"></i> {% endif %} </td>
+            <td>
+              <a class="mr-2 btn btn-info" href="{{ url_for('users.user_profile', user_id=user.id) }}" title="Uređivanje korisnika">{{ user.name }} {{ user.surname }}</a>
+              {% if user.principal %} <span class="principal-badge" title="Nalogodavac"><i class="fa-solid fa-stamp"></i> N</span> {% endif %}
+            </td>
             <td>{{ user.email }}</td>
-            <th>{{ user.authorization }}</th>
+            <td><span class="auth-badge auth-{{ user.authorization }}">{{ user.authorization }}</span></td>
           </tr>
         {% endif %}
       {% endfor %}

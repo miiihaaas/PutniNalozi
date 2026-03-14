@@ -1,63 +1,143 @@
 {% extends "layout.html" %}
 {% block content %}
-<table id="data" class="table table-striped">
-  <thead>
-    <tr id="header">
-      <th>Modul</th>
-      <th>Opis modula</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% if current_user.authorization not in ['c_user', 'c_member', 'o_cashier'] %}
-    <tr>
-      <td> <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni nalozi</a> </td>
-      <td>Kreiranje i administriranje putnih naloga</td>
-    </tr>
-    <tr>
-      <td> <a class="btn btn-info" href="{{ url_for('main.settings', company_id=current_user.user_company.id) }}">Osnovna podešavanja</a> </td>
-      <td>Podešavanja - razna</td>
-    </tr>
-    <tr>
-      <td> <a class="btn btn-info" href="{{ url_for('companys.company_list') }}">Kompanija</a> </td>
-      <td>Unos i promena podataka o kompaniji</td>
-    </tr>
-    <tr>
-      <td> <a class="btn btn-info" href="{{ url_for('vehicles.vehicle_list') }}">Vozila</a> </td>
-      <td>Unos i promena podataka o vozilima</td>
-    </tr>
-    <tr>
-      <td> <a class="btn btn-info" href="{{ url_for('users.user_list') }}">Korisnici</a> </td>
-      <td>Kreiranje i izmena korisničkih naloga</td>
-    </tr>
-    {% else %}
-    <tr>
-      <td> <a class="btn btn-info" href="{{ url_for('travel_warrants.travel_warrant_list') }}">Putni nalozi</a> </td>
-      <td>Administriranje putnih naloga</td>
-    </tr>
-    {% endif %}
-  </tbody>
-</table>
-<h2>O softveru:</h2>
-<p class="emphasized">Softver putninalozi.online omogućava izradu, evidenciju i štampu putnih naloga za službena putovanja u zemlji i inostranstvu. On umrežava korisnike koji zajednički mogu da rade na generisanju, popunjavanju i knjiženju putnih naloga. Softver je razvio Studio Implicit, firma sa bogatim iskustvom u razvoju poslovnih rešenja.</p>
-<br>
-<div class="content-section">
-  <h3>Zašto da koristite naš softver?</h3>
-  <p class='text-muted'>
-    <ul class="list-group">
-      <li class="list-group-item list-group-item-light"><small> - Softver je jednostavan za korišćenje</small></li>
-      <li class="list-group-item list-group-item-light"><small> - Pristup softveru je moguć u bilo kom trenutku i odakle god da radite</small></li>
-      <li class="list-group-item list-group-item-light"><small> - Automatsko generisanje popunjenog putnog naloga i putnog računa</small></li>
-      <li class="list-group-item list-group-item-light"><small> - Automatski obračun dnevnica i troškova nastalih na službenom putovanju</small></li>
-      <li class="list-group-item list-group-item-light"><small> - Automatsko prosleđivanje odobrenog putnog naloga računovodstvu</small></li>
-      <li class="list-group-item list-group-item-light"><small> - Jednostavan odabir vozila kojim se ide na službeno putovanje iz prethodno kreirane baze vozila</small></li>
-      <li class="list-group-item list-group-item-light"><small> - Ukoliko više osoba putuje jednim vozilom na službeni put, softver olakšava izradu putnih naloga za svaku od njih</small></li>
-      <li class="list-group-item list-group-item-light"><small> - Brza pretraga po različitim kriterijumima</small></li>
-      <li class="list-group-item list-group-item-light"><small> - Softver radi u cloud-u, nije potrebno instaliranje</small></li>
-    </ul>
-  </p>
+
+<div class="dashboard-welcome">
+  <div class="welcome-text">
+    <h2>Dobrodošli, {{ current_user.name }}</h2>
+    <p>Izaberite modul za rad</p>
+  </div>
 </div>
 
-<h2>Uz naš softver, svaki put je srećan put!</h2>
+<div class="dashboard-grid">
+  {% if current_user.authorization not in ['c_user', 'c_member', 'o_cashier'] %}
+  <a href="{{ url_for('travel_warrants.travel_warrant_list') }}" class="dash-card">
+    <div class="dash-card-icon">
+      <i class="fa-solid fa-route"></i>
+    </div>
+    <div class="dash-card-body">
+      <h3>Putni nalozi</h3>
+      <p>Kreiranje i administriranje putnih naloga</p>
+    </div>
+    <div class="dash-card-arrow">
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </a>
+  <a href="{{ url_for('main.settings', company_id=current_user.user_company.id) }}" class="dash-card">
+    <div class="dash-card-icon">
+      <i class="fa-solid fa-sliders"></i>
+    </div>
+    <div class="dash-card-body">
+      <h3>Osnovna podešavanja</h3>
+      <p>Podešavanja - razna</p>
+    </div>
+    <div class="dash-card-arrow">
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </a>
+  <a href="{{ url_for('companys.company_list') }}" class="dash-card">
+    <div class="dash-card-icon">
+      <i class="fa-solid fa-building"></i>
+    </div>
+    <div class="dash-card-body">
+      <h3>Kompanija</h3>
+      <p>Unos i promena podataka o kompaniji</p>
+    </div>
+    <div class="dash-card-arrow">
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </a>
+  <a href="{{ url_for('vehicles.vehicle_list') }}" class="dash-card">
+    <div class="dash-card-icon">
+      <i class="fa-solid fa-car-side"></i>
+    </div>
+    <div class="dash-card-body">
+      <h3>Vozila</h3>
+      <p>Unos i promena podataka o vozilima</p>
+    </div>
+    <div class="dash-card-arrow">
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </a>
+  <a href="{{ url_for('users.user_list') }}" class="dash-card">
+    <div class="dash-card-icon">
+      <i class="fa-solid fa-users"></i>
+    </div>
+    <div class="dash-card-body">
+      <h3>Korisnici</h3>
+      <p>Kreiranje i izmena korisničkih naloga</p>
+    </div>
+    <div class="dash-card-arrow">
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </a>
+  {% else %}
+  <a href="{{ url_for('travel_warrants.travel_warrant_list') }}" class="dash-card">
+    <div class="dash-card-icon">
+      <i class="fa-solid fa-route"></i>
+    </div>
+    <div class="dash-card-body">
+      <h3>Putni nalozi</h3>
+      <p>Administriranje putnih naloga</p>
+    </div>
+    <div class="dash-card-arrow">
+      <i class="fa-solid fa-arrow-right"></i>
+    </div>
+  </a>
+  {% endif %}
+</div>
+
+<div class="about-section">
+  <div class="about-header">
+    <h2><i class="fa-solid fa-circle-info"></i> O softveru</h2>
+    <p class="about-lead">Softver putninalozi.online omogućava izradu, evidenciju i štampu putnih naloga za službena putovanja u zemlji i inostranstvu. On umrežava korisnike koji zajednički mogu da rade na generisanju, popunjavanju i knjiženju putnih naloga. Softver je razvio Studio Implicit, firma sa bogatim iskustvom u razvoju poslovnih rešenja.</p>
+  </div>
+  <div class="benefits-section">
+    <h3>Zašto da koristite naš softver?</h3>
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-hand-pointer"></i></div>
+        <p>Softver je jednostavan za korišćenje</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-globe"></i></div>
+        <p>Pristup softveru je moguć u bilo kom trenutku i odakle god da radite</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-file-lines"></i></div>
+        <p>Automatsko generisanje popunjenog putnog naloga i putnog računa</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-calculator"></i></div>
+        <p>Automatski obračun dnevnica i troškova nastalih na službenom putovanju</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-paper-plane"></i></div>
+        <p>Automatsko prosleđivanje odobrenog putnog naloga računovodstvu</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-car"></i></div>
+        <p>Jednostavan odabir vozila iz prethodno kreirane baze vozila</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-users"></i></div>
+        <p>Ukoliko više osoba putuje jednim vozilom, softver olakšava izradu putnih naloga za svaku od njih</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+        <p>Brza pretraga po različitim kriterijumima</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-icon"><i class="fa-solid fa-cloud"></i></div>
+        <p>Softver radi u cloud-u, nije potrebno instaliranje</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="home-footer-tagline">
+  <p>Uz naš softver, svaki put je srećan put!</p>
+</div>
+
 <script>document.body.classList.add('about');</script>
 <script>document.body.classList.add('home');</script>
 {% endblock content%}

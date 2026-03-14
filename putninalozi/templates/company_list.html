@@ -1,10 +1,11 @@
-{% extends "layout.html" %} 
-{% block content %} 
+{% extends "layout.html" %}
+{% block content %}
 {% if current_user.authorization == 's_admin' %}
-<a class="btn btn-info btn-sm m-1" href="{{ url_for('companys.register_c') }}">Kreiraj Novu Kompaniju</a>
+<div style="margin-bottom: 20px;">
+  <a class="btn btn-info m-1" href="{{ url_for('companys.register_c') }}"><i class="fa-solid fa-plus"></i> Kreiraj novu kompaniju</a>
+</div>
 {% endif %}
-<hr />
-<table id="data" border="1" class="table table-striped complist">
+<table id="data" class="table table-striped complist">
   <thead>
     <tr>
       <th>Kompanija</th>
@@ -16,7 +17,7 @@
     </tr>
   </thead>
   <tbody>
-    {% if current_user.authorization == 's_admin' %} 
+    {% if current_user.authorization == 's_admin' %}
       {% for company in companys %}
       <tr>
         <td>
@@ -24,20 +25,29 @@
             class="mr-2 btn btn-info"
             href="{{ url_for('companys.company_profile', company_id=company.id) }}"
             title="Uređivanje kompanije"
-            >{{ company.companyname }}</a
-          >
+          >{{ company.companyname }}</a>
         </td>
         <td>
           {{ company.company_address }} {{ company.company_address_number }}
         </td>
         <td>{{ company.company_city }}, {{ company.company_state }}</td>
         <td>
-          {{ company.company_site }} / {{ company.company_mail }} / {{ company.company_phone }}
+          <div class="contact-info">
+            {% if company.company_site %}
+            <span class="contact-item" title="Web sajt"><i class="fa-solid fa-globe"></i> {{ company.company_site }}</span>
+            {% endif %}
+            {% if company.company_mail %}
+            <span class="contact-item" title="E-mail"><i class="fa-solid fa-envelope"></i> {{ company.company_mail }}</span>
+            {% endif %}
+            {% if company.company_phone %}
+            <span class="contact-item" title="Telefon"><i class="fa-solid fa-phone"></i> {{ company.company_phone }}</span>
+            {% endif %}
+          </div>
         </td>
       </tr>
-      {% endfor %} 
-    {% else %} 
-      {% for company in companys %} 
+      {% endfor %}
+    {% else %}
+      {% for company in companys %}
         {% if company.companyname == current_user.user_company.companyname %}
         <tr>
           <td>
@@ -45,20 +55,19 @@
               class="mr-2 btn btn-info"
               href="{{ url_for('companys.company_profile', company_id=company.id) }}"
               title="Uređivanje kompanije"
-              >{{ company.companyname }}</a
-            >
+            >{{ company.companyname }}</a>
           </td>
           <td>
             {{ company.company_address }} {{ company.company_address_number }}
           </td>
           <td>{{ company.company_city }}, {{ company.company_state }}</td>
         </tr>
-        {% endif %} 
+        {% endif %}
       {% endfor %}
+    {% endif %}
   </tbody>
-  {% endif %}
 </table>
-{% endblock content%} 
+{% endblock content%}
 
 {% block scripts %}
 <script>

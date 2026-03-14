@@ -1,8 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 <form method="POST" action="">
   {{ form.hidden_tag() }}
-  <fieldset class="form-group">
-  </fieldset>
   {% if current_user.authorization not in ['c_user', 'c_member'] %}
   <div id="accordionZero">
     <div class="accordion">
@@ -16,10 +14,10 @@
             aria-expanded="false"
             aria-controls="collapseZero"
           >
-            Kreiranje novog putnog naloga
+            <i class="fa-solid fa-plus" style="margin-right:8px;"></i> Kreiranje novog putnog naloga
           </button>
         </div>
-        
+
         <div
           id="collapseZero"
           class="collapse"
@@ -30,16 +28,16 @@
             <div class="row">
               <div class="col form-group columnflex">
                 <div class="rowflex">
-                  {{ form.user_id.label(class="form-control-label") }} 
-                  {% if form.user_id.errors %} 
+                  {{ form.user_id.label(class="form-control-label") }}
+                  {% if form.user_id.errors %}
                     {{ form.user_id(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
                       {% for error in form.user_id.errors %}
                       <span>{{ error }}</span>
                       {% endfor %}
                     </div>
-                  {% else %} 
-                    {{ form.user_id(class="form-select form-select-lg") }} 
+                  {% else %}
+                    {{ form.user_id(class="form-select form-select-lg") }}
                   {% endif %}
                 </div>
                 <small class="text-muted ml-2">
@@ -47,16 +45,16 @@
                 </small>
               </div>
               <div class="col form-box start-time">
-                {{ form.start_datetime.label(class="form-control-label") }} 
-                {% if form.start_datetime.errors %} 
+                {{ form.start_datetime.label(class="form-control-label") }}
+                {% if form.start_datetime.errors %}
                   {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
                   <div class="invalid-feedback">
                     {% for error in form.start_datetime.errors %}
                     <span>{{ error }}</span>
                     {% endfor %}
                   </div>
-                {% else %} 
-                  {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local", readonly="readonly") }} 
+                {% else %}
+                  {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local", readonly="readonly") }}
                 {% endif %}
               </div>
               <div class="form-group">
@@ -69,7 +67,7 @@
     </div>
   </div>
   {% endif %}
-  <table id="data" border="1" class="table table-striped twlist">
+  <table id="data" class="table table-striped twlist">
     {% if current_user.authorization == 's_admin' %}
     <thead>
       <tr id="header">
@@ -84,37 +82,39 @@
       {% for warrant in warrants %}
       <tr>
         <td class="align-middle">
-          <div class="btn-group">
+          <div class="tw-actions">
             <a
-              class="btn btn-info"
+              class="btn btn-info tw-btn-main"
               href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}"
               role="button"
               title="Izmenite putni nalog"
             >
               {{ warrant.travel_warrant_number }}
             </a>
-            <a
-              class="btn btn-info"
-              href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
-              title="Štampa dokumenta"
-              target="_blank" 
-            >
-              <i class="fa-solid fa-print"></i>
-            </a>
-            <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download> <i class="fa-solid fa-download"></i></a>
-          </div>          
+            <div class="tw-btn-icons">
+              <a
+                class="btn btn-icon-action"
+                href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
+                title="Štampa dokumenta"
+                target="_blank"
+              >
+                <i class="fa-solid fa-print"></i>
+              </a>
+              <a class="btn btn-icon-action" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download><i class="fa-solid fa-download"></i></a>
+            </div>
+          </div>
         </td>
         <td class="align-middle">
           {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }}
         </td>
         <td class="align-middle flexvcenter">
-          {% if warrant.together_with %} 
+          {% if warrant.together_with %}
             {% for w in warrants %}
               {% if w.travel_warrant_number == warrant.together_with %}
                 {% if w.personal_vehicle_id %}
-                  <img src="../../static/img/P-Light.png" alt="(P)" class="tableiconimg" title="Privatno vozilo">
+                  <img src="{{ url_for('static', filename='img/P-Light.png') }}" alt="(P)" class="tableiconimg" title="Privatno vozilo">
                 {% else %}
-                  <img src="../../static/img/S-Light.png" alt="(S)" class="tableiconimg" title="Službeno vozilo">
+                  <img src="{{ url_for('static', filename='img/S-Light.png') }}" alt="(S)" class="tableiconimg" title="Službeno vozilo">
                 {% endif %}
               {% endif %}
             {% endfor %}
@@ -123,15 +123,15 @@
             <b>{{warrant.together_with}} </b>
           </p>
           {% elif warrant.other %}
-            <img src="../../static/img/D-Light.png" alt="(D)" class="tableiconimg" title="Dugi tip prevoza">
+            <img src="{{ url_for('static', filename='img/D-Light.png') }}" alt="(D)" class="tableiconimg" title="Dugi tip prevoza">
             {{ warrant.other }}
           {% elif warrant.personal_vehicle_id %}
-            <img src="../../static/img/P-Light.png" alt="(P)" class="tableiconimg" title="Privatno vozilo">
+            <img src="{{ url_for('static', filename='img/P-Light.png') }}" alt="(P)" class="tableiconimg" title="Privatno vozilo">
           <p>{{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}</p>
-          {% else %} 
-            <img src="../../static/img/S-Light.png" alt="(S)" class="tableiconimg" title="Službeno vozilo">
+          {% else %}
+            <img src="{{ url_for('static', filename='img/S-Light.png') }}" alt="(S)" class="tableiconimg" title="Službeno vozilo">
           <p> {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}</p>
@@ -140,7 +140,7 @@
         <td class="align-middle">
           {{ warrant.travelwarrant_company.companyname }}
         </td>
-        <td class="align-middle">{{ warrant.status }}</td>
+        <td class="align-middle"><span class="status-badge status-{{ warrant.status }}">{{ warrant.status }}</span></td>
       </tr>
       {% endfor %}
     </tbody>
@@ -155,61 +155,62 @@
       </tr>
     </thead>
     <tbody>
-      {% for warrant in warrants %} 
+      {% for warrant in warrants %}
       {% if current_user.user_company.id == warrant.travelwarrant_company.id %}
       <tr class="iconwrapper">
         <td class="align-middle">
-          <div class="btn-group">
+          <div class="tw-actions">
             <a
-              class="btn btn-info"
+              class="btn btn-info tw-btn-main"
               href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}"
               role="button"
               title="Izmenite putni nalog"
             >
-              {{ warrant.travel_warrant_number }}</a
-            ><a
-              class="btn btn-outline-info"
-              href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
-              title="Štampa dokumenta"
-              target="_blank"
-              ><i class="fa-solid fa-print"></i></a
-            >
-            <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download> <i class="fa-solid fa-download"></i></a>
+              {{ warrant.travel_warrant_number }}</a>
+            <div class="tw-btn-icons">
+              <a
+                class="btn btn-icon-action"
+                href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
+                title="Štampa dokumenta"
+                target="_blank"
+              ><i class="fa-solid fa-print"></i></a>
+              <a class="btn btn-icon-action" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download><i class="fa-solid fa-download"></i></a>
+            </div>
           </div>
         </td>
         <td class="align-middle">
           {{ warrant.travelwarrant_user.name }} {{warrant.travelwarrant_user.surname}}
         </td>
         <td class="align-middle flexvcenter">
-          {% if warrant.together_with %} 
+          {% if warrant.together_with %}
             {% for w in warrants %}
               {% if w.travel_warrant_number == warrant.together_with %}
                 {% if w.personal_vehicle_id %}
-                  <img src="../../static/img/P-Light.png" alt="(P)" class="tableiconimg" title="Privatno vozilo">
+                  <img src="{{ url_for('static', filename='img/P-Light.png') }}" alt="(P)" class="tableiconimg" title="Privatno vozilo">
                 {% else %}
-                  <img src="../../static/img/S-Light.png" alt="(S)" class="tableiconimg" title="Službeno vozilo">
+                  <img src="{{ url_for('static', filename='img/S-Light.png') }}" alt="(S)" class="tableiconimg" title="Službeno vozilo">
                 {% endif %}
               {% endif %}
             {% endfor %}
           <p>PUTUJE SA: <br />
             <b>{{warrant.together_with}} </b></p>
           {% elif warrant.other %}
-            <img src="../../static/img/D-Light.png" alt="(D)" class="tableiconimg" title="Dugi tip prevoza">
+            <img src="{{ url_for('static', filename='img/D-Light.png') }}" alt="(D)" class="tableiconimg" title="Dugi tip prevoza">
           <p>{{ warrant.other }}</p>
           {% elif warrant.personal_vehicle_id %}
-            <img src="../../static/img/P-Light.png" alt="(P)" class="tableiconimg" title="Privatno vozilo">
+            <img src="{{ url_for('static', filename='img/P-Light.png') }}" alt="(P)" class="tableiconimg" title="Privatno vozilo">
           <p>{{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}</p>
-          {% else %} 
-            <img src="../../static/img/S-Light.png" alt="(S)" class="tableiconimg" title="Službeno vozilo">
+          {% else %}
+            <img src="{{ url_for('static', filename='img/S-Light.png') }}" alt="(S)" class="tableiconimg" title="Službeno vozilo">
           <p>{{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}</p>
           {% endif %}
         </td>
         <td class="align-middle">{{ warrant.start_datetime.date() }}</td>
-        <td class="align-middle">{{ warrant.status }}</td>
+        <td class="align-middle"><span class="status-badge status-{{ warrant.status }}">{{ warrant.status }}</span></td>
       </tr>
       {% endif %} {% endfor %}
     </tbody>
@@ -224,55 +225,57 @@
       </tr>
     </thead>
     <tbody>
-      {% for warrant in warrants %} 
+      {% for warrant in warrants %}
       {% if current_user.id == warrant.travelwarrant_user.id %}
       <tr>
         <td class="align-middle">
-          <div class="btn-group">
+          <div class="tw-actions">
             <a
-              class="btn btn-info"
+              class="btn btn-info tw-btn-main"
               href="{{ url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id) }}"
               role="button"
               title="Izmenite putni nalog"
             >
               {{ warrant.travel_warrant_number }}</a>
-              <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Štampa dokumenta" target="_blank"><i class="fa-solid fa-print"></i></a>
-              <a class="btn btn-outline-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download> <i class="fa-solid fa-download"></i></a>
+            <div class="tw-btn-icons">
+              <a class="btn btn-icon-action" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Štampa dokumenta" target="_blank"><i class="fa-solid fa-print"></i></a>
+              <a class="btn btn-icon-action" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" title="Preuzmite dokument" download><i class="fa-solid fa-download"></i></a>
+            </div>
           </div>
         </td>
         <td class="align-middle">
           {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname}}
         </td>
         <td class="align-middle">
-          {% if warrant.together_with %} 
+          {% if warrant.together_with %}
             {% for w in warrants %}
               {% if w.travel_warrant_number == warrant.together_with %}
                 {% if w.personal_vehicle_id %}
-                  <img src="../../static/img/P-Light.png" alt="(P)" class="tableiconimg" title="Privatno vozilo">
+                  <img src="{{ url_for('static', filename='img/P-Light.png') }}" alt="(P)" class="tableiconimg" title="Privatno vozilo">
                 {% else %}
-                  <img src="../../static/img/S-Light.png" alt="(S)" class="tableiconimg" title="Službeno vozilo">
+                  <img src="{{ url_for('static', filename='img/S-Light.png') }}" alt="(S)" class="tableiconimg" title="Službeno vozilo">
                 {% endif %}
               {% endif %}
             {% endfor %}
             PUTUJE SA: <br />
-            <b>{{warrant.together_with}} </b> 
+            <b>{{warrant.together_with}} </b>
           {% elif warrant.other %}
-            <img src="../../static/img/D-Light.png" alt="(D)" class="tableiconimg" title="Dugi tip prevoza">
+            <img src="{{ url_for('static', filename='img/D-Light.png') }}" alt="(D)" class="tableiconimg" title="Dugi tip prevoza">
             {{ warrant.other }}
           {% elif warrant.personal_vehicle_id %}
-            <img src="../../static/img/P-Light.png" alt="(P)" class="tableiconimg" title="Privatno vozilo">
+            <img src="{{ url_for('static', filename='img/P-Light.png') }}" alt="(P)" class="tableiconimg" title="Privatno vozilo">
             {{ warrant.travelwarrant_personal.vehicle_type }} <br />
             {{ warrant.travelwarrant_personal.vehicle_brand }} <br />
             {{ warrant.travelwarrant_personal.vehicle_registration }}
-          {% else %} 
-            <img src="../../static/img/S-Light.png" alt="(S)" class="tableiconimg" title="Službeno vozilo">
+          {% else %}
+            <img src="{{ url_for('static', filename='img/S-Light.png') }}" alt="(S)" class="tableiconimg" title="Službeno vozilo">
             {{ warrant.travelwarrant_vehicle.vehicle_type}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_brand}} <br />
             {{warrant.travelwarrant_vehicle.vehicle_registration}}
           {% endif %}
         </td>
         <td class="align-middle">{{ warrant.start_datetime.date() }}</td>
-        <td class="align-middle">{{ warrant.status }}</td>
+        <td class="align-middle"><span class="status-badge status-{{ warrant.status }}">{{ warrant.status }}</span></td>
       </tr>
       {% endif %} {% endfor %}
     </tbody>
@@ -280,7 +283,7 @@
   </table>
 </form>
 
-{% endblock content%} 
+{% endblock content%}
 
 {% block scripts %}
 <script>
@@ -318,7 +321,7 @@
       buttonSubmit.prop('disabled', false);
     }
   })
-  
+
 </script>
 
 <script>document.body.classList.add('tw-list');</script>
