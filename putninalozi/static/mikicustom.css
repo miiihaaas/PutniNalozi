@@ -91,6 +91,8 @@ body.tw-user #accordionZero:not(.nothere) { margin-bottom: 0; }
 .accordion-button:not(.collapsed)::after { transform: rotate(180deg); }
 .accordion-button.collapsed::after { transform: rotate(0deg); }
 .accordion-button h1 { margin: 0 !important; background-color: transparent !important; padding: 0 !important; color: #555 !important; }
+.accordion-button label,
+.accordion-button .form-control-label { color: #fff !important; font-size: 12px; font-weight: 700; text-transform: uppercase; margin: 0; cursor: pointer; }
 .btn-check:focus+.btn-info, .btn-info:focus { color: #000; background-color: transparent; border-color: transparent; box-shadow: none; }
 .accordion-item .card-body .col { display: flex; align-items: baseline; color: #555; }
 .accordion-item input { font-size: 16px; padding: 10px 20px; border-radius: 5px !important; }
@@ -480,3 +482,35 @@ body.register-u .settings-section .form-control-label { font-size: 13px; color: 
 .auth-badge.auth-c_user { background-color: #f5f5f5; color: #555; border: 1px solid #ddd; }
 .auth-badge.auth-c_member { background-color: #f5f5f5; color: #555; border: 1px solid #ddd; }
 .auth-badge.auth-c_deleted { background-color: #f5f5f5; color: #999; border: 1px solid #eee; }
+
+/* ==========================================
+   TRAVEL WARRANT PAGE
+   ========================================== */
+body.travel-warrant .content-section { border: 0; padding: 0; background: transparent; }
+body.travel-warrant fieldset.form-group { max-width: 100%; margin: 0; }
+body.travel-warrant .settings-section .form-group { margin-bottom: 0; }
+body.travel-warrant .settings-section .form-control-label { font-size: 13px; color: #555; font-weight: 500; margin-bottom: 4px; }
+body.travel-warrant .settings-section .accordion-item { margin-bottom: 0; border-radius: 0 !important; }
+body.travel-warrant .settings-section .accordion-item:first-child { border-radius: 0 !important; }
+body.travel-warrant .settings-section .accordion-item:last-child { border-radius: 0 0 10px 10px !important; }
+body.travel-warrant .settings-section .accordion-button { border-radius: 0 !important; }
+
+/* ==========================================
+   EXPENSES PAGE
+   ========================================== */
+body.expenses .content-section { border: 0; padding: 0; background: transparent; }
+body.expenses fieldset.form-group { max-width: 100%; margin: 0; }
+body.expenses .settings-section .form-group { margin-bottom: 0; }
+body.expenses .settings-section .form-control-label { font-size: 13px; color: #555; font-weight: 500; margin-bottom: 4px; }
+
+/* ==========================================
+   REGISTER TRAVEL WARRANT PAGE
+   ========================================== */
+body.register-tw .content-section { border: 0; padding: 0; background: transparent; }
+body.register-tw fieldset.form-group { max-width: 100%; margin: 0; }
+body.register-tw .settings-section .form-group { margin-bottom: 0; }
+body.register-tw .settings-section .form-control-label { font-size: 13px; color: #555; font-weight: 500; margin-bottom: 4px; }
+body.register-tw .settings-section .accordion-item { margin-bottom: 0; border-radius: 0 !important; }
+body.register-tw .settings-section .accordion-item:first-child { border-radius: 0 !important; }
+body.register-tw .settings-section .accordion-item:last-child { border-radius: 0 0 10px 10px !important; }
+body.register-tw .settings-section .accordion-button { border-radius: 0 !important; }

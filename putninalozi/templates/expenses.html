@@ -1,118 +1,122 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
-  <form class="" action="" method="POST">
-    {{ form.hidden_tag() }}
-    <fieldset class="form-group">
-      <legend class="border-bottom mb-4">{{legend}} {{ warrant.travel_warrant_number }}</legend>
-      {% if form.errors %}
-      debag line: {{ form.errors }}
-      {% endif %}
-      <div class="row">
-        <div class="col form-group">
-          {{ form.expenses_type.label(class="form-control-label") }}
-          {% if form.expenses_type.errors %}
-            {{ form.expenses_type(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in form.expenses_type.errors %}
-                <span>{{ error }}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ form.expenses_type(id="expenses_type", class="form-select form-select-lg") }}
-          {% endif %}
-        </div>
-      </div>
+
+<form action="" method="POST">
+  {{ form.hidden_tag() }}
+  {% if form.errors %}<div class="alert alert-danger">{{ form.errors }}</div>{% endif %}
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-receipt"></i>
+      <h3>{{legend}} {{ warrant.travel_warrant_number }}</h3>
+    </div>
+    <div class="settings-section-body">
       <div class="form-group">
+        {{ form.expenses_type.label(class="form-control-label") }}
+        {% if form.expenses_type.errors %}
+          {{ form.expenses_type(class="form-control form-control-lg is-invalid") }}
+          <div class="invalid-feedback">
+            {% for error in form.expenses_type.errors %}<span>{{ error }}</span>{% endfor %}
+          </div>
+        {% else %}
+          {{ form.expenses_type(id="expenses_type", class="form-select form-select-lg") }}
+        {% endif %}
+      </div>
+      <div class="form-group" style="margin-top: 16px;">
         {{ form.description.label(class="form-control-label") }}
         {% if form.description.errors %}
           {{ form.description(class="form-control form-control-lg is-invalid") }}
           <div class="invalid-feedback">
-            {% for error in form.description.errors %}
-              <span>{{ error }}</span>
-            {% endfor %}
+            {% for error in form.description.errors %}<span>{{ error }}</span>{% endfor %}
           </div>
         {% else %}
           {{ form.description(id="description", class="form-control form-control-lg", readonly=false) }}
         {% endif %}
       </div>
-      <div class="row">
-        <div class="col form-group">
+      <div class="row" style="margin-top: 16px;">
+        <div class="col-md-6 form-group">
           {{ form.amount.label(class="form-control-label") }}
           {% if form.amount.errors %}
             {{ form.amount(class="form-control form-control-lg is-invalid") }}
             <div class="invalid-feedback">
-              {% for error in form.amount.errors %}
-                <span>{{ error }}</span>
-              {% endfor %}
+              {% for error in form.amount.errors %}<span>{{ error }}</span>{% endfor %}
             </div>
           {% else %}
             {{ form.amount(id="amount", class="form-control form-control-lg") }}
           {% endif %}
         </div>
-        <div class="col form-group">
+        <div class="col-md-6 form-group">
           {{ form.amount_currency.label(class="form-control-label") }}
           {% if form.amount_currency.errors %}
             {{ form.amount_currency(class="form-control form-control-lg is-invalid") }}
             <div class="invalid-feedback">
-              {% for error in form.amount_currency.errors %}
-                <span>{{ error }}</span>
-              {% endfor %}
+              {% for error in form.amount_currency.errors %}<span>{{ error }}</span>{% endfor %}
             </div>
           {% else %}
             {{ form.amount_currency(class="form-select form-select-lg") }}
           {% endif %}
         </div>
       </div>
-    </fieldset>
-    <div class="form-group">
-      <a class="btn btn-info" href="{{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id)}}">Nazad</a>
-      {{ form.submit(class="btn btn-outline-info") }}
-      {% if legend != 'Dodavanje troškova:' %}
-      <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Obrišite trošak</button>
-      <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="DeleteModalLabel">Izbrišite trošak</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-footer">
-              <form action="{{ url_for('travel_warrants.delete_expense', warrant_id=warrant.travel_warrant_id, expenses_id=expense.expenses_id) }}" method="post">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
-                <a class="btn btn-danger" href="{{ url_for('travel_warrants.delete_expense', warrant_id=warrant.travel_warrant_id, expenses_id=expense.expenses_id) }}"> Izbrišite trošak </a>
-              </form>
-            </div>
-          </div>
+    </div>
+  </div>
+
+  <div class="settings-actions">
+    <a class="btn btn-secondary" href="{{url_for('travel_warrants.travel_warrant_profile', warrant_id=warrant.travel_warrant_id)}}"><i class="fa-solid fa-arrow-left"></i> Nazad</a>
+    {{ form.submit(class="btn btn-primary") }}
+    {% if legend != 'Dodavanje troškova:' %}
+      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DeleteModal"><i class="fa-solid fa-trash"></i> Obrišite trošak</button>
+    {% endif %}
+  </div>
+</form>
+
+{% if legend != 'Dodavanje troškova:' %}
+<!-- Modal -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želite da izbrišete ovaj trošak?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-actions">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
+          <a class="btn btn-danger" href="{{ url_for('travel_warrants.delete_expense', warrant_id=warrant.travel_warrant_id, expenses_id=expense.expenses_id) }}"><i class="fa-solid fa-trash"></i> Izbrišite trošak</a>
         </div>
       </div>
-      {% endif %}
     </div>
-  </form>
+  </div>
 </div>
+{% endif %}
 
-
-<br>
-<table id="data" border="1" class="table table-striped">
-    <thead>
-      <tr id="header">
-        <th>Tip troška</th>
-        <th>Opis</th>
-        <th>Iznos</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for trosak in troskovi %}
-      <tr>
-        <td class="align-middle"> {{ trosak.expenses_type }} </td>
-        <td class="align-middle"> {{ trosak.description }} </td>
-        <td class="align-middle"> {{ '{:,.2f}'.format(trosak.amount) }} {{ trosak.amount_currency }} </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-</table>
+<div class="settings-section" style="margin-top: 20px;">
+  <div class="settings-section-header">
+    <i class="fa-solid fa-list"></i>
+    <h3>Postojeći troškovi</h3>
+  </div>
+  <div class="settings-section-body">
+    <table id="data" class="table table-striped twtable">
+      <thead>
+        <tr id="header">
+          <th>Tip troška</th>
+          <th>Opis</th>
+          <th>Iznos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for trosak in troskovi %}
+        <tr>
+          <td class="align-middle">{{ trosak.expenses_type }}</td>
+          <td class="align-middle">{{ trosak.description }}</td>
+          <td class="align-middle">{{ '{:,.2f}'.format(trosak.amount) }} {{ trosak.amount_currency }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 
 {% endblock content%}
 
@@ -126,7 +130,6 @@
     } );
   } );
 </script>
-
 <script>
   const selectField = document.getElementById("expenses_type");
   const inputField = document.getElementById("description");
@@ -136,17 +139,14 @@
     if (selectField.value === "Troškovi amortizacije privatnog vozila") {
       inputField.value = "30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
       inputField.readOnly = true;
-      // inputField2.placeholder = "uneti vrednost koja predstavlja 30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
       inputField2.placeholder = "30% vrednosti goriva";
-    } 
+    }
   };
-
 
   selectField.addEventListener("change", function() {
     if (this.value === "Troškovi amortizacije privatnog vozila") {
       inputField.value = "30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
       inputField.readOnly = true;
-      // inputField2.placeholder = "uneti vrednost koja predstavlja 30% od vrednosti potrošenog goriva potrebnog za pređenu kilometražu";
       inputField2.placeholder = "30% vrednosti goriva";
     } else {
       inputField.readOnly = false;
@@ -154,8 +154,6 @@
       inputField2.placeholder = "";
     }
   });
-
-
 </script>
 <script>document.body.classList.add('expenses');</script>
 {% endblock %}

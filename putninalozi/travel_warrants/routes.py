@@ -400,6 +400,9 @@ def add_expenses(warrant_id):
     elif current_user.user_company.id != warrant.company_id:
             return render_template('403.html')
     form = TravelWarrantExpensesForm()
+    global_settings = Settings.query.filter_by(company_id=current_user.user_company.id).first()
+    if request.method == 'GET' and global_settings:
+        form.amount_currency.data = global_settings.default_currency
     if form.validate_on_submit():
         expense = TravelWarrantExpenses(expenses_type = form.expenses_type.data,
                 description = form.description.data,

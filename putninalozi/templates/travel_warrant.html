@@ -1,28 +1,31 @@
 {% extends "layout.html" %} {% block content %}
-<div class="content-section" onload="myFunction()">
-  <form id="myForm" action="" method="POST">
-    {{ form.hidden_tag() }}
-    <fieldset class="form-group">
-      {% if form.errors %} debag line: {{ form.errors }} {% endif %}
-      <legend class="border-bottom mb-4">Broj putnog naloga: {{ warrant.travel_warrant_number }}</legend>
-      <legend class=""> Zaposleni:</legend>
+<form id="myForm" action="" method="POST">
+  {{ form.hidden_tag() }}
+  {% if form.errors %}<div class="alert alert-danger">{{ form.errors }}</div>{% endif %}
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-file-lines"></i>
+      <h3>Putni nalog: {{ warrant.travel_warrant_number }}</h3>
+    </div>
+    <div class="settings-section-body">
       <div class="row">
-        <div class="col form-box col-md-6">
+        <div class="col-md-6 form-group">
+          <label class="form-control-label">Zaposleni</label>
           <input type="text" class="form-control form-control-lg" value="{{ warrant.travelwarrant_user.name }}  {{ warrant.travelwarrant_user.surname }}" disabled>
         </div>
-        <div class="col form-box col-md-6 mb-4">
-          <input class="form-control form-control-lg" type="datetime-local", value="{{ warrant.start_datetime }}" disabled>
+        <div class="col-md-6 form-group">
+          <label class="form-control-label">Datum izdavanja</label>
+          <input class="form-control form-control-lg" type="datetime-local" value="{{ warrant.start_datetime }}" disabled>
         </div>
       </div>
-      
-      <div class="accordion nothere" id="accordionZero">
+      <div class="accordion nothere" id="accordionZero" style="margin-top: 16px;">
         <div class="accordion-item">
           <div class="accordion-header" id="headingZero">
             <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseZero" aria-expanded="false" aria-controls="collapseZero">
-              Detalji
+              <i class="fa-solid fa-circle-info" style="margin-right: 6px;"></i> Detalji
             </button>
           </div>
-
           <div id="collapseZero" class="collapse" aria-labelledby="headingZero" data-parent="#accordionZero">
             <div class="card-body">
               {{ detalji | safe }}
@@ -30,401 +33,358 @@
           </div>
         </div>
       </div>
-      <div class="form-box">
-        {{ form.with_task.label(class="form-control-label") }} 
-        {% if form.with_task.errors %} 
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-clipboard-list"></i>
+      <h3>Zadatak i period</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="form-group">
+        {{ form.with_task.label(class="form-control-label") }}
+        {% if form.with_task.errors %}
           {{ form.with_task(class="form-control form-control-lg is-invalid") }}
           <div class="invalid-feedback">
-            {% for error in form.with_task.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
+            {% for error in form.with_task.errors %}<span>{{ error }}</span>{% endfor %}
           </div>
-        {% else %} 
+        {% else %}
           {{ form.with_task(class="form-control form-control-lg") }}
         {% endif %}
       </div>
-      <div class="row">
-        <div class="col form-box col-md-6">
-          {{ form.start_datetime.label(class="form-control-label") }} 
-          {% if form.start_datetime.errors %} 
-            {{ form.start_datetime(class="form-control form-control-lg is-invalid")  }}
+      <div class="row" style="margin-top: 16px;">
+        <div class="col-md-6 form-group">
+          {{ form.start_datetime.label(class="form-control-label") }}
+          {% if form.start_datetime.errors %}
+            {{ form.start_datetime(class="form-control form-control-lg is-invalid") }}
             <div class="invalid-feedback">
-              {% for error in form.start_datetime.errors %}
-              <span>{{ error }}</span>
-              {% endfor %}
+              {% for error in form.start_datetime.errors %}<span>{{ error }}</span>{% endfor %}
             </div>
-          {% else %} 
+          {% else %}
             {{ form.start_datetime(class="form-control form-control-lg", type="datetime-local", min=start_datetime_min, max=start_datetime_max) }}
           {% endif %}
         </div>
-        <div class="col form-box col-md-6">
-          {{ form.end_datetime.label(class="form-control-label") }} 
-          {% if form.end_datetime.errors %} 
+        <div class="col-md-6 form-group">
+          {{ form.end_datetime.label(class="form-control-label") }}
+          {% if form.end_datetime.errors %}
             {{ form.end_datetime(class="form-control form-control-lg is-invalid", min=warrant.start_datetime) }}
             <div class="invalid-feedback">
-              {% for error in form.end_datetime.errors %}
-              <span>{{ error }}</span>
-              {% endfor %}
+              {% for error in form.end_datetime.errors %}<span>{{ error }}</span>{% endfor %}
             </div>
-          {% else %} 
-            {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local", min=warrant.start_datetime, max=end_datum) }} 
+          {% else %}
+            {{ form.end_datetime(class="form-control form-control-lg", type="datetime-local", min=warrant.start_datetime, max=end_datum) }}
           {% endif %}
         </div>
       </div>
-      <br />
-      <div class="form-check form-switch top0" onload="myFunction()">
-        {{ form.abroad(class="form-check-input", onclick="myFunction()", id="abroad_id") }} 
-        {{ form.abroad.label(class="form-check-label") }}
-        <!-- test: {{form.abroad.data}} -->
-      </div>
-      <div class="form-box">
-        {{ form.relation.label(class="form-control-label") }} 
-        {% if form.relation.errors %} 
-        {{ form.relation(class="form-control form-control-lg is-invalid") }}
+      <div class="form-group" style="margin-top: 16px;">
+        {{ form.relation.label(class="form-control-label") }}
+        {% if form.relation.errors %}
+          {{ form.relation(class="form-control form-control-lg is-invalid") }}
           <div class="invalid-feedback">
-            {% for error in form.relation.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
+            {% for error in form.relation.errors %}<span>{{ error }}</span>{% endfor %}
           </div>
-        {% else %} 
+        {% else %}
           {{ form.relation(class="form-control form-control-lg") }}
         {% endif %}
       </div>
-      <div class="row">
-        <div
-        id="collapseAbrod"
-        class="collapse"
-        aria-labelledby="headingAbrod"
-        >
-          <div class="card-body paddingall">
-            {{ form.abroad_contry.label(class="form-control-label") }} 
-            {% if form.abroad_contry.errors %} 
-            {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in form.abroad_contry.errors %}
-              <span>{{ error }}</span>
-              {% endfor %}
-            </div>
-            {% else %} {{ form.abroad_contry(class="form-control
-            form-control-lg") }} {% endif %}
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-globe"></i>
+      <h3>Inostranstvo</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="settings-switch-item">
+        <div class="form-check form-switch">
+          {{ form.abroad(class="form-check-input", onclick="myFunction()", id="abroad_id") }}
+          {{ form.abroad.label(class="form-check-label") }}
+        </div>
+      </div>
+      <div id="collapseAbrod" class="collapse" aria-labelledby="headingAbrod">
+        <div class="row" style="margin-top: 16px;">
+          <div class="col-md-6 form-group">
+            {{ form.abroad_contry.label(class="form-control-label") }}
+            {% if form.abroad_contry.errors %}
+              {{ form.abroad_contry(class="form-control form-control-lg is-invalid") }}
+              <div class="invalid-feedback">
+                {% for error in form.abroad_contry.errors %}<span>{{ error }}</span>{% endfor %}
+              </div>
+            {% else %}
+              {{ form.abroad_contry(class="form-control form-control-lg") }}
+            {% endif %}
           </div>
-          <div class="card-body paddingall">
-            {{ form.daily_wage_abroad.label(class="form-control-label") }} 
-            {% if form.daily_wage_abroad.errors %} 
+          <div class="col-md-3 form-group">
+            {{ form.daily_wage_abroad.label(class="form-control-label") }}
+            {% if form.daily_wage_abroad.errors %}
               {{ form.daily_wage_abroad(class="form-control form-control-lg is-invalid") }}
               <div class="invalid-feedback">
-                {% for error in form.daily_wage_abroad.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
+                {% for error in form.daily_wage_abroad.errors %}<span>{{ error }}</span>{% endfor %}
               </div>
-            {% else %} 
-              {{ form.daily_wage_abroad(class="form-control form-control-lg") }} 
+            {% else %}
+              {{ form.daily_wage_abroad(class="form-control form-control-lg") }}
             {% endif %}
           </div>
-          <div class="card-body paddingall">
-            {{ form.daily_wage_abroad_currency.label(class="form-control-label") }} 
-            {% if form.daily_wage_abroad_currency.errors %} 
+          <div class="col-md-3 form-group">
+            {{ form.daily_wage_abroad_currency.label(class="form-control-label") }}
+            {% if form.daily_wage_abroad_currency.errors %}
               {{ form.daily_wage_abroad_currency(class="form-control form-control-lg is-invalid") }}
               <div class="invalid-feedback">
-                {% for error in form.daily_wage_abroad_currency.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
+                {% for error in form.daily_wage_abroad_currency.errors %}<span>{{ error }}</span>{% endfor %}
               </div>
-            {% else %} 
-              {{ form.daily_wage_abroad_currency(class="form-select form-select-lg") }} 
+            {% else %}
+              {{ form.daily_wage_abroad_currency(class="form-select form-select-lg") }}
             {% endif %}
           </div>
-          <div class="col form-box paddingall">
-            {{ form.contry_leaving.label(class="form-control-label") }} 
-            {% if form.contry_leaving.errors %} 
+        </div>
+        <div class="row" style="margin-top: 8px;">
+          <div class="col-md-6 form-group">
+            {{ form.contry_leaving.label(class="form-control-label") }}
+            {% if form.contry_leaving.errors %}
               {{ form.contry_leaving(class="form-control form-control-lg is-invalid") }}
               <div class="invalid-feedback">
-                {% for error in form.contry_leaving.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
+                {% for error in form.contry_leaving.errors %}<span>{{ error }}</span>{% endfor %}
               </div>
-            {% else %} 
+            {% else %}
               {{ form.contry_leaving(class="form-control form-control-lg", type="datetime-local") }}
             {% endif %}
           </div>
-          <div class="col form-box paddingall">
-            {{ form.contry_return.label(class="form-control-label") }} 
-            {% if form.contry_return.errors %} 
+          <div class="col-md-6 form-group">
+            {{ form.contry_return.label(class="form-control-label") }}
+            {% if form.contry_return.errors %}
               {{ form.contry_return(class="form-control form-control-lg is-invalid") }}
               <div class="invalid-feedback">
-                {% for error in form.contry_return.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
+                {% for error in form.contry_return.errors %}<span>{{ error }}</span>{% endfor %}
               </div>
-            {% else %} 
-              {{ form.contry_return(class="form-control form-control-lg", type="datetime-local") }} 
+            {% else %}
+              {{ form.contry_return(class="form-control form-control-lg", type="datetime-local") }}
             {% endif %}
           </div>
         </div>
       </div>
-      <br />
-      <div class="row just-column">
-        <div class="col form-box">
-          {{ form.costs_pays.label(class="form-control-label") }} 
-          {% if form.costs_pays.errors %} 
-            {{ form.costs_pays(class="form-control form-control-lg is-invalid") }}
-            <div class="invalid-feedback">
-              {% for error in form.costs_pays.errors %}
-              <span>{{ error }}</span>
-              {% endfor %}
-            </div>
-          {% else %} 
-            {{ form.costs_pays(class="form-control form-control-lg") }}
-          {% endif %}
-        </div>
+    </div>
+  </div>
 
-        <div class="col form-box">
-          {{ form.daily_wage.label(class="form-control-label") }} {% if
-          form.daily_wage.errors %} {{ form.daily_wage(class="form-control
-          form-control-lg is-invalid") }}
-          <div class="invalid-feedback">
-            {% for error in form.daily_wage.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-          {% else %} {{ form.daily_wage(class="form-control form-control-lg") }}
-          {% endif %}
-        </div>
-        <div class="col form-box col-md-2 minw120">
-          {{ form.daily_wage_currency.label(class="form-control-label") }} {% if
-          form.daily_wage_currency.errors %} {{
-          form.daily_wage_currency(class="form-control form-control-lg
-          is-invalid") }}
-          <div class="invalid-feedback">
-            {% for error in form.daily_wage_currency.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-          {% else %} {{ form.daily_wage_currency(class="form-select
-          form-select-lg") }} {% endif %}
-        </div>
-      </div>
-      <div class="row top15 just-column">
-        <div class="col form-box">
-          {{ form.status.label(class="form-control-label") }} {% if
-          form.status.errors %} {{ form.status(class="form-control
-          form-control-lg is-invalid") }}
-          <div class="invalid-feedback">
-            {% for error in form.status.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-          {% else %} {{ form.status(class="form-select form-select-lg") }} {%
-          endif %}
-        </div>
-        <div class="col form-box">
-          {{ form.advance_payment.label(class="form-control-label") }} {% if
-          form.advance_payment.errors %} {{
-          form.advance_payment(class="form-control form-control-lg is-invalid")
-          }}
-          <div class="invalid-feedback">
-            {% for error in form.advance_payment.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-          {% else %} {{ form.advance_payment(class="form-control
-          form-control-lg") }} {% endif %}
-        </div>
-        <div class="col form-box col-md-2 minw120">
-          {{ form.advance_payment_currency.label(class="form-control-label") }}
-          {% if form.advance_payment_currency.errors %} {{
-          form.advance_payment_currency(class="form-control form-control-lg
-          is-invalid") }}
-          <div class="invalid-feedback">
-            {% for error in form.advance_payment_currency.errors %}
-            <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-          {% else %} {{ form.advance_payment_currency(class="form-select
-          form-select-lg") }} {% endif %}
-        </div>
-      </div>
-      <br />
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-car"></i>
+      <h3>Prevozno sredstvo</h3>
+    </div>
+    <div class="settings-section-body" style="padding: 0;">
       <div id="accordion">
         <div class="accordion-item">
           <div class="accordion-header" id="headingOne">
-            <button
-              type="button"
-              class="accordion-button collapsed"
-              data-toggle="collapse"
-              data-target="#collapseOne"
-              aria-expanded="true"
-              aria-controls="collapseOne"
-            >
+            <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
               {{ form.vehicle_id.label(class="form-control-label") }}
             </button>
           </div>
-          <div
-            id="collapseOne"
-            class="collapse"
-            aria-labelledby="headingOne"
-            data-parent="#accordion"
-          >
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
               <div class="form-box">
-                {% if form.vehicle_id.errors %} {{
-                form.vehicle_id(class="form-control form-control-lg is-invalid")
-                }}
-                <div class="invalid-feedback">
-                  {% for error in form.vehicle_id.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.vehicle_id(class="form-select
-                form-select-lg") }} {% endif %}
+                {% if form.vehicle_id.errors %}
+                  {{ form.vehicle_id(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.vehicle_id.errors %}<span>{{ error }}</span>{% endfor %}
+                  </div>
+                {% else %}
+                  {{ form.vehicle_id(class="form-select form-select-lg") }}
+                {% endif %}
               </div>
             </div>
           </div>
         </div>
         <div class="accordion-item">
           <div class="accordion-header" id="headingTwo">
-            <button
-              type="button"
-              class="accordion-button collapsed"
-              data-toggle="collapse"
-              data-target="#collapseTwo"
-              aria-expanded="false"
-              aria-controls="collapseTwo"
-            >
+            <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
               {{ form.together_with.label(class="form-control-label") }}
             </button>
           </div>
-          <div
-            id="collapseTwo"
-            class="collapse"
-            aria-labelledby="headingTwo"
-            data-parent="#accordion"
-          >
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
             <div class="card-body">
               <div class="form-box">
-                {% if form.together_with.errors %} {{
-                form.together_with(class="form-control form-control-lg
-                is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.together_with.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.together_with(class="form-select
-                form-select-lg", placeholder="Uneti broj putnog naloga kolege
-                koji vozi službeno vozilo") }} {% endif %}
+                {% if form.together_with.errors %}
+                  {{ form.together_with(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.together_with.errors %}<span>{{ error }}</span>{% endfor %}
+                  </div>
+                {% else %}
+                  {{ form.together_with(class="form-select form-select-lg", placeholder="Uneti broj putnog naloga kolege koji vozi službeno vozilo") }}
+                {% endif %}
               </div>
             </div>
           </div>
         </div>
         <div class="accordion-item">
           <div class="accordion-header" id="headingThree">
-            <button
-              type="button"
-              class="accordion-button collapsed"
-              data-toggle="collapse"
-              data-target="#collapseThree"
-              aria-expanded="false"
-              aria-controls="collapseThree"
-            >
+            <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
               Privatno Vozilo:
             </button>
           </div>
-          <div
-            id="collapseThree"
-            class="collapse inertop15"
-            aria-labelledby="headingThree"
-            data-parent="#accordion"
-          >
+          <div id="collapseThree" class="collapse inertop15" aria-labelledby="headingThree" data-parent="#accordion">
             <div class="card-body">
               <div class="form-box">
                 {{ form.personal_vehicle_id.label(class="form-control-label") }}
-                {% if form.personal_vehicle_id.errors %} 
+                {% if form.personal_vehicle_id.errors %}
                   {{ form.personal_vehicle_id(class="form-control form-control-lg is-invalid") }}
                   <div class="invalid-feedback">
-                    {% for error in form.personal_vehicle_id.errors %}
-                      <span>{{ error }}</span>
-                    {% endfor %}
+                    {% for error in form.personal_vehicle_id.errors %}<span>{{ error }}</span>{% endfor %}
                   </div>
-                {% else %} 
-                  {{ form.personal_vehicle_id(class="form-select form-select-lg") }} 
+                {% else %}
+                  {{ form.personal_vehicle_id(class="form-select form-select-lg") }}
                 {% endif %}
               </div>
-              
             </div>
           </div>
         </div>
         <div class="accordion-item">
           <div class="accordion-header" id="headingFour">
-            <h5 class="mb-0">
-              <button
-                type="button"
-                class="accordion-button collapsed"
-                data-toggle="collapse"
-                data-target="#collapseFour"
-                aria-expanded="false"
-                aria-controls="collapseFour"
-              >
-                {{ form.other.label(class="form-control-label") }}
-              </button>
-            </h5>
+            <button type="button" class="accordion-button collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              {{ form.other.label(class="form-control-label") }}
+            </button>
           </div>
-          <div
-            id="collapseFour"
-            class="collapse"
-            aria-labelledby="headingFour"
-            data-parent="#accordion"
-          >
+          <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
             <div class="card-body">
               <div class="form-box">
-                {% if form.other.errors %} {{ form.other(class="form-control
-                form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.other.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.other(class="form-control form-control-lg",
-                placeholder="Avion, Autobus, Taxi ...") }} {% endif %}
+                {% if form.other.errors %}
+                  {{ form.other(class="form-control form-control-lg is-invalid") }}
+                  <div class="invalid-feedback">
+                    {% for error in form.other.errors %}<span>{{ error }}</span>{% endfor %}
+                  </div>
+                {% else %}
+                  {{ form.other(class="form-control form-control-lg", placeholder="Avion, Autobus, Taxi ...") }}
+                {% endif %}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <br />
-      <div class="form-box">
-        {{ form.principal_id.label(class="form-control-label") }}
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-coins"></i>
+      <h3>Troškovi i dnevnice</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="row">
+        <div class="col-md-4 form-group">
+          {{ form.costs_pays.label(class="form-control-label") }}
+          {% if form.costs_pays.errors %}
+            {{ form.costs_pays(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.costs_pays.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.costs_pays(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-4 form-group">
+          {{ form.daily_wage.label(class="form-control-label") }}
+          {% if form.daily_wage.errors %}
+            {{ form.daily_wage(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.daily_wage.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.daily_wage(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-4 form-group">
+          {{ form.daily_wage_currency.label(class="form-control-label") }}
+          {% if form.daily_wage_currency.errors %}
+            {{ form.daily_wage_currency(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.daily_wage_currency.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.daily_wage_currency(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="row" style="margin-top: 16px;">
+        <div class="col-md-4 form-group">
+          {{ form.status.label(class="form-control-label") }}
+          {% if form.status.errors %}
+            {{ form.status(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.status.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.status(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-4 form-group">
+          {{ form.advance_payment.label(class="form-control-label") }}
+          {% if form.advance_payment.errors %}
+            {{ form.advance_payment(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.advance_payment.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.advance_payment(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <div class="col-md-4 form-group">
+          {{ form.advance_payment_currency.label(class="form-control-label") }}
+          {% if form.advance_payment_currency.errors %}
+            {{ form.advance_payment_currency(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.advance_payment_currency.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
+          {% else %}
+            {{ form.advance_payment_currency(class="form-select form-select-lg") }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-user-tie"></i>
+      <h3>Nalogodavac i blagajnik</h3>
+    </div>
+    <div class="settings-section-body">
+      <div class="row">
+        <div class="col-md-6 form-group">
+          {{ form.principal_id.label(class="form-control-label") }}
           {% if form.principal_id.errors %}
-              {{ form.principal_id(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.principal_id.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
+            {{ form.principal_id(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.principal_id.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
           {% else %}
-              {{ form.principal_id(class="form-select form-select-lg") }}
+            {{ form.principal_id(class="form-select form-select-lg") }}
           {% endif %}
-      </div>
-      <div class="form-box top15">
-        {{ form.cashier_id.label(class="form-control-label") }}
+        </div>
+        <div class="col-md-6 form-group">
+          {{ form.cashier_id.label(class="form-control-label") }}
           {% if form.cashier_id.errors %}
-              {{ form.cashier_id(class="form-control form-control-lg is-invalid") }}
-              <div class="invalid-feedback">
-                  {% for error in form.cashier_id.errors %}
-                      <span>{{ error }}</span>
-                  {% endfor %}
-              </div>
+            {{ form.cashier_id(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.cashier_id.errors %}<span>{{ error }}</span>{% endfor %}
+            </div>
           {% else %}
-              {{ form.cashier_id(class="form-select form-select-lg") }}
+            {{ form.cashier_id(class="form-select form-select-lg") }}
           {% endif %}
+        </div>
       </div>
-      <br />
-      <hr />
-      <div class="form-group">
-        <input type="submit" name="dugme" class="btn btn-info btn-block" href="#" value="Dodajte trošak">
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-header">
+      <i class="fa-solid fa-receipt"></i>
+      <h3>Troškovi</h3>
+    </div>
+    <div class="settings-section-body">
+      <div style="margin-bottom: 16px;">
+        <input type="submit" name="dugme" class="btn btn-info" value="Dodajte trošak">
       </div>
-      <br />
-      <table id="data" border="1" class="table table-striped twtable">
+      <table id="data" class="table table-striped twtable">
         <thead>
           <tr id="header">
             <th>Tip troška</th>
@@ -436,12 +396,7 @@
           {% for trosak in troskovi %}
           <tr>
             <td class="align-middle">
-              <a
-                class="mr-2 btn btn-info width100"
-                href="{{ url_for('travel_warrants.expenses_profile', warrant_id=warrant.travel_warrant_id, expenses_id=trosak.expenses_id) }}"
-                title="Uređivanje Troška"
-                >{{ trosak.expenses_type }}</a
-              >
+              <a class="mr-2 btn btn-info width100" href="{{ url_for('travel_warrants.expenses_profile', warrant_id=warrant.travel_warrant_id, expenses_id=trosak.expenses_id) }}" title="Uređivanje Troška">{{ trosak.expenses_type }}</a>
             </td>
             <td class="align-middle">{{ trosak.description }}</td>
             <td class="align-middle">{{ '{:,.2f}'.format(trosak.amount) }} {{ trosak.amount_currency }}</td>
@@ -449,72 +404,53 @@
           {% endfor %}
         </tbody>
       </table>
-      <br />
-      <hr />
-    </fieldset>
-    <div class="form-group">
-      <a
-        class="btn btn-info"
-        href="{{url_for('travel_warrants.travel_warrant_list')}}"
-        >Nazad</a
-      >
-      {% if warrant.status == 'kreiran' %}
-      <input
-        class="btn btn-primary"
-        type="submit"
-        name="dugme"
-        value="Završi"
-      />
-      {% elif warrant.status == 'završen' %}
-      <input
-        class="btn btn-primary"
-        type="submit"
-        name="dugme"
-        value="Obračunajte"
-      />
-      {% endif %} 
-      {{ form.submit(class="btn btn-outline-primary") }}
-      <a
-        class="btn btn-info"
-        href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}"
-        target="_blank"
-        >Preuzmite dokument</a>
-      {% if current_user.authorization in ['c_functionary', 's_admin', 'c_admin', 'c_founder']  %}
-      <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#DeleteModal">Obrišite putni nalog</button>
-      {% endif %}
     </div>
-  </form>
-</div>
+  </div>
+
+  <div class="settings-actions">
+    <a class="btn btn-secondary" href="{{url_for('travel_warrants.travel_warrant_list')}}"><i class="fa-solid fa-arrow-left"></i> Nazad</a>
+    {% if warrant.status == 'kreiran' %}
+      <input class="btn btn-primary" type="submit" name="dugme" value="Završi">
+    {% elif warrant.status == 'završen' %}
+      <input class="btn btn-primary" type="submit" name="dugme" value="Obračunajte">
+    {% endif %}
+    {{ form.submit(class="btn btn-primary") }}
+    <a class="btn btn-info" href="{{ url_for('travel_warrants.download_file', file_name=warrant.file_name) }}" target="_blank"><i class="fa-solid fa-download"></i> Preuzmite dokument</a>
+    {% if current_user.authorization in ['c_functionary', 's_admin', 'c_admin', 'c_founder'] %}
+      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DeleteModal"><i class="fa-solid fa-trash"></i> Obrišite putni nalog</button>
+    {% endif %}
+  </div>
+</form>
+
 <!-- Modal -->
 <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-  <div class="modal-content">
+    <div class="modal-content">
       <div class="modal-header">
-      <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želite da trajno izbrišete putni nalog {{warrant.travel_warrant_number}}?</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title" id="DeleteModalLabel">Da li zaista želite da trajno izbrišete putni nalog {{warrant.travel_warrant_number}}?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-      </button>
+        </button>
       </div>
       <div class="modal-body">
-      <label for="input_password">Zaposleni: {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }}
-        <br>Sa zadatkom: {{ warrant.with_task }}
-        <br>Relacija: {{ warrant.relation }}
-        <br>
-        <br> Da biste izbrisali putni nalog potrebno je uneti svoju lozinku.
-      </label>
+        <p><strong>Zaposleni:</strong> {{ warrant.travelwarrant_user.name }} {{ warrant.travelwarrant_user.surname }}</p>
+        <p><strong>Sa zadatkom:</strong> {{ warrant.with_task }}</p>
+        <p><strong>Relacija:</strong> {{ warrant.relation }}</p>
+        <label for="input_password">Da biste izbrisali putni nalog potrebno je uneti svoju lozinku.</label>
+        <form action="{{ url_for('travel_warrants.delete_travel_warrant', warrant_id=warrant.travel_warrant_id) }}" method="post">
+          <input class="form-control mt-3" type="password" id="input_password" name="input_password" value="" placeholder="Potvrdite lozinkom">
+          <div class="settings-actions mt-3">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
+            <input class="btn btn-danger" type="submit" value="Izbrišite putni nalog">
+          </div>
+        </form>
       </div>
-      <div class="modal-footer">
-      <form  action="{{ url_for('travel_warrants.delete_travel_warrant', warrant_id=warrant.travel_warrant_id) }}" method="post">
-          <input class="form-control" type="password" id="input_password" name="input_password" value="" placeholder="potvrdite lozinkom">
-          <br>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvorite</button>
-          <input class="btn btn-danger" type="submit" value="Izbrišite putni nalog">
-      </form>
-      </div>
-  </div>
+    </div>
   </div>
 </div>
-{% endblock content %} 
+
+<script>document.body.classList.add('travel-warrant');</script>
+{% endblock content %}
 
 {% block scripts %}
 <script>
@@ -528,7 +464,6 @@
   var booleanValue = '{{form.abroad.data}}';
   const inputContryLeaving = $('#contry_leaving');
   const inputContryReturn = $('#contry_return');
-  // window.alert(booleanValue);
   if (booleanValue === 'True') {
     booleanValue = false;
   } else if (booleanValue === 'False') {
@@ -538,10 +473,8 @@
     myFunction();
   };
 
-  // window.alert(booleanValue);
   function myFunction() {
     booleanValue = !booleanValue;
-    // window.alert(booleanValue);
     var x = document.getElementById("collapseAbrod");
     if (booleanValue === true) {
       x.style.display = "block";
@@ -561,18 +494,12 @@
   }
 </script>
 <script>
-  // Select the two date picker fields
   const startDateField = $('#start_datetime');
   const endDateField = $('#end_datetime');
 
-  // Attach an event listener to the start date field
   startDateField.on('change', function() {
-    // Get the selected start date as a Date object
     const startDate = new Date(startDateField.val());
-
-    // Set the min attribute of the end date field to the selected start date
     endDateField.attr('min', formatDate(startDate));
   });
 </script>
-<script>document.body.classList.add('travel-warrant');</script>
 {% endblock %}
