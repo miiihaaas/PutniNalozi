@@ -1,4 +1,5 @@
 import secrets, os
+from datetime import datetime, timedelta
 from PIL import Image
 from flask import Blueprint
 from flask import  render_template, url_for, flash, redirect, request, abort
@@ -25,7 +26,7 @@ def register_c():
         flash('Da biste pristupili ovoj stranici treba da budete ulogovani.', 'danger')
         return redirect(url_for('users.login'))
     elif current_user.is_authenticated and current_user.authorization != 's_admin':
-        flash('Nemate autorizaciju da kreirate novu kompaniju.' 'warning')
+        flash('Nemate autorizaciju da kreirate novu kompaniju.', 'warning')
         return redirect(url_for('main.home'))
     form = RegistrationCompanyForm()
     if form.validate_on_submit():
@@ -40,7 +41,10 @@ def register_c():
                             company_site=form.company_site.data,
                             company_mail=form.company_mail.data,
                             company_phone=form.company_phone.data,
-                            company_logo="")
+                            company_logo="",
+                            premium_expiration_date=datetime.now() + timedelta(days=365),
+                            premium_users=5,
+                            premium_warrants=100)
         db.session.add(company)
         db.session.commit()
         flash(f'Kompanija: {form.companyname.data} je uspešno kreirana!', 'success')

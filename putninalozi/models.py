@@ -94,7 +94,7 @@ class TravelWarrant(db.Model):
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     abroad = db.Column(db.Boolean(), default=False, nullable=True)
     abroad_contry = db.Column(db.String(50), nullable=True)
-    relation = db.Column(db.String(150), nullable=False)
+    relation = db.Column(db.String(500), nullable=False)
     start_datetime = db.Column(db.DateTime, nullable=True)
     end_datetime = db.Column(db.DateTime, nullable=True)
     contry_leaving = db.Column(db.DateTime, nullable=True)
